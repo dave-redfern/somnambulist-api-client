@@ -1,0 +1,35 @@
+{
+    "name": "somnambulist/api-client",
+    "type": "library",
+    "description": "A library to help ease creating API integrations",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "ext-json":  "*",
+        "beberlei/assert": "^3.0",
+        "psr/log": "^1.0",
+        "somnambulist/collection": "^3.0",
+        "symfony/http-client": "^4.4|^5.0",
+        "symfony/routing": "^4.4|^5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~8.2",
+        "fzaninotto/faker": "~1.8",
+        "pagerfanta/pagerfanta": "^2.1",
+        "somnambulist/domain": "^2.3",
+        "symfony/var-dumper": "^4.4|^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Somnambulist\\ApiClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Somnambulist\\ApiClient\\Tests\\": "tests/"
+        }
+    },
+    "suggest": {
+        "pagerfanta/pagerfanta": "For paginating results from API calls"
+    }
+}
