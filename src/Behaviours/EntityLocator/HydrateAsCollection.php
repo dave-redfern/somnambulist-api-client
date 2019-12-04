@@ -41,7 +41,7 @@ trait HydrateAsCollection
             $results =
                 $this
                     ->mapper
-                    ->setCollectionClass(MutableCollection::class)
+                    ->setCollectionClass($collection)
                     ->mapArray($this->getClassName(), $data, new ObjectHydratorContext())
             ;
         }
