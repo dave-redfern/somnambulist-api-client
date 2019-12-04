@@ -116,11 +116,6 @@ class EntityLocator implements LoggerAwareInterface, EntityLocatorInterface
         return null;
     }
 
-    public function findAll(): Collection
-    {
-        return $this->findBy();
-    }
-
     public function findBy(array $criteria = [], array $orderBy = [], int $limit = null, int $offset = null): Collection
     {
         $options = array_merge(

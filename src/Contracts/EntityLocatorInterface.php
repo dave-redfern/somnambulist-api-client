@@ -34,13 +34,6 @@ interface EntityLocatorInterface
     public function find($id): ?object;
 
     /**
-     * Fetch all records, up to the API limit
-     *
-     * @return Collection
-     */
-    public function findAll(): Collection;
-
-    /**
      * Find records by the criteria, and optionally order them
      *
      * Criteria is a key -> value array of fields and values, dependent on the API
