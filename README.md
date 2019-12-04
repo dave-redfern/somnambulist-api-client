@@ -186,6 +186,11 @@ use Somnambulist\ApiClient\Mapper\ObjectHydratorContext;
 
 $hydrator = new class implements ObjectHydratorInterface
 {
+    public function supports() : string
+    {
+        return User::class;
+    }
+
     public function hydrate($resource, ObjectHydratorContext $context) : object
     {
         return new User($resource['id'], $resource['name'], $resource['email']);
@@ -200,10 +205,10 @@ This would be added to the `ObjectMapper` by calling `->addHydrator()`:
 use Somnambulist\ApiClient\Mapper\ObjectMapper;
 
 $mapper = new ObjectMapper();
-$mapper->addHydrator(User::class, $hydrator);
+$mapper->addHydrator($hydrator);
 ```
 
-The ObjectMapper supports iterates in the constructor to batch assign tagged hydrators.
+The ObjectMapper supports iterators in the constructor to batch assign tagged hydrators.
 For example: if using the Symfony Container, then you can tag your hydrators and assign
 the tagged services as the dependency on the service definition.
 

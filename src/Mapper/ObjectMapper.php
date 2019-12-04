@@ -75,14 +75,14 @@ final class ObjectMapper
      */
     public function addHydrators(iterable $hydrators): void
     {
-        foreach ($hydrators as $class => $hydrator) {
-            $this->addHydrator($class, $hydrator);
+        foreach ($hydrators as $hydrator) {
+            $this->addHydrator($hydrator);
         }
     }
 
-    public function addHydrator(string $class, ObjectHydratorInterface $handler): void
+    public function addHydrator(ObjectHydratorInterface $hydrator): void
     {
-        $this->hydrators->set($class, $handler);
+        $this->hydrators->set($hydrator->supports(), $hydrator);
     }
 
     /**

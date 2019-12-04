@@ -31,7 +31,12 @@ class Factory
     public function makeUserMapper(): ObjectMapper
     {
         $mapper = $this->makeMapper();
-        $mapper->addHydrator(User::class, new class implements ObjectHydratorInterface {
+        $mapper->addHydrator(new class implements ObjectHydratorInterface {
+            public function supports(): string
+            {
+                return User::class;
+            }
+
             public function hydrate($resource, ObjectHydratorContext $context): object
             {
                 $resource = new MutableCollection($resource);

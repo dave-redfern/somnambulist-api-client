@@ -14,6 +14,13 @@ interface ObjectHydratorInterface
 {
 
     /**
+     * The class that this hydrator will return
+     *
+     * @return string
+     */
+    public function supports(): string;
+
+    /**
      * Hydrate the resource to an object
      *
      * Context provides additional information to help hydrate the object

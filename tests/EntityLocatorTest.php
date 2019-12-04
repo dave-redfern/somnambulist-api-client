@@ -41,25 +41,25 @@ class EntityLocatorTest extends TestCase
     protected function setUp(): void
     {
         $host = 'http://api.example.dev/users/v1';
-        $default = new MockResponse(file_get_contents(__DIR__ . '/../Stubs/user_list.json'), [
+        $default = new MockResponse(file_get_contents(__DIR__ . '/Stubs/user_list.json'), [
             'http_code'        => 200,
             'response_headers' => [
                 'Content-Type' => 'application/json',
             ],
         ]);
-        $view = new MockResponse(file_get_contents(__DIR__ . '/../Stubs/user.json'), [
+        $view = new MockResponse(file_get_contents(__DIR__ . '/Stubs/user.json'), [
             'http_code'        => 200,
             'response_headers' => [
                 'Content-Type' => 'application/json',
             ],
         ]);
-        $findById = new MockResponse(file_get_contents(__DIR__ . '/../Stubs/user_list_single.json'), [
+        $findById = new MockResponse(file_get_contents(__DIR__ . '/Stubs/user_list_single.json'), [
             'http_code'        => 200,
             'response_headers' => [
                 'Content-Type' => 'application/json',
             ],
         ]);
-        $noResults = new MockResponse(file_get_contents(__DIR__ . '/../Stubs/user_list_no_result.json'), [
+        $noResults = new MockResponse(file_get_contents(__DIR__ . '/Stubs/user_list_no_result.json'), [
             'http_code'        => 200,
             'response_headers' => [
                 'Content-Type' => 'application/json',
