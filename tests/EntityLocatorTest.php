@@ -100,20 +100,6 @@ class EntityLocatorTest extends TestCase
         $this->repository = null;
     }
 
-    public function testFindAll()
-    {
-        $repo = $this->repository;
-
-        $results = $repo->findAll();
-
-        $this->assertInstanceOf(MutableCollection::class, $results);
-        $this->assertEquals(30, $results->count());
-
-        foreach ($results as $user) {
-            $this->assertInstanceOf(User::class, $user);
-        }
-    }
-
     public function testFind()
     {
         $repo = $this->repository;

@@ -6,6 +6,7 @@ use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
 use Somnambulist\ApiClient\Mapper\ObjectHydratorContext;
 use Somnambulist\ApiClient\Mapper\ObjectMapper;
+use Somnambulist\Collection\MutableCollection;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use function count;
 use function is_array;
@@ -27,7 +28,7 @@ use const JSON_THROW_ON_ERROR;
 trait HydrateAsPaginator
 {
 
-    protected function hydratePaginator(ResponseInterface $response): Pagerfanta
+    protected function hydratePaginator(ResponseInterface $response, string $collectionClass = MutableCollection::class): Pagerfanta
     {
         $results = [];
         $total   = 0;
@@ -57,6 +58,7 @@ trait HydrateAsPaginator
 
             $results = $this
                 ->mapper
+                ->setCollectionClass($collectionClass)
                 ->mapArray($this->getClassName(), $data, new ObjectHydratorContext(['meta' => $decoded['meta'] ?? []]))
             ;
         }

@@ -161,7 +161,10 @@ Most of the functionality of the locator is wrapped in traits. These cover:
  * hydrating a paginator instance
  * appending include data
 
-The locator can be re-implemented if desired as it is defined by an interface.
+The Collection type returned by `findBy` can be changed by overriding the `collectionClass`
+property, or re-implementing `findBy`.
+
+The locator can be entirely re-implemented if desired as it is defined by an interface.
 
 A basic example can be seen in the tests.
 

@@ -69,6 +69,13 @@ class EntityLocator implements LoggerAwareInterface, EntityLocatorInterface
     protected $classPrimaryKey;
 
     /**
+     * The collection class to return when hydrating collections
+     *
+     * @var string
+     */
+    protected $collectionClass = MutableCollection::class;
+
+    /**
      * Constructor
      *
      * @param ApiClientInterface $client
@@ -127,7 +134,7 @@ class EntityLocator implements LoggerAwareInterface, EntityLocatorInterface
         try {
             $response = $this->client->get($this->prefix('list'), $this->appendIncludes($options));
 
-            return $this->hydrateCollection($response);
+            return $this->hydrateCollection($response, $this->collectionClass);
         } catch (ClientException $e) {
             $this->log(LogLevel::ERROR, $e->getMessage(), [
                 'route' => $this->client->route($this->prefix('list'), $this->appendIncludes($options)),
