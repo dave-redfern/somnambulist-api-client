@@ -1,5 +1,7 @@
 # Somnambulist API Client Library
 
+[![GitHub Actions Build Status](https://github.com/somnambulist-tech/api-client/workflows/tests/badge.svg)](https://github.com/somnambulist-tech/api-client/actions?query=workflow%3Atests)
+
 The ApiClient library is intended to help build client libraries for consuming JSON APIs.
 The library includes a simple ApiClient and EntityLocator and a basic ObjectMapper to
 convert JSON payloads from an array to objects.
