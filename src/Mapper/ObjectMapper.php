@@ -4,6 +4,7 @@ namespace Somnambulist\ApiClient\Mapper;
 
 use Assert\Assert;
 use Somnambulist\ApiClient\Contracts\ObjectHydratorInterface;
+use Somnambulist\ApiClient\Contracts\ObjectMapperAwareInterface;
 use Somnambulist\Collection\AbstractCollection;
 use Somnambulist\Collection\Contracts\Collection;
 use Somnambulist\Collection\MutableCollection;
@@ -83,6 +84,10 @@ final class ObjectMapper
     public function addHydrator(ObjectHydratorInterface $hydrator): void
     {
         $this->hydrators->set($hydrator->supports(), $hydrator);
+
+        if ($hydrator instanceof ObjectMapperAwareInterface) {
+            $hydrator->setMapper($this);
+        }
     }
 
     /**

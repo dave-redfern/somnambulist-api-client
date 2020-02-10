@@ -178,7 +178,13 @@ no need for DSLs or complex config files.
 
 Hydrators are added to an instance of the ObjectMapper and are mapped to a specific class.
 That class will always be hydrated by that hydrator. There is nothing preventing you from
-adding the ObjectMapper to your hydrator if you wish to hydrate sub-objects.
+adding the ObjectMapper to your hydrator if you wish to hydrate sub-objects; though if you
+do this, be sure to use `ObjectMapperAwareInterface` and implement the method or use the
+included trait.
+
+__Note:__ if you receive out of memory errors when using constructor dependency injection
+of the mapper instance, switch to using the interface and allow the mapper to inject itself
+when binding the hydrator to the mapper.
 
 Hydrators can be as simple as they need to be. The only requirement is that they return an
 object and this could be a `stdClass`; though that would defeat the purpose of the hydrator.
