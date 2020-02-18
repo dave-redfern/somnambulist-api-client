@@ -136,6 +136,22 @@ In the same way that the ApiRouter can be extended, the ApiClient can be extende
 additional functionality. The base of this library is more focused on offering read defaults
 for APIs than complex push requests.
 
+#### Custom Header Injection
+
+From `1.2.0` each ApiClient can be configured with an optional `ApiCLientHeaderInjectorInterface`
+that allows custom, request time, headers to be added to each out-going request. For example:
+in a micro services setup, you may use the `X-Request-Id` header to track a single user journey
+through the stack. An injector can be configured to pull the header from the apps request object
+and apply it to all ApiClient calls.
+
+The injector requires a single method: `getHeaders()`. This can be implemented however you need.
+A Symfony RequestStack injector is included that can be used to pull the master request headers.
+Alternatively: a custom implementation can be written to hook into Laravels request, or the
+`_SERVER` variable directly - or any other scheme.
+
+Additionally a custom injector can compute headers based on other elements e.g. the currently
+authenticated user or API token / usage limits etc etc.  
+
 ### EntityLocator
 
 The EntityLocator is a Doctrine EntityRepository like object that uses the ApiClient and the

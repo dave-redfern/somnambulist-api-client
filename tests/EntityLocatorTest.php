@@ -12,7 +12,6 @@ use Somnambulist\ApiClient\EntityLocator;
 use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
 use Somnambulist\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Collection\Contracts\Collection;
-use Somnambulist\Collection\MutableCollection;
 use Somnambulist\Domain\Utils\EntityAccessor;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
