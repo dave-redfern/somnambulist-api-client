@@ -28,7 +28,7 @@ final class ApiRequestHelper
 
     public function createPaginationRequestArguments(int $page = 1, int $perPage = 30): array
     {
-        return ['per_page' => $page, 'page' => $perPage];
+        return ['per_page' => $perPage, 'page' => $page];
     }
 
     public function createPaginationRequestArgumentsFromLimitAndOffset(int $limit = null, int $offset = null): array
@@ -38,7 +38,7 @@ final class ApiRequestHelper
         }
 
         $offset = $offset ?? 0;
-        $page   = $offset > 0 ? max(floor($offset / $limit) + 1, 1) : 1;
+        $page   = $offset > 0 ? (int)max(floor($offset / $limit) + 1, 1) : 1;
 
         return ['per_page' => $limit, 'page' => $page];
     }
