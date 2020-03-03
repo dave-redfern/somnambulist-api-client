@@ -73,4 +73,16 @@ class PaginatorTest extends TestCase
         $this->assertEquals(1, $results->getCurrentPage());
         $this->assertEquals(30, $results->getMaxPerPage());
     }
+
+    public function testFindByPaginated()
+    {
+        $repo = $this->repository;
+
+        $results = $repo->findByPaginated();
+
+        $this->assertInstanceOf(Pagerfanta::class, $results);
+        $this->assertEquals(200, $results->getNbResults());
+        $this->assertEquals(1, $results->getCurrentPage());
+        $this->assertEquals(30, $results->getMaxPerPage());
+    }
 }

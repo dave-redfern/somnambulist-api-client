@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-03-03 - 1.3.0
+------------------
+
+ * Add `findByPaginated` for use in EntityLocators; requires `HydrateAsPaginator`
+
 2020-02-18 - 1.2.0
 ------------------
 
