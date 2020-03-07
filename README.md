@@ -10,7 +10,7 @@ The library uses Symfony HTTP Client under the hood.
 
 ## Requirements
 
- * PHP 7.2+
+ * PHP 7.3+
  * cURL
  * symfony/http-client
  * symfony/routing
@@ -248,6 +248,35 @@ information about the current API response. For example, it can include the curr
 number, or URL information. The context additionally allows for already processed records
 to share information with other objects that need hydrating; for example: if hydrating
 child objects you could include the parent in the context, or some other reference. 
+
+### Persisting "Objects"
+
+For simple use cases an `EntityPersister` class is available. This allows for storing, updating
+or deleting records via API calls: POST, PUT and DELETE. The basic implementation makes use
+of form-data and sends a standard request. The implementation can be customised or swapped
+out entirely.
+
+Hooks are provided for both `store` and `update` to add pre-validation of the request data
+before the request is sent.
+
+Errors and exceptions from all methods are converted to EntityPersisterException instances.
+For errors derived from a JSON decoded response, a "previous" exception is used to decode
+this data (ApiErrorException).
+
+Both `store` and `update` operate on basic arrays of simple scalar data. For file uploads
+or more complex data-types, re-implement the methods or make your own that can pass through
+the appropriate data to the underlying `HttpClient` instance.
+
+`store` and `update` will attempt to return a hydrated object - provided that the API returns
+the representation after the action is performed.
+
+Similar to `EntityLocator` the `EntityPersister` methods expects routes that are suffixed with:
+ 
+ * `.store` for `store()`
+ * `.update` for `update()`
+ * `.destroy` for `destroy()`
+
+For example: `users.store`, `users.update` and `users.destroy`.
 
 ## Tests
 

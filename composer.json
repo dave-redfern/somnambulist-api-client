@@ -4,7 +4,7 @@
     "description": "A library to help ease creating API integrations",
     "license": "MIT",
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.3",
         "ext-json":  "*",
         "beberlei/assert": "^3.0",
         "psr/log": "^1.0",

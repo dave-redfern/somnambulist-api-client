@@ -1,0 +1,7 @@
+{
+    "message": "Validation error.",
+    "errors": {
+        "name": "This field is missing.",
+        "email": "This field is missing."
+    }
+}

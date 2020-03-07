@@ -3,6 +3,7 @@
 namespace Somnambulist\ApiClient\Tests\Stubs\Entities;
 
 use Somnambulist\Collection\MutableCollection;
+use Somnambulist\Domain\Entities\Types\DateTime\DateTime;
 use Somnambulist\Domain\Entities\Types\Identity\EmailAddress;
 use Somnambulist\Domain\Entities\Types\Identity\Uuid;
 
@@ -26,9 +27,24 @@ class User
     public $name;
 
     /**
+     * @var bool
+     */
+    public $active = false;
+
+    /**
      * @var EmailAddress
      */
     public $email;
+
+    /**
+     * @var DateTime
+     */
+    public $createdAt;
+
+    /**
+     * @var DateTime
+     */
+    public $updatedAt;
 
     /**
      * @var MutableCollection|Address[]

@@ -35,7 +35,7 @@ class EntityLocatorTest extends TestCase
     /**
      * @var EntityLocator
      */
-    private $repository;
+    private $locator;
 
     protected function setUp(): void
     {
@@ -91,17 +91,17 @@ class EntityLocatorTest extends TestCase
 
         $client = new ApiClient($client, $router);
 
-        $this->repository = new EntityLocator($client, $this->factory()->makeUserMapper(), User::class);
+        $this->locator = new EntityLocator($client, $this->factory()->makeUserMapper(), User::class);
     }
 
     protected function tearDown(): void
     {
-        $this->repository = null;
+        $this->locator = null;
     }
 
     public function testFind()
     {
-        $repo = $this->repository;
+        $repo = $this->locator;
 
         /** @var User $user */
         $user = $repo->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
@@ -112,7 +112,7 @@ class EntityLocatorTest extends TestCase
 
     public function testFindBy()
     {
-        $repo = $this->repository;
+        $repo = $this->locator;
 
         $results = $repo->findBy(['id' => 'c8259b3b-8603-3098-8361-425325078c9a']);
 
@@ -121,7 +121,7 @@ class EntityLocatorTest extends TestCase
 
     public function testFindByWithLimits()
     {
-        $repo = $this->repository;
+        $repo = $this->locator;
 
         $results = $repo->findBy(['id' => 'c8259b3b-8603-3098-8361-425325078c9a'], [], 10, 0);
 
@@ -130,7 +130,7 @@ class EntityLocatorTest extends TestCase
 
     public function testFindByWithOrdering()
     {
-        $repo = $this->repository;
+        $repo = $this->locator;
         $results = $repo->findBy(['id' => 'c8259b3b-8603-3098-8361-425325078c9a'], ['name' => 'DESC', 'created_at' => 'asc']);
 
         $this->assertInstanceOf(Collection::class, $results);
@@ -138,7 +138,7 @@ class EntityLocatorTest extends TestCase
 
     public function testFindOneBy()
     {
-        $repo = $this->repository;
+        $repo = $this->locator;
 
         /** @var User $user */
         $user = $repo->findOneBy(['id' => 'c8259b3b-8603-3098-8361-425325078c9a']);
@@ -148,7 +148,7 @@ class EntityLocatorTest extends TestCase
 
     public function testFindOneByReturnsNullWhenNotFound()
     {
-        $repo = $this->repository;
+        $repo = $this->locator;
 
         $user = $repo->findOneBy(['id' => '5715229a-c9d3-4dd9-88f7-e6a1a66f5d31']);
 
@@ -157,7 +157,7 @@ class EntityLocatorTest extends TestCase
 
     public function testLoadingSubObjects()
     {
-        $repo = $this->repository;
+        $repo = $this->locator;
 
         $repo->with('addresses', 'contacts');
 
@@ -170,7 +170,7 @@ class EntityLocatorTest extends TestCase
 
     public function testLoadingSubObjectsResetsAfterFetch()
     {
-        $repo = $this->repository;
+        $repo = $this->locator;
 
         $repo->with('addresses', 'contacts');
 

@@ -3,12 +3,13 @@
 namespace Somnambulist\ApiClient\Tests\Support;
 
 use Somnambulist\ApiClient\Contracts\ObjectHydratorInterface;
-use Somnambulist\ApiClient\Mapper\ObjectMapper;
 use Somnambulist\ApiClient\Mapper\ObjectHydratorContext;
+use Somnambulist\ApiClient\Mapper\ObjectMapper;
 use Somnambulist\ApiClient\Tests\Stubs\Entities\Address;
 use Somnambulist\ApiClient\Tests\Stubs\Entities\Contact;
 use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
 use Somnambulist\Collection\MutableCollection;
+use Somnambulist\Domain\Entities\Types\DateTime\DateTime;
 use Somnambulist\Domain\Entities\Types\Geography\Country;
 use Somnambulist\Domain\Entities\Types\Identity\EmailAddress;
 use Somnambulist\Domain\Entities\Types\Identity\Uuid;
@@ -17,7 +18,7 @@ use Somnambulist\Domain\Entities\Types\PhoneNumber;
 /**
  * Class Factory
  *
- * @package Somnambulist\ApiClient\Tests\Support
+ * @package    Somnambulist\ApiClient\Tests\Support
  * @subpackage Somnambulist\ApiClient\Tests\Support\Factory
  */
 class Factory
@@ -41,10 +42,13 @@ class Factory
             {
                 $resource = new MutableCollection($resource);
 
-                $user        = new User();
-                $user->id    = new Uuid($resource->get('id'));
-                $user->name  = $resource->get('name');
-                $user->email = new EmailAddress($resource->get('email'));
+                $user            = new User();
+                $user->id        = new Uuid($resource->get('id'));
+                $user->name      = $resource->get('name');
+                $user->active    = $resource->get('is_active', false);
+                $user->email     = new EmailAddress($resource->get('email'));
+                $user->createdAt = DateTime::parseUtc($resource->get('created_at', 'now'));
+                $user->updatedAt = DateTime::parseUtc($resource->get('updated_at', 'now'));
 
                 $resource->value('addresses', new MutableCollection())->each(function ($address) use ($user) {
                     $addr = new MutableCollection($address);

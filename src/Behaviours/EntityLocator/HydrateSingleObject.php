@@ -23,7 +23,7 @@ trait HydrateSingleObject
 
     protected function hydrateObject(ResponseInterface $response): ?object
     {
-        if ($response->getStatusCode() == 200) {
+        if (200 === $response->getStatusCode() || 201 === $response->getStatusCode()) {
             $data = json_decode((string)$response->getContent(), true, $depth = 512, JSON_THROW_ON_ERROR);
 
             if (!$data || !is_array($data)) {

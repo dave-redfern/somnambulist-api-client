@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2020-03-06
+----------
+
+ * Add `EntityPersisterInterface` and a basic implementation of the interface.
+   EntityPersister provides an initial implementation for making POST / PUT requests
+   to API endpoints.
+
 2020-03-03 - 1.3.0
 ------------------
 
