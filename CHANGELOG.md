@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-03-09
+----------
+
+ * Added `findOrFail` behaviour for EntityLocator (requires somnambulist/domain)
+
 2020-03-06
 ----------
 

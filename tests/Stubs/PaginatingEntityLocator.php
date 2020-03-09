@@ -3,6 +3,7 @@
 namespace Somnambulist\ApiClient\Tests\Stubs;
 
 use Somnambulist\ApiClient\Behaviours\EntityLocator\FindByPaginated;
+use Somnambulist\ApiClient\Behaviours\EntityLocator\FindOrFail;
 use Somnambulist\ApiClient\Behaviours\EntityLocator\HydrateAsPaginator;
 use Somnambulist\ApiClient\EntityLocator;
 use Pagerfanta\Pagerfanta;
@@ -19,6 +20,7 @@ class PaginatingEntityLocator extends EntityLocator
 
     use HydrateAsPaginator;
     use FindByPaginated;
+    use FindOrFail;
 
     public function findAllPaginated($page = 1, $perPage = 20): Pagerfanta
     {

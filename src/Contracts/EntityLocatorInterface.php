@@ -25,7 +25,7 @@ interface EntityLocatorInterface
     public function with(string ...$include);
 
     /**
-     * Find a record by primary id
+     * Find a record by primary id, return null if not found
      *
      * @param mixed $id
      *
