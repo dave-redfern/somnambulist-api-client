@@ -4,7 +4,6 @@ namespace Somnambulist\ApiClient\Behaviours\EntityPersister;
 
 use Psr\Log\LogLevel;
 use Somnambulist\ApiClient\Contracts\ApiClientInterface;
-use Somnambulist\ApiClient\Exceptions\ApiErrorException;
 use Somnambulist\ApiClient\Exceptions\EntityPersisterException;
 use Symfony\Component\HttpClient\Exception\ClientException;
 
@@ -30,7 +29,7 @@ trait CanDestroyEntity
             // delete should return a 204 - no content response code
             if (204 !== $response->getStatusCode()) {
                 throw EntityPersisterException::entityNotDestroyed(
-                    $this->className, (string)$id, new ApiErrorException($response)
+                    $this->className, (string)$id, new ClientException($response)
                 );
             }
 

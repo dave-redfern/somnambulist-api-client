@@ -5,7 +5,6 @@ namespace Somnambulist\ApiClient\Behaviours\EntityPersister;
 use InvalidArgumentException;
 use Psr\Log\LogLevel;
 use Somnambulist\ApiClient\Contracts\ApiClientInterface;
-use Somnambulist\ApiClient\Exceptions\ApiErrorException;
 use Somnambulist\ApiClient\Exceptions\EntityPersisterException;
 use Symfony\Component\HttpClient\Exception\ClientException;
 
@@ -29,7 +28,7 @@ trait CanStoreEntity
             $response = $this->client->post($this->prefix('store'), [], $properties);
 
             if (201 !== $response->getStatusCode()) {
-                throw EntityPersisterException::entityNotCreated($this->className, new ApiErrorException($response));
+                throw EntityPersisterException::entityNotCreated($this->className, new ClientException($response));
             }
 
             return $this->hydrateObject($response);

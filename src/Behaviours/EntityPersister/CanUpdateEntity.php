@@ -5,7 +5,6 @@ namespace Somnambulist\ApiClient\Behaviours\EntityPersister;
 use InvalidArgumentException;
 use Psr\Log\LogLevel;
 use Somnambulist\ApiClient\Contracts\ApiClientInterface;
-use Somnambulist\ApiClient\Exceptions\ApiErrorException;
 use Somnambulist\ApiClient\Exceptions\EntityPersisterException;
 use Symfony\Component\HttpClient\Exception\ClientException;
 
@@ -32,7 +31,7 @@ trait CanUpdateEntity
             $response = $this->client->put($this->prefix('update'), $options, $properties);
 
             if (200 !== $response->getStatusCode()) {
-                throw EntityPersisterException::entityNotUpdated($this->className, $id, new ApiErrorException($response));
+                throw EntityPersisterException::entityNotUpdated($this->className, $id, new ClientException($response));
             }
 
             return $this->hydrateObject($response);

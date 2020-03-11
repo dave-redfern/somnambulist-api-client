@@ -9,7 +9,6 @@ use Somnambulist\ApiClient\Client\ApiRoute;
 use Somnambulist\ApiClient\Client\ApiRouter;
 use Somnambulist\ApiClient\Client\ApiService;
 use Somnambulist\ApiClient\EntityPersister;
-use Somnambulist\ApiClient\Exceptions\ApiErrorException;
 use Somnambulist\ApiClient\Exceptions\EntityPersisterException;
 use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
 use Somnambulist\ApiClient\Tests\Support\Behaviours\UseFactory;
@@ -17,6 +16,8 @@ use Somnambulist\Collection\Contracts\Collection;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use function file_get_contents;
 
 /**
@@ -140,9 +141,11 @@ class EntityPersisterTest extends TestCase
                 'error' => true,
             ]);
         } catch (EntityPersisterException $e) {
-            $this->assertInstanceOf(ApiErrorException::class, $e->getPrevious());
-            $this->assertInstanceOf(Collection::class, $e->getPrevious()->getPayload());
-            $this->assertCount(2, $e->getPrevious()->getPayload());
+            $this->assertInstanceOf(ClientExceptionInterface::class, $e->getPrevious());
+            $this->assertInstanceOf(Collection::class, $e->getPayload());
+            $this->assertInstanceOf(Collection::class, $e->getErrors());
+            $this->assertInstanceOf(ResponseInterface::class, $e->getResponse());
+            $this->assertCount(2, $e->getPayload());
         }
     }
 

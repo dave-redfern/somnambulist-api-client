@@ -3,9 +3,12 @@
 namespace Somnambulist\ApiClient\Exceptions;
 
 use Exception;
+use Somnambulist\Collection\Contracts\Immutable;
+use Somnambulist\Collection\FrozenCollection;
+use Somnambulist\Collection\MutableCollection;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Throwable;
+use function json_decode;
 
 /**
  * Class EntityPersisterException
@@ -18,9 +21,35 @@ use Throwable;
 class EntityPersisterException extends Exception
 {
 
-    public function __construct($message, Throwable $previous = null)
+    /**
+     * The API response from the HTTP Client instance
+     *
+     * @var ResponseInterface
+     */
+    private $response;
+
+    /**
+     * All decoded fields from the JSON payload
+     *
+     * @var MutableCollection
+     */
+    private $payload;
+
+    /**
+     * Any decoded error fields from the JSON payload
+     *
+     * @var MutableCollection
+     */
+    private $errors;
+
+    public function __construct($message, ClientExceptionInterface $error)
     {
-        parent::__construct($message, 0, $previous);
+        parent::__construct($message, $error->getCode(), $error);
+
+        $this->response = $error->getResponse();
+        $this->code     = $this->response->getStatusCode();
+        $this->payload  = $payload = new MutableCollection(json_decode((string)$this->response->getContent(false), true, $depth = 512) ?? []);
+        $this->errors   = $payload->value('errors', new MutableCollection());
     }
 
     public static function serverError($message, ClientExceptionInterface $e): self
@@ -31,42 +60,78 @@ class EntityPersisterException extends Exception
         return $err;
     }
 
-    public static function entityNotCreated(string $class, ClientExceptionInterface $error): self
+    public static function entityNotCreated(string $class, ClientExceptionInterface $e): self
     {
-        $err = new static(sprintf('Entity of type "%s" could not be created', $class), $error);
+        $err = new static(sprintf('Entity of type "%s" could not be created', $class), $e);
         $err->code = 422;
 
         return $err;
     }
 
-    public static function entityNotUpdated(string $class, string $id, ClientExceptionInterface $error): self
+    public static function entityNotUpdated(string $class, string $id, ClientExceptionInterface $e): self
     {
-        $err = new static(sprintf('Entity of type "%s" with identity "%s" could not be updated', $class, $id), $error);
+        $err = new static(sprintf('Entity of type "%s" with identity "%s" could not be updated', $class, $id), $e);
         $err->code = 422;
 
         return $err;
     }
 
-    public static function entityNotDestroyed(string $class, string $id, ClientExceptionInterface $error): self
+    public static function entityNotDestroyed(string $class, string $id, ClientExceptionInterface $e): self
     {
-        $err = new static(sprintf('Entity of type "%s" with identity "%s" was not destroyed', $class, $id), $error);
+        $err = new static(sprintf('Entity of type "%s" with identity "%s" was not destroyed', $class, $id), $e);
         $err->code = 400;
 
         return $err;
     }
 
-    public function getClientErrorMessage(): string
+    public function getResponseMessage(): string
     {
-        return $this->getPrevious()->getMessage();
+        return $this->payload->value('message', 'There was an error from the API, the response could not be decoded');
     }
 
-    public function getClientTrace(): array
+    public function getResponseTrace(): array
     {
-        return $this->getPrevious()->getTrace();
+        return $this->payload->value('trace', []);
     }
 
-    public function getClientResponse(): ResponseInterface
+    public function getPayload(): Immutable
     {
-        return $this->getPrevious()->getResponse();
+        return $this->payload->freeze();
+    }
+
+    public function getErrors(): Immutable
+    {
+        return $this->errors->freeze();
+    }
+
+    public function getResponse(): ResponseInterface
+    {
+        return $this->response;
+    }
+
+    /**
+     * Returns a collection of error fields mapped to form fields
+     *
+     * As APIs may have differently named fields to a UI form, this allows the API errors to be
+     * pulled back to the form field for better correlation of errors from the API to the form
+     * that was used for submission.
+     *
+     * Structure is an associative array: API field -> form field e.g.: user_id => user
+     *
+     * @param array $map
+     *
+     * @return Immutable
+     */
+    public function remapErrorFieldsToFormFieldNames(array $map): Immutable
+    {
+        $tmp = [];
+
+        foreach ($map as $field => $key) {
+            if ($this->errors->has($field)) {
+                $tmp[$key] = $this->errors->get($field);
+            }
+        }
+
+        return new FrozenCollection($tmp);
     }
 }
