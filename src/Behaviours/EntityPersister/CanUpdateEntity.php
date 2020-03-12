@@ -37,7 +37,7 @@ trait CanUpdateEntity
             return $this->hydrateObject($response);
         } catch (ClientException $e) {
             $this->log(LogLevel::ERROR, $e->getMessage(), [
-                'route' => $this->client->route($this->prefix('store')),
+                'route' => $this->client->route($this->prefix('update'), $options),
             ]);
 
             throw EntityPersisterException::serverError($e->getMessage(), $e);

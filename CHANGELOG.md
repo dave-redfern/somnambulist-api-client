@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-03-12
+----------
+
+ * Fix error logging on persister update
+
 2020-03-11
 ----------
 
