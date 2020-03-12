@@ -13,8 +13,15 @@ use function sprintf;
 trait RoutePrefixer
 {
 
+    /**
+     * A custom route prefix to override the service alias
+     *
+     * @var null|string
+     */
+    protected $routePrefix = null;
+
     protected function prefix(string $route): string
     {
-        return sprintf('%s.%s', $this->client->router()->service()->alias(), $route);
+        return sprintf('%s.%s', ($this->routePrefix ?? $this->client->router()->service()->alias()), $route);
     }
 }

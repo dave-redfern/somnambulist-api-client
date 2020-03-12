@@ -5,6 +5,7 @@ Change Log
 ----------
 
  * Fix error logging on persister update
+ * Add `routePrefix` property for overriding the default service alias when sharing a router
 
 2020-03-11
 ----------
