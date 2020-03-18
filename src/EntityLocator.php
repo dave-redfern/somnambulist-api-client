@@ -4,8 +4,9 @@ namespace Somnambulist\ApiClient;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LogLevel;
 use Somnambulist\ApiClient\Behaviours\EntityLocator\CanAppendIncludes;
+use Somnambulist\ApiClient\Behaviours\EntityLocator\Find;
+use Somnambulist\ApiClient\Behaviours\EntityLocator\FindBy;
 use Somnambulist\ApiClient\Behaviours\EntityLocator\HydrateAsCollection;
 use Somnambulist\ApiClient\Behaviours\EntityLocator\HydrateSingleObject;
 use Somnambulist\ApiClient\Behaviours\LoggerWrapper;
@@ -14,10 +15,7 @@ use Somnambulist\ApiClient\Client\ApiRequestHelper;
 use Somnambulist\ApiClient\Contracts\ApiClientInterface;
 use Somnambulist\ApiClient\Contracts\EntityLocatorInterface;
 use Somnambulist\ApiClient\Mapper\ObjectMapper;
-use Somnambulist\Collection\Contracts\Collection;
 use Somnambulist\Collection\MutableCollection;
-use Symfony\Component\HttpClient\Exception\ClientException;
-use function array_merge;
 
 /**
  * Class EntityLocator
@@ -40,6 +38,8 @@ class EntityLocator implements LoggerAwareInterface, EntityLocatorInterface
 {
 
     use CanAppendIncludes;
+    use Find;
+    use FindBy;
     use HydrateAsCollection;
     use HydrateSingleObject;
     use LoggerAwareTrait;
@@ -102,49 +102,5 @@ class EntityLocator implements LoggerAwareInterface, EntityLocatorInterface
         $this->includes = $include;
 
         return $this;
-    }
-
-    public function find($id): ?object
-    {
-        $options = [$this->identityField => (string)$id];
-
-        try {
-            $response = $this->client->get($this->prefix('view'), $this->appendIncludes($options));
-
-            return $this->hydrateObject($response);
-        } catch (ClientException $e) {
-            $this->log(LogLevel::ERROR, $e->getMessage(), [
-                'route'              => $this->client->route($this->prefix('view'), $this->appendIncludes($options)),
-                $this->identityField => (string)$id,
-            ]);
-        }
-
-        return null;
-    }
-
-    public function findBy(array $criteria = [], array $orderBy = [], int $limit = null, int $offset = null): Collection
-    {
-        $options = array_merge(
-            $criteria,
-            $this->apiHelper->createOrderByRequestArgument($orderBy),
-            $this->apiHelper->createPaginationRequestArgumentsFromLimitAndOffset($limit, $offset)
-        );
-
-        try {
-            $response = $this->client->get($this->prefix('list'), $this->appendIncludes($options));
-
-            return $this->hydrateCollection($response, $this->collectionClass);
-        } catch (ClientException $e) {
-            $this->log(LogLevel::ERROR, $e->getMessage(), [
-                'route' => $this->client->route($this->prefix('list'), $this->appendIncludes($options)),
-            ]);
-        }
-
-        return new MutableCollection();
-    }
-
-    public function findOneBy(array $criteria, array $orderBy = []): ?object
-    {
-        return $this->findBy($criteria, $orderBy, 1)->first() ?: null;
     }
 }

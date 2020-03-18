@@ -256,27 +256,25 @@ or deleting records via API calls: POST, PUT and DELETE. The basic implementatio
 of form-data and sends a standard request. The implementation can be customised or swapped
 out entirely.
 
-Hooks are provided for both `store` and `update` to add pre-validation of the request data
-before the request is sent.
+The persister works with `ApiActionInterface` objects that should provide:
+
+ * the hydrating class
+ * the route and parameters (must be valid in the ApiClient passed to the persister)
+ * the properties to change / send to the API
+ 
+Unlike the `EntityLocator`, the `EntityPersister` is not keyed a particular class type. This
+is defined on the action. Custom actions can be passed, provided they implement the interface.
+For updates and deletes, the route parameter values are hashed together to act as an id value
+for logging / exception purposes.
 
 Errors and exceptions from all methods are converted to EntityPersisterException instances.
-For errors derived from a JSON decoded response, a "previous" exception is used to decode
-this data (ApiErrorException).
-
-Both `store` and `update` operate on basic arrays of simple scalar data. For file uploads
-or more complex data-types, re-implement the methods or make your own that can pass through
-the appropriate data to the underlying `HttpClient` instance.
+For errors derived from a JSON decoded response, the errors are parsed out and made available
+via the `->getErrors()` method. The original response is kept in the exception.
 
 `store` and `update` will attempt to return a hydrated object - provided that the API returns
 the representation after the action is performed.
 
-Similar to `EntityLocator` the `EntityPersister` methods expects routes that are suffixed with:
- 
- * `.store` for `store()`
- * `.update` for `update()`
- * `.destroy` for `destroy()`
-
-For example: `users.store`, `users.update` and `users.destroy`.
+For complex persistence requirements, implement your own solution.
 
 ## Tests
 

@@ -16,12 +16,11 @@ use const JSON_THROW_ON_ERROR;
  * @subpackage Somnambulist\ApiClient\Behaviours\EntityLocator\HydrateSingleObject
  *
  * @property-read ObjectMapper $mapper
- * @method string getClassName
  */
 trait HydrateSingleObject
 {
 
-    protected function hydrateObject(ResponseInterface $response): ?object
+    protected function hydrateObject(ResponseInterface $response, string $className): ?object
     {
         if (200 === $response->getStatusCode() || 201 === $response->getStatusCode()) {
             $data = json_decode((string)$response->getContent(), true, $depth = 512, JSON_THROW_ON_ERROR);
@@ -34,7 +33,7 @@ trait HydrateSingleObject
                 $data = $data['data'];
             }
 
-            return $this->mapper->map($this->getClassName(), $data, new ObjectHydratorContext());
+            return $this->mapper->map($className, $data, new ObjectHydratorContext());
         }
 
         return null;

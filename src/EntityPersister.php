@@ -5,11 +5,10 @@ namespace Somnambulist\ApiClient;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Somnambulist\ApiClient\Behaviours\EntityLocator\HydrateSingleObject;
-use Somnambulist\ApiClient\Behaviours\EntityPersister\CanDestroyEntity;
-use Somnambulist\ApiClient\Behaviours\EntityPersister\CanStoreEntity;
-use Somnambulist\ApiClient\Behaviours\EntityPersister\CanUpdateEntity;
+use Somnambulist\ApiClient\Behaviours\EntityPersister\MakeCreateRequest;
+use Somnambulist\ApiClient\Behaviours\EntityPersister\MakeDestroyRequest;
+use Somnambulist\ApiClient\Behaviours\EntityPersister\MakeUpdateRequest;
 use Somnambulist\ApiClient\Behaviours\LoggerWrapper;
-use Somnambulist\ApiClient\Behaviours\RoutePrefixer;
 use Somnambulist\ApiClient\Contracts\ApiClientInterface;
 use Somnambulist\ApiClient\Contracts\EntityPersisterInterface;
 use Somnambulist\ApiClient\Mapper\ObjectMapper;
@@ -28,24 +27,19 @@ use Somnambulist\ApiClient\Mapper\ObjectMapper;
  * or client error, then the JSON error message will be added to the exception
  * history via the ApiErrorException wrapper class.
  *
- * This implementation does not implement request validation for store or update
- * but does provide hook methods to implement checks if necessary via:
- * validateStoreRequest and validateUpdateRequest.
- *
  * @package    Somnambulist\ApiClient
  * @subpackage Somnambulist\ApiClient\EntityPersister
  */
-class EntityPersister implements LoggerAwareInterface, EntityPersisterInterface
+class EntityPersister implements EntityPersisterInterface, LoggerAwareInterface
 {
 
     use HydrateSingleObject;
     use LoggerAwareTrait;
     use LoggerWrapper;
-    use RoutePrefixer;
 
-    use CanStoreEntity;
-    use CanUpdateEntity;
-    use CanDestroyEntity;
+    use MakeCreateRequest;
+    use MakeUpdateRequest;
+    use MakeDestroyRequest;
 
     /**
      * @var ApiClientInterface
@@ -57,26 +51,9 @@ class EntityPersister implements LoggerAwareInterface, EntityPersisterInterface
      */
     protected $mapper;
 
-    /**
-     * @var string
-     */
-    protected $className;
-
-    /**
-     * @var string
-     */
-    protected $identityField;
-
-    public function __construct(ApiClientInterface $client, ObjectMapper $mapper, string $class, string $identity = 'id')
+    public function __construct(ApiClientInterface $client, ObjectMapper $mapper)
     {
-        $this->mapper        = $mapper;
-        $this->client        = $client;
-        $this->className     = $class;
-        $this->identityField = $identity;
-    }
-
-    public function getClassName(): string
-    {
-        return $this->className;
+        $this->mapper = $mapper;
+        $this->client = $client;
     }
 }

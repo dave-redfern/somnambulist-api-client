@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2020-03-18
+----------
+
+ * Refactor `EntityPersister` to work with `ApiActionInterface` objects
+ * Refactor `EntityPersister` logging and exception messages
+ * Add example persister actions and common traits
+
 2020-03-12
 ----------
 

@@ -10,6 +10,9 @@ use Somnambulist\ApiClient\Client\ApiRouter;
 use Somnambulist\ApiClient\Client\ApiService;
 use Somnambulist\ApiClient\EntityPersister;
 use Somnambulist\ApiClient\Exceptions\EntityPersisterException;
+use Somnambulist\ApiClient\PersisterActions\CreateAction;
+use Somnambulist\ApiClient\PersisterActions\DestroyAction;
+use Somnambulist\ApiClient\PersisterActions\UpdateAction;
 use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
 use Somnambulist\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Collection\Contracts\Collection;
@@ -87,13 +90,13 @@ class EntityPersisterTest extends TestCase
         $client   = new MockHttpClient($callback);
 
         $router = new ApiRouter(new ApiService($host, 'users'), new RouteCollection());
-        $router->routes()->add('users.store', new ApiRoute('/users', [], ['POST']));
+        $router->routes()->add('users.create', new ApiRoute('/users', [], ['POST']));
         $router->routes()->add('users.update', new ApiRoute('/users/{id}', ['id' => '[0-9a-f\-]{36}'], ['PUT', 'PATCH']));
         $router->routes()->add('users.destroy', new ApiRoute('/users/{id}', ['id' => '[0-9a-f\-]{36}'], ['DELETE']));
 
         $client = new ApiClient($client, $router);
 
-        $this->persister = new EntityPersister($client, $this->factory()->makeUserMapper(), User::class);
+        $this->persister = new EntityPersister($client, $this->factory()->makeUserMapper());
     }
 
     protected function tearDown(): void
@@ -105,11 +108,15 @@ class EntityPersisterTest extends TestCase
     {
         $repo = $this->persister;
 
+        $req = CreateAction::new(User::class)
+            ->with([
+                'name' => 'foo bar', 'email' => 'foo@example.com'
+            ])
+            ->route('users.create')
+        ;
+
         /** @var User $user */
-        $user = $repo->store([
-            'name'  => 'foo bar',
-            'email' => 'foo@example.com',
-        ]);
+        $user = $repo->create($req);
 
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals('c8259b3b-8603-3098-8361-425325078c9a', $user->id->toString());
@@ -122,12 +129,14 @@ class EntityPersisterTest extends TestCase
         $this->expectExceptionMessage('Entity of type "Somnambulist\ApiClient\Tests\Stubs\Entities\User" could not be created');
 
         $repo = $this->persister;
+        $req = CreateAction::new(User::class)
+            ->with([
+                'name' => 'foo bar', 'email' => 'foo@example.com', 'error' => true,
+            ])
+            ->route('users.create')
+        ;
 
-        $repo->store([
-            'name'  => 'foo bar',
-            'email' => 'foo@example.com',
-            'error' => true,
-        ]);
+        $repo->create($req);
     }
 
     public function testStoreRaisesWrappedErrorWithPayload()
@@ -135,11 +144,14 @@ class EntityPersisterTest extends TestCase
         $repo = $this->persister;
 
         try {
-            $repo->store([
-                'name'  => 'foo bar',
-                'email' => 'foo@example.com',
-                'error' => true,
-            ]);
+            $req = CreateAction::new(User::class)
+                ->with([
+                    'name' => 'foo bar', 'email' => 'foo@example.com', 'error' => true,
+                ])
+                ->route('users.create')
+            ;
+
+            $repo->create($req);
         } catch (EntityPersisterException $e) {
             $this->assertInstanceOf(ClientExceptionInterface::class, $e->getPrevious());
             $this->assertInstanceOf(Collection::class, $e->getPayload());
@@ -153,11 +165,15 @@ class EntityPersisterTest extends TestCase
     {
         $repo = $this->persister;
 
+        $req = UpdateAction::update(User::class)
+            ->set([
+                'name' => 'foo bar baz', 'email' => 'foobar@example.com'
+            ])
+            ->route('users.update', ['id' => 'c8259b3b-8603-3098-8361-425325078c9a'])
+        ;
+
         /** @var User $user */
-        $user = $repo->update('c8259b3b-8603-3098-8361-425325078c9a', [
-            'name'  => 'foo bar baz',
-            'email' => 'foobar@example.com',
-        ]);
+        $user = $repo->update($req);
 
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals('c8259b3b-8603-3098-8361-425325078c9a', $user->id->toString());
@@ -168,6 +184,8 @@ class EntityPersisterTest extends TestCase
     {
         $repo = $this->persister;
 
-        $this->assertTrue($repo->destroy('c8259b3b-8603-3098-8361-425325078c9a'));
+        $this->assertTrue(
+            $repo->destroy(DestroyAction::destroy(User::class)->route('users.destroy', ['id' => 'c8259b3b-8603-3098-8361-425325078c9a']))
+        );
     }
 }

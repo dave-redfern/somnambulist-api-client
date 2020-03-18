@@ -28,14 +28,14 @@ use const JSON_THROW_ON_ERROR;
 trait HydrateAsPaginator
 {
 
-    protected function hydratePaginator(ResponseInterface $response, string $collectionClass = MutableCollection::class): Pagerfanta
+    protected function hydratePaginator(ResponseInterface $response, string $className, string $collectionClass = MutableCollection::class): Pagerfanta
     {
         $results = [];
         $total   = 0;
         $perPage = 30;
         $page    = 1;
 
-        if ($response->getStatusCode() == 200) {
+        if (200 === $response->getStatusCode()) {
             $decoded = json_decode($response->getContent(), true, $depth = 512, JSON_THROW_ON_ERROR);
             $data    = $decoded;
             $total   = $perPage = count($data);
@@ -59,7 +59,7 @@ trait HydrateAsPaginator
             $results = $this
                 ->mapper
                 ->setCollectionClass($collectionClass)
-                ->mapArray($this->getClassName(), $data, new ObjectHydratorContext(['meta' => $decoded['meta'] ?? []]))
+                ->mapArray($className, $data, new ObjectHydratorContext(['meta' => $decoded['meta'] ?? []]))
             ;
         }
 

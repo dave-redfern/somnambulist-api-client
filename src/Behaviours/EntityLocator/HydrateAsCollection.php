@@ -18,16 +18,15 @@ use const JSON_THROW_ON_ERROR;
  * @subpackage Somnambulist\ApiClient\Behaviours\EntityLocator\HydrateAsCollection
  *
  * @property-read ObjectMapper $mapper
- * @method string getClassName
  */
 trait HydrateAsCollection
 {
 
-    protected function hydrateCollection(ResponseInterface $response, string $collection = MutableCollection::class): Collection
+    protected function hydrateCollection(ResponseInterface $response, string $className, string $collection = MutableCollection::class): Collection
     {
         $results = new $collection();
 
-        if ($response->getStatusCode() == 200) {
+        if (200 === $response->getStatusCode()) {
             $data = json_decode((string)$response->getContent(), true, $depth = 512, JSON_THROW_ON_ERROR);
 
             if (!$data || !is_array($data)) {
@@ -42,7 +41,7 @@ trait HydrateAsCollection
                 $this
                     ->mapper
                     ->setCollectionClass($collection)
-                    ->mapArray($this->getClassName(), $data, new ObjectHydratorContext())
+                    ->mapArray($className, $data, new ObjectHydratorContext())
             ;
         }
 

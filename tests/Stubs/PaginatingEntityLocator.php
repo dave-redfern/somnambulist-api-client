@@ -31,7 +31,7 @@ class PaginatingEntityLocator extends EntityLocator
 
             $response = $this->client->get($this->prefix('list'), $this->appendIncludes($options));
 
-            return $this->hydratePaginator($response);
+            return $this->hydratePaginator($response, $this->className);
         } catch (ClientException $e) {
         }
 

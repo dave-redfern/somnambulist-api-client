@@ -2,43 +2,49 @@
 
 namespace Somnambulist\ApiClient\Behaviours\EntityLocator;
 
-use Pagerfanta\Pagerfanta;
 use Psr\Log\LogLevel;
-use Somnambulist\ApiClient\Client\ApiClient;
 use Somnambulist\ApiClient\Client\ApiRequestHelper;
+use Somnambulist\ApiClient\Contracts\ApiClientInterface;
+use Somnambulist\Collection\Contracts\Collection;
+use Somnambulist\Collection\MutableCollection;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use function array_merge;
 
 /**
- * Trait FindByPaginated
+ * Trait FindBy
  *
  * @package    Somnambulist\ApiClient\Behaviours\EntityLocator
- * @subpackage Somnambulist\ApiClient\Behaviours\EntityLocator\FindByPaginated
+ * @subpackage Somnambulist\ApiClient\Behaviours\EntityLocator\FindBy
  *
+ * @property-read ApiClientInterface $client
  * @property-read ApiRequestHelper $apiHelper
- * @property-read ApiClient $client
  */
-trait FindByPaginated
+trait FindBy
 {
 
-    public function findByPaginated(array $criteria = [], array $orderBy = [], int $page = 1, int $perPage = 30): Pagerfanta
+    public function findBy(array $criteria = [], array $orderBy = [], int $limit = null, int $offset = null): Collection
     {
         $options = array_merge(
             $criteria,
             $this->apiHelper->createOrderByRequestArgument($orderBy),
-            $this->apiHelper->createPaginationRequestArguments($page, $perPage)
+            $this->apiHelper->createPaginationRequestArgumentsFromLimitAndOffset($limit, $offset)
         );
 
         try {
             $response = $this->client->get($this->prefix('list'), $this->appendIncludes($options));
 
-            return $this->hydratePaginator($response, $this->className, $this->collectionClass);
+            return $this->hydrateCollection($response, $this->className, $this->collectionClass);
         } catch (ClientException $e) {
             $this->log(LogLevel::ERROR, $e->getMessage(), [
                 'route' => $this->client->route($this->prefix('list'), $this->appendIncludes($options)),
             ]);
         }
 
-        return $this->getEmptyPaginatorInstance();
+        return new MutableCollection();
+    }
+
+    public function findOneBy(array $criteria, array $orderBy = []): ?object
+    {
+        return $this->findBy($criteria, $orderBy, 1)->first() ?: null;
     }
 }
