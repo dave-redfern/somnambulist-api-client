@@ -16,6 +16,7 @@ use Somnambulist\ApiClient\PersisterActions\UpdateAction;
 use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
 use Somnambulist\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Collection\Contracts\Collection;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Routing\RouteCollection;
@@ -187,5 +188,31 @@ class EntityPersisterTest extends TestCase
         $this->assertTrue(
             $repo->destroy(DestroyAction::destroy(User::class)->route('users.destroy', ['id' => 'c8259b3b-8603-3098-8361-425325078c9a']))
         );
+    }
+
+    public function testCanRemapErrorFields()
+    {
+        $repo = $this->persister;
+
+        try {
+            $req = CreateAction::new(User::class)
+                ->with([
+                    'name' => 'foo bar', 'email' => 'foo@example.com', 'error' => true,
+                ])
+                ->route('users.create')
+            ;
+
+            $repo->create($req);
+        } catch (EntityPersisterException $e) {
+            $errors = $e->remapErrorFieldsToFormFieldNames(['email' => 'email_address', 'name' => 'first_name']);
+
+            $this->assertTrue($errors->has('email_address'));
+            $this->assertTrue($errors->has('first_name'));
+
+            $errors = $e->remapErrorFieldsToFormFieldNames(['name' => 'first_name']);
+
+            $this->assertTrue($errors->has('email'));
+            $this->assertTrue($errors->has('first_name'));
+        }
     }
 }

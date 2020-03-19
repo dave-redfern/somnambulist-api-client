@@ -126,10 +126,8 @@ class EntityPersisterException extends Exception
     {
         $tmp = [];
 
-        foreach ($map as $field => $key) {
-            if ($this->errors->has($field)) {
-                $tmp[$key] = $this->errors->get($field);
-            }
+        foreach ($this->errors as $key => $value) {
+            $tmp[($map[$key] ?? $key)] = $value;
         }
 
         return new FrozenCollection($tmp);

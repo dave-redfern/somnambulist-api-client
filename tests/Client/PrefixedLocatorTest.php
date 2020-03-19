@@ -67,9 +67,6 @@ class PrefixedLocatorTest extends TestCase
         $this->repository = null;
     }
 
-    /**
-     * @group cur
-     */
     public function testFind()
     {
         $repo = $this->repository;

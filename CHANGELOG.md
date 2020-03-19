@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+2020-03-19 - 1.4.1
+------------------
+
+ * Fix bug in `EntityPersisterException` when remapping fields, was only including mapped fields
+
+2020-03-19 - 1.4.0
+------------------
+
+ * Released refactored entity persister as final version
+
 2020-03-18
 ----------
 
