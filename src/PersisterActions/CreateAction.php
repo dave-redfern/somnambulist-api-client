@@ -30,8 +30,8 @@ class CreateAction extends AbstractAction
     public function isValid(): bool
     {
         Assert::lazy()->tryAll()
-            ->that($this->properties, 'properties')->notEmpty()
-            ->that($this->route, 'route')->notNull()->notBlank()
+            ->that($this->properties, 'properties')->notEmpty('No properties have been attached to the create request')
+            ->that($this->route, 'route', 'The route should not be blank or null')->notNull()->notBlank()
             ->verifyNow()
         ;
 

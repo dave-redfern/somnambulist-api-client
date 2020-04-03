@@ -28,9 +28,9 @@ class UpdateAction extends AbstractAction
     public function isValid(): bool
     {
         Assert::lazy()->tryAll()
-            ->that($this->properties, 'properties')->notEmpty()
-            ->that($this->route, 'route')->notNull()->notBlank()
-            ->that($this->params, 'params')->notEmpty()
+            ->that($this->properties, 'properties')->notEmpty('There are no properties specified for update')
+            ->that($this->route, 'route', 'The route should not be blank or null')->notNull()->notBlank()
+            ->that($this->params, 'params')->notEmpty('There are no route parameters for the update request')
             ->verifyNow()
         ;
 

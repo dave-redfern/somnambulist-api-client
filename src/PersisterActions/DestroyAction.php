@@ -28,8 +28,8 @@ class DestroyAction extends AbstractAction
     public function isValid(): bool
     {
         Assert::lazy()->tryAll()
-            ->that($this->route, 'route')->notNull()->notBlank()
-            ->that($this->params, 'params')->notEmpty()
+            ->that($this->route, 'route', 'The route should not be blank or null')->notNull()->notBlank()
+            ->that($this->params, 'params')->notEmpty('There are no route parameters for the delete request')
             ->verifyNow()
         ;
 

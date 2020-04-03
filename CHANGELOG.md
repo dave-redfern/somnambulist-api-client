@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-04-03 - 1.4.2
+------------------
+
+ * Add better messages on validation failures for default actions
+
 2020-03-19 - 1.4.1
 ------------------
 
