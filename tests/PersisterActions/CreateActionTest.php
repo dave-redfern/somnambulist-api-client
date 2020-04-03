@@ -62,7 +62,7 @@ class CreateActionTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The following 1 assertions failed:
-1) route: Value "" is blank, but was expected to contain a value.
+1) route: The route should not be blank or null
 ');
 
         $action->isValid();

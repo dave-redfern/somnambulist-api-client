@@ -62,8 +62,8 @@ class UpdateActionTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The following 2 assertions failed:
-1) route: Value "" is blank, but was expected to contain a value.
-2) params: Value "<ARRAY>" is empty, but non empty value was expected.
+1) route: The route should not be blank or null
+2) params: There are no route parameters for the update request
 ');
 
         $action->isValid();
