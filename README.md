@@ -276,6 +276,18 @@ the representation after the action is performed.
 
 For complex persistence requirements, implement your own solution.
 
+#### Persisting "null" values
+
+Sometimes it is advantageous to be able to send "null" as the value for a field. Unfortunately
+the Symfony HttpClient uses `http_build_query` under the hood to normalise the body data. This
+function will strip all keys with null values, however it will leave false, 0 and empty string
+as-is.
+
+Your options in this case are:
+
+ * substitute empty string or another value to stand in for null
+ * send a JSON payload through a custom request call (use ['json' => [..array of data..]])
+
 ## Tests
 
 PHPUnit 8+ is used for testing. Run tests via `vendor/bin/phpunit`.
