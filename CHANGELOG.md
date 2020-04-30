@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-04-29 - 1.5.0
+------------------
+
+ * Add `GenericAction` without route param or property checks
+
 2020-04-03
 ----------
 
