@@ -18,11 +18,12 @@ abstract class AbstractAction implements ApiActionInterface
     use HasObjectData;
     use HasRouteData;
 
-    public function __construct(string $class, array $properties = [], string $route = '', array $params = [])
+    public function __construct(string $class, array $properties = [], string $route = '', array $params = [], string $method = null)
     {
         $this->class      = $class;
         $this->properties = $properties;
         $this->route      = $route;
         $this->params     = $params;
+        $this->method     = $this->validateHttpMethod($method);
     }
 }

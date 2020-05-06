@@ -56,32 +56,32 @@ class ApiClient implements ApiClientInterface
 
     public function get(string $route, array $parameters = []): ResponseInterface
     {
-        return $this->client->request('GET', $this->router->route($route, $parameters), $this->appendHeaders());
+        return $this->client->request('GET', $this->route($route, $parameters), $this->appendHeaders());
     }
 
     public function head(string $route, array $parameters = []): ResponseInterface
     {
-        return $this->client->request('HEAD', $this->router->route($route, $parameters), $this->appendHeaders());
+        return $this->client->request('HEAD', $this->route($route, $parameters), $this->appendHeaders());
     }
 
     public function post(string $route, array $parameters = [], array $body = []): ResponseInterface
     {
-        return $this->client->request('POST', $this->router->route($route, $parameters), $this->appendHeaders(['body' => $body]));
+        return $this->client->request('POST', $this->route($route, $parameters), $this->appendHeaders(['body' => $body]));
     }
 
     public function put(string $route, array $parameters = [], array $body = []): ResponseInterface
     {
-        return $this->client->request('PUT', $this->router->route($route, $parameters), $this->appendHeaders(['body' => $body]));
+        return $this->client->request('PUT', $this->route($route, $parameters), $this->appendHeaders(['body' => $body]));
     }
 
     public function patch(string $route, array $parameters = [], array $body = []): ResponseInterface
     {
-        return $this->client->request('PATCH', $this->router->route($route, $parameters), $this->appendHeaders(['body' => $body]));
+        return $this->client->request('PATCH', $this->route($route, $parameters), $this->appendHeaders(['body' => $body]));
     }
 
     public function delete(string $route, array $parameters = []): ResponseInterface
     {
-        return $this->client->request('DELETE', $this->router->route($route, $parameters), $this->appendHeaders());
+        return $this->client->request('DELETE', $this->route($route, $parameters), $this->appendHeaders());
     }
 
     private function appendHeaders(array $options = []): array

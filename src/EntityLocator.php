@@ -97,6 +97,11 @@ class EntityLocator implements LoggerAwareInterface, EntityLocatorInterface
         return $this->className;
     }
 
+    public function getClient(): ApiClientInterface
+    {
+        return $this->client;
+    }
+
     public function with(string ...$include): self
     {
         $this->includes = $include;

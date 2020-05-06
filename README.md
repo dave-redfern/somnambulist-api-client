@@ -286,7 +286,66 @@ as-is.
 Your options in this case are:
 
  * substitute empty string or another value to stand in for null
- * send a JSON payload through a custom request call (use ['json' => [..array of data..]])
+ * send a JSON payload through a custom request call (use `['json' => [..array of data..]]`)
+
+### Recording Responses
+
+Since 1.6.0 a `RecordingApiClient` has been added that can record HTTP responses to requests.
+This allows actual API responses to be recorded to JSON files for use later on in e.g. tests.
+
+__Please note that as of v1.6.0 this feature is considered "beta" quality.__
+
+There are 3 modes of operation:
+
+ * passthru - the normal, it does nothing except return the response as-is
+ * record - record the response to a JSON file
+ * playback - load the cached response instead of making the request
+ 
+`passthru` is the default mode if nothing is configured. The mode is changed by calling:
+`->record()`, `->playback()` or `->passthru()` on the instance.
+
+A store must be configured before any recording or playback can be done.
+
+For example to set up recording:
+
+```php
+<?php
+use Somnambulist\ApiClient\Client\RecordingApiClient;
+
+$apiClient = new RecordingApiClient($httpCLient, $router, $injector);
+$apiClient->setStore('path/to/file/store')->record();
+```
+
+Now any calls to the API using this client instance will be recorded to the folder specified.
+All responses are recorded as SHA1 hashes of the request data:
+
+ * url + parameters
+ * headers
+ * body
+
+To avoid many files in one folder, the first 4 characters are used as sub-folders:
+
+ * path/to/file/store/ae/bc/aebc....._(n+1).json
+
+All data in the hash is sorted by key in ascending order so that the request will hash to the
+same value.
+
+To avoid issues where the same request may produce different output, each call to the same
+endpoint is tracked during that request cycle and the call number appended to the hash.
+For example: if you make 3 requests to https//api.url/v1/user/<some_id>, there will be 3
+cache files generated for each response during _that_ request cycle.
+
+Because data could change between request cycles, it is recommended to use separate stores.
+For example in a test suite you would want to store the responses per test suite, otherwise
+responses may be overwritten.
+
+The `RecordingApiClient` supports the `ResetInterface` to allow the request tracking to be flushed
+between requests in the case that it has been loaded in a dependency injection container. For
+Symfony projects, the service should be tagged as resetable by the kernel.
+
+If using standalone in tests, be sure to call `->reset()` between tests in the `tearDown()`
+method, otherwise you may not have the desired behaviour if you run an individual test (the
+requests will be in the _wrong_ order).
 
 ## Tests
 

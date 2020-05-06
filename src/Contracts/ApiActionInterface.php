@@ -27,4 +27,6 @@ interface ApiActionInterface
     public function getRoute(): string;
 
     public function getRouteParams(): array;
+
+    public function getMethod(): ?string;
 }

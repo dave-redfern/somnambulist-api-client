@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+2020-05-06 - 1.6.0
+------------------
+
+ * Add `method` to `AbstractAction` to allow for a generic `MakeRequest` trait for the persister
+ * Add `RecordingApiClient` for recording API requests to files for future playback (beta)
+
 2020-04-29 - 1.5.0
 ------------------
 

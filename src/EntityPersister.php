@@ -7,6 +7,7 @@ use Psr\Log\LoggerAwareTrait;
 use Somnambulist\ApiClient\Behaviours\EntityLocator\HydrateSingleObject;
 use Somnambulist\ApiClient\Behaviours\EntityPersister\MakeCreateRequest;
 use Somnambulist\ApiClient\Behaviours\EntityPersister\MakeDestroyRequest;
+use Somnambulist\ApiClient\Behaviours\EntityPersister\MakeRequest;
 use Somnambulist\ApiClient\Behaviours\EntityPersister\MakeUpdateRequest;
 use Somnambulist\ApiClient\Behaviours\LoggerWrapper;
 use Somnambulist\ApiClient\Contracts\ApiClientInterface;
@@ -37,6 +38,7 @@ class EntityPersister implements EntityPersisterInterface, LoggerAwareInterface
     use LoggerAwareTrait;
     use LoggerWrapper;
 
+    use MakeRequest;
     use MakeCreateRequest;
     use MakeUpdateRequest;
     use MakeDestroyRequest;
@@ -55,5 +57,10 @@ class EntityPersister implements EntityPersisterInterface, LoggerAwareInterface
     {
         $this->mapper = $mapper;
         $this->client = $client;
+    }
+
+    public function getClient(): ApiClientInterface
+    {
+        return $this->client;
     }
 }
