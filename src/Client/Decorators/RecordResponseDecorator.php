@@ -1,67 +1,44 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Client;
+namespace Somnambulist\ApiClient\Client\Decorators;
 
-use IlluminateAgnostic\Str\Support\Str;
-use ReflectionObject;
+use InvalidArgumentException;
 use RuntimeException;
-use Somnambulist\ApiClient\Contracts\ApiClientHeaderInjectorInterface;
 use Somnambulist\ApiClient\Contracts\ApiClientInterface;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\Service\ResetInterface;
 use function array_key_exists;
 use function array_merge;
-use function dir;
 use function dirname;
-use function explode;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
-use function is_array;
-use function is_dir;
+use function is_null;
 use function json_decode;
 use function json_encode;
-use function json_last_error_msg;
 use function ksort;
 use function sha1;
 use function sprintf;
+use function strtoupper;
 use function substr;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 
 /**
- * Class RecordingApiClient
+ * Class RecordResponseDecorator
  *
- * Wraps calls to API end points so that the responses can be stored into JSON files for
- * future playback. This allows mocking out all API calls for e.g. testing and to work
- * with real responses from an API.
+ * Decorates an ApiClientInterface adding the ability to record responses from the API.
  *
  * @package    Somnambulist\ApiClient\Client
- * @subpackage Somnambulist\ApiClient\Client\RecordingApiClient
+ * @subpackage Somnambulist\ApiClient\Client\Decorators\RecordResponseDecorator
  */
-class RecordingApiClient implements ApiClientInterface, ResetInterface
+class RecordResponseDecorator extends AbstractDecorator implements ResetInterface
 {
 
     const MODE_PASSTHRU = 'passthru';
     const MODE_PLAYBACK = 'playback';
     const MODE_RECORD   = 'record';
-
-    /**
-     * @var HttpClientInterface
-     */
-    private $client;
-
-    /**
-     * @var ApiRouter
-     */
-    private $router;
-
-    /**
-     * @var ApiClientHeaderInjectorInterface
-     */
-    private $injector;
 
     /**
      * @var string
@@ -71,7 +48,7 @@ class RecordingApiClient implements ApiClientInterface, ResetInterface
     /**
      * @var string
      */
-    private $mode = self::MODE_PASSTHRU;
+    private $mode;
 
     /**
      * Tracks the number of times the same request has been made
@@ -80,11 +57,15 @@ class RecordingApiClient implements ApiClientInterface, ResetInterface
      */
     private $requestTracker = [];
 
-    public function __construct(HttpClientInterface $client, ApiRouter $router, ApiClientHeaderInjectorInterface $injector = null)
+    public function __construct(ApiClientInterface $client, string $mode = null, string $store = null)
     {
-        $this->client   = $client;
-        $this->router   = $router;
-        $this->injector = $injector;
+        if (in_array($mode, [self::MODE_PLAYBACK, self::MODE_RECORD]) && is_null($store)) {
+            throw new InvalidArgumentException('A file store must be specified when setting mode in the constructor');
+        }
+
+        $this->client = $client;
+        $this->mode   = (in_array($mode, [self::MODE_RECORD, self::MODE_PLAYBACK, self::MODE_PASSTHRU]) ? $mode : self::MODE_PASSTHRU);
+        $this->store  = $store;
     }
 
     public function reset()
@@ -120,69 +101,19 @@ class RecordingApiClient implements ApiClientInterface, ResetInterface
         return $this;
     }
 
-    public function client(): HttpClientInterface
-    {
-        return $this->client;
-    }
-
-    public function router(): ApiRouter
-    {
-        return $this->router;
-    }
-
-    public function route(string $route, array $parameters = []): string
-    {
-        return $this->router->route($route, $parameters);
-    }
-
-    public function get(string $route, array $parameters = []): ResponseInterface
-    {
-        return $this->makeRequest(__FUNCTION__, $route, $parameters, []);
-    }
-
-    public function head(string $route, array $parameters = []): ResponseInterface
-    {
-        return $this->makeRequest(__FUNCTION__, $route, $parameters, []);
-    }
-
-    public function post(string $route, array $parameters = [], array $body = []): ResponseInterface
-    {
-        return $this->makeRequest(__FUNCTION__, $route, $parameters, $body);
-    }
-
-    public function put(string $route, array $parameters = [], array $body = []): ResponseInterface
-    {
-        return $this->makeRequest(__FUNCTION__, $route, $parameters, $body);
-    }
-
-    public function patch(string $route, array $parameters = [], array $body = []): ResponseInterface
-    {
-        return $this->makeRequest(__FUNCTION__, $route, $parameters, $body);
-    }
-
-    public function delete(string $route, array $parameters = []): ResponseInterface
-    {
-        return $this->makeRequest(__FUNCTION__, $route, $parameters, []);
-    }
-
-    private function isRecording(): bool
+    public function isRecording(): bool
     {
         return self::MODE_RECORD === $this->mode;
     }
 
-    private function shouldPassThrough(): bool
+    public function isPassingThru(): bool
     {
         return self::MODE_PASSTHRU === $this->mode;
     }
 
-    private function isPlayingBack(): bool
+    public function isPlayingBack(): bool
     {
         return self::MODE_PLAYBACK === $this->mode;
-    }
-
-    private function appendHeaders(array $options = []): array
-    {
-        return array_merge($options, ['headers' => ($this->injector ? $this->injector->getHeaders() : [])]);
     }
 
     private function makeCacheHash(string $route, array $body = [])
@@ -211,16 +142,16 @@ class RecordingApiClient implements ApiClientInterface, ResetInterface
         return sprintf('%s/%s/%s/%s.json', $this->store, substr($hash, 0, 2), substr($hash, 2, 2), $hash);
     }
 
-    private function makeRequest(string $method, string $route, array $parameters = [], array $body = []): ResponseInterface
+    protected function makeRequest(string $method, string $route, array $parameters = [], array $body = []): ResponseInterface
     {
-        $route = $this->route($route, $parameters);
-        $hash  = $this->makeCacheHash($route, $body);
+        $url  = $this->route($route, $parameters);
+        $hash = $this->makeCacheHash($route, $body);
 
         if ($this->isPlayingBack()) {
-            return $this->playbackResponse($hash, Str::upper($method), $route, $this->appendHeaders(['body' => $body]));
+            return $this->playbackResponse($hash, $method, $url, ['body' => $body]);
         }
 
-        $response = $this->client->request(Str::upper($method), $route, $this->appendHeaders(['body' => $body]));
+        $response = $this->client->$method($route, $parameters, $body);
 
         if ($this->isRecording()) {
             return $this->recordResponse($hash, $response);
@@ -241,7 +172,7 @@ class RecordingApiClient implements ApiClientInterface, ResetInterface
 
         $response = new MockResponse($data['body'], $data['info']);
 
-        return MockResponse::fromRequest($method, $url, $options, $response);
+        return MockResponse::fromRequest(strtoupper($method), $url, $options, $response);
     }
 
     private function recordResponse(string $hash, ResponseInterface $response): ResponseInterface
@@ -249,9 +180,9 @@ class RecordingApiClient implements ApiClientInterface, ResetInterface
         $cache = $this->makeCacheFileName($hash);
 
         $data = json_encode([
-            'headers' => $response->getHeaders(false),
-            'info' => $response->getInfo(),
-            'body' => $response->getContent(false),
+            'headers' => $response->getHeaders(false), // needs to be before getInfo() otherwise info is largely empty
+            'info'    => $response->getInfo(),
+            'body'    => $response->getContent(false),
         ], JSON_PRETTY_PRINT);
 
         if (!file_exists(dirname($cache))) {

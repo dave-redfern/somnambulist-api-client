@@ -7,6 +7,7 @@ use Somnambulist\ApiClient\Contracts\ApiClientInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use function array_merge;
+use function ksort;
 
 /**
  * Class ApiClient
@@ -51,6 +52,8 @@ class ApiClient implements ApiClientInterface
 
     public function route(string $route, array $parameters = []): string
     {
+        ksort($parameters);
+
         return $this->router->route($route, $parameters);
     }
 

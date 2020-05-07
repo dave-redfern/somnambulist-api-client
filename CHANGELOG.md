@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+2020-05-07 - 1.7.0
+------------------
+
+ * Change ApiClient `route` to ksort parameters before making the URL
+ * Refactor `RecordingApiClient` to `RecordResponseDecorator` to make it easier to use
+ * Add ability to set `mode` and `store` on construction of decorator
+ * Add example `LoggingDecorator`
+
 2020-05-06 - 1.6.1
 ------------------
 

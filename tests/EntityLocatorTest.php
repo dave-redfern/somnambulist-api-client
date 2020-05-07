@@ -76,7 +76,7 @@ class EntityLocatorTest extends TestCase
                 case Str::contains($url, '/users?id=c8259b3b-8603-3098-8361-425325078c9a&include=addresses,contacts'):
                     return $findById;
 
-                case Str::contains($url, '/users?id=5715229a-c9d3-4dd9-88f7-e6a1a66f5d31&per_page=1&page=1'):
+                case Str::contains($url, '/users?id=5715229a-c9d3-4dd9-88f7-e6a1a66f5d31&page=1&per_page=1'):
                     return $noResults;
                     
                 default:

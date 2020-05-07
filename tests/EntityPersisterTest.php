@@ -16,7 +16,6 @@ use Somnambulist\ApiClient\PersisterActions\UpdateAction;
 use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
 use Somnambulist\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Collection\Contracts\Collection;
-use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Routing\RouteCollection;

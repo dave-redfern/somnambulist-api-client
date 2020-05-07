@@ -290,10 +290,10 @@ Your options in this case are:
 
 ### Recording Responses
 
-Since 1.6.0 a `RecordingApiClient` has been added that can record HTTP responses to requests.
-This allows actual API responses to be recorded to JSON files for use later on in e.g. tests.
+The ApiClient instance can be wrapped in decorators to modify the behaviour / add functionality.
+Decorators can be stacked over an underlying instance.
 
-__Please note that as of v1.6.0 this feature is considered "beta" quality.__
+__Please note that as of v1.6.0 this feature is "beta" quality.__
 
 There are 3 modes of operation:
 
@@ -310,9 +310,9 @@ For example to set up recording:
 
 ```php
 <?php
-use Somnambulist\ApiClient\Client\RecordingApiClient;
+use Somnambulist\ApiClient\Client\Decorators\RecordResponseDecorator;
 
-$apiClient = new RecordingApiClient($httpCLient, $router, $injector);
+$apiClient = new RecordResponseDecorator($apiClient);
 $apiClient->setStore('path/to/file/store')->record();
 ```
 
