@@ -208,7 +208,7 @@ class RecordingApiClient implements ApiClientInterface, ResetInterface
 
     private function makeCacheFileName(string $hash): string
     {
-        return sprintf('%s/%s/%s/%s.json', $this->store, substr($hash, 0, 2), substr($hash, 1, 2), $hash);
+        return sprintf('%s/%s/%s/%s.json', $this->store, substr($hash, 0, 2), substr($hash, 2, 2), $hash);
     }
 
     private function makeRequest(string $method, string $route, array $parameters = [], array $body = []): ResponseInterface

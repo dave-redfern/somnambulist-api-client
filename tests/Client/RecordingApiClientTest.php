@@ -124,8 +124,8 @@ class RecordingApiClientTest extends TestCase
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
         $this->locator->findBy(['id' => $id], ['name' => 'DESC', 'created_at' => 'asc']);
 
-        $this->assertFileExists($this->store . '/15/53/153a46dff068e201e2f93de7725929800f18b749_1.json');
-        $this->assertFileExists($this->store . '/21/11/211da158d83dee04816a76e62ccb8c697311009e_1.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
+        $this->assertFileExists($this->store . '/21/1d/211da158d83dee04816a76e62ccb8c697311009e_1.json');
     }
 
     public function testMultipleSameRequestsGetSeparateFiles()
@@ -134,9 +134,9 @@ class RecordingApiClientTest extends TestCase
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
-        $this->assertFileExists($this->store . '/15/53/153a46dff068e201e2f93de7725929800f18b749_1.json');
-        $this->assertFileExists($this->store . '/15/53/153a46dff068e201e2f93de7725929800f18b749_2.json');
-        $this->assertFileExists($this->store . '/15/53/153a46dff068e201e2f93de7725929800f18b749_3.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_2.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_3.json');
     }
 
     public function testCanPlayback()
@@ -144,7 +144,7 @@ class RecordingApiClientTest extends TestCase
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
         // record the request to avoid needing another stub file
-        $this->assertFileExists($this->store . '/15/53/153a46dff068e201e2f93de7725929800f18b749_1.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
 
         // reset the request tracker so the hash is still the first request: _1
         $this->locator->getClient()->playback()->reset();
@@ -158,7 +158,7 @@ class RecordingApiClientTest extends TestCase
     {
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
-        $this->assertFileExists($this->store . '/15/53/153a46dff068e201e2f93de7725929800f18b749_1.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
 
         $this->locator->getClient()->playback()->reset();
 
