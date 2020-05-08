@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+2020-05-07 - 1.7.1
+------------------
+
+ * Refactor `RecordResponseDecorator` to use singletons for recording / request tracking
+   Fixes issues when using the recording with Symfony WebTestCase and the kernel being
+   reset between requests within the same test i.e. navigating between pages which would
+   prevent the request order being set properly.
+ * Remove `ResetInterface` from `RecordResponseDecorator`
+
 2020-05-07 - 1.7.0
 ------------------
 

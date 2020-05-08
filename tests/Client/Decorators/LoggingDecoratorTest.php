@@ -2,22 +2,16 @@
 
 namespace Somnambulist\ApiClient\Tests\Client\Decorators;
 
-use IlluminateAgnostic\Str\Support\Str;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RuntimeException;
 use Somnambulist\ApiClient\Client\ApiClient;
 use Somnambulist\ApiClient\Client\ApiRoute;
 use Somnambulist\ApiClient\Client\ApiRouter;
 use Somnambulist\ApiClient\Client\ApiService;
 use Somnambulist\ApiClient\Client\Decorators\LoggingDecorator;
-use Somnambulist\ApiClient\Client\Decorators\RecordResponseDecorator;
 use Somnambulist\ApiClient\EntityLocator;
 use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
 use Somnambulist\ApiClient\Tests\Support\Behaviours\UseFactory;
-use SplFileInfo;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpKernel\Log\Logger;
@@ -25,14 +19,12 @@ use Symfony\Component\Routing\RouteCollection;
 use function dirname;
 use function file_exists;
 use function file_get_contents;
-use function rmdir;
 
 /**
  * Class LoggingDecoratorTest
  *
  * @package    Somnambulist\ApiClient\Tests\Client\Decorators
  * @subpackage Somnambulist\ApiClient\Tests\Client\Decorators\LoggingDecoratorTest
- * @group cur
  */
 class LoggingDecoratorTest extends TestCase
 {

@@ -311,9 +311,12 @@ For example to set up recording:
 ```php
 <?php
 use Somnambulist\ApiClient\Client\Decorators\RecordResponseDecorator;
+use Somnambulist\ApiClient\Client\Decorators\ResponseStore;
+
+ResponseStore::instance()->setStore($store);
 
 $apiClient = new RecordResponseDecorator($apiClient);
-$apiClient->setStore('path/to/file/store')->record();
+$apiClient->record();
 ```
 
 Now any calls to the API using this client instance will be recorded to the folder specified.
@@ -339,13 +342,29 @@ Because data could change between request cycles, it is recommended to use separ
 For example in a test suite you would want to store the responses per test suite, otherwise
 responses may be overwritten.
 
-The `RecordingApiClient` supports the `ResetInterface` to allow the request tracking to be flushed
-between requests in the case that it has been loaded in a dependency injection container. For
-Symfony projects, the service should be tagged as resetable by the kernel.
+#### Using with Symfony WebTestCase
 
-If using standalone in tests, be sure to call `->reset()` between tests in the `tearDown()`
-method, otherwise you may not have the desired behaviour if you run an individual test (the
-requests will be in the _wrong_ order).
+When using recording with Symfony WebTestCases, you need to set the recording store for each
+test method, otherwise you may overwrite previous requests. Then before each test method you
+should additionally call: `RequestTracker::instance()->reset()` to ensure that the request
+counters are reset between tests.
+
+The reset could be placed in the `tearDown()` or `setUp()` method, along with the `setStore()`:
+
+```php
+<?php
+use Somnambulist\ApiClient\Client\Decorators\RequestTracker;
+use Somnambulist\ApiClient\Client\Decorators\ResponseStore;
+
+class LoginTest extends WebTestCase
+{
+    protected function setUp(): void 
+    {
+        ResponseStore::instance()->setStore('/path/to/store');
+        RequestTracker::instance()->reset();
+    }
+}
+```
 
 ## Tests
 

@@ -12,6 +12,8 @@ use Somnambulist\ApiClient\Client\ApiRoute;
 use Somnambulist\ApiClient\Client\ApiRouter;
 use Somnambulist\ApiClient\Client\ApiService;
 use Somnambulist\ApiClient\Client\Decorators\RecordResponseDecorator;
+use Somnambulist\ApiClient\Client\Decorators\RequestTracker;
+use Somnambulist\ApiClient\Client\Decorators\ResponseStore;
 use Somnambulist\ApiClient\EntityLocator;
 use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
 use Somnambulist\ApiClient\Tests\Support\Behaviours\UseFactory;
@@ -80,7 +82,10 @@ class RecordResponseDecoratorTest extends TestCase
         $router->routes()->add('users.view', new ApiRoute('/users/{id}', ['id' => '[0-9a-f\-]{36}']));
 
         $client = new RecordResponseDecorator(new ApiClient($client, $router));
-        $client->setStore($this->store = dirname(__DIR__, 3) . '/var/cache')->record();
+        $client->record();
+
+        ResponseStore::instance()->setStore($this->store = dirname(__DIR__, 3) . '/var/cache');
+        RequestTracker::instance()->reset();
 
         $this->locator = new EntityLocator($client, $this->factory()->makeUserMapper(), User::class);
     }
@@ -107,8 +112,8 @@ class RecordResponseDecoratorTest extends TestCase
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
         $this->locator->findBy(['id' => $id], ['name' => 'DESC', 'created_at' => 'asc']);
 
-        $this->assertFileExists($this->store . '/ac/7e/ac7ebb8e9b2316625ce0bd99b7f02b34f58e3f29_1.json');
-        $this->assertFileExists($this->store . '/df/a8/dfa8715f8b64d05831e340cb091461210efca04b_1.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
+        $this->assertFileExists($this->store . '/21/1d/211da158d83dee04816a76e62ccb8c697311009e_1.json');
     }
 
     public function testMultipleSameRequestsGetSeparateFiles()
@@ -117,9 +122,9 @@ class RecordResponseDecoratorTest extends TestCase
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
-        $this->assertFileExists($this->store . '/ac/7e/ac7ebb8e9b2316625ce0bd99b7f02b34f58e3f29_1.json');
-        $this->assertFileExists($this->store . '/ac/7e/ac7ebb8e9b2316625ce0bd99b7f02b34f58e3f29_2.json');
-        $this->assertFileExists($this->store . '/ac/7e/ac7ebb8e9b2316625ce0bd99b7f02b34f58e3f29_3.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_2.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_3.json');
     }
 
     public function testCanPlayback()
@@ -127,10 +132,10 @@ class RecordResponseDecoratorTest extends TestCase
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
         // record the request to avoid needing another stub file
-        $this->assertFileExists($this->store . '/ac/7e/ac7ebb8e9b2316625ce0bd99b7f02b34f58e3f29_1.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
 
         // reset the request tracker so the hash is still the first request: _1
-        $this->locator->getClient()->playback()->reset();
+        RequestTracker::instance()->reset();
 
         $result = $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
@@ -141,9 +146,11 @@ class RecordResponseDecoratorTest extends TestCase
     {
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
-        $this->assertFileExists($this->store . '/ac/7e/ac7ebb8e9b2316625ce0bd99b7f02b34f58e3f29_1.json');
+        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
 
-        $this->locator->getClient()->playback()->reset();
+        RequestTracker::instance()->reset();
+
+        $this->locator->getClient()->playback();
 
         $this->locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
