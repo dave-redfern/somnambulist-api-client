@@ -1,85 +1,88 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Tests\Support;
+namespace Somnambulist\Components\ApiClient\Tests\Support;
 
-use Somnambulist\ApiClient\Contracts\ObjectHydratorInterface;
-use Somnambulist\ApiClient\Mapper\ObjectHydratorContext;
-use Somnambulist\ApiClient\Mapper\ObjectMapper;
-use Somnambulist\ApiClient\Tests\Stubs\Entities\Address;
-use Somnambulist\ApiClient\Tests\Stubs\Entities\Contact;
-use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
-use Somnambulist\Collection\MutableCollection;
-use Somnambulist\Domain\Entities\Types\DateTime\DateTime;
+use IlluminateAgnostic\Str\Support\Str;
+use RuntimeException;
+use Somnambulist\Components\ApiClient\Client\ApiRoute;
+use Somnambulist\Components\ApiClient\Client\ApiRouter;
+use Somnambulist\Components\ApiClient\Client\Connection;
+use Somnambulist\Components\ApiClient\Manager;
+use Somnambulist\Components\AttributeModel\TypeCasters;
 use Somnambulist\Domain\Entities\Types\Geography\Country;
 use Somnambulist\Domain\Entities\Types\Identity\EmailAddress;
 use Somnambulist\Domain\Entities\Types\Identity\Uuid;
 use Somnambulist\Domain\Entities\Types\PhoneNumber;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Class Factory
  *
- * @package    Somnambulist\ApiClient\Tests\Support
- * @subpackage Somnambulist\ApiClient\Tests\Support\Factory
+ * @package    Somnambulist\Components\ApiClient\Tests\Support
+ * @subpackage Somnambulist\Components\ApiClient\Tests\Support\Factory
  */
 class Factory
 {
 
-    public function makeMapper(array $hydrators = []): ObjectMapper
+    public function makeManager(): Manager
     {
-        return new ObjectMapper($hydrators);
-    }
+        $host = 'http://api.example.dev/users/v1';
 
-    public function makeUserMapper(): ObjectMapper
-    {
-        $mapper = $this->makeMapper();
-        $mapper->addHydrator(new class implements ObjectHydratorInterface {
-            public function supports(): string
-            {
-                return User::class;
+        $callback = function ($method, $url, $options) {
+            dump($url);
+            switch ($url) {
+                case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a?include=addresses,contacts'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_addresses_contacts.json'));
+
+                case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a?include=address,contacts'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_address_contacts.json'));
+
+                case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a?include=address'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_address.json'));
+
+                case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view.json'));
+
+                case Str::contains($url, '/v1/users?email=noresults@example.com'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_list_no_result.json'));
+
+                case Str::contains($url, '/v1/users?email=hodkiewicz.anastasia@feest.org'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_list_single.json'));
+
+                case Str::contains($url, '/v1/users?include=addresses,contacts'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_list_with_addresses_contacts.json'));
+
+                case Str::contains($url, '/v1/users'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_list.json'));
+
+                case Str::contains($url, '/v1/foobar'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_foobar.json'));
             }
 
-            public function hydrate($resource, ObjectHydratorContext $context): object
-            {
-                $resource = new MutableCollection($resource);
+            throw new RuntimeException(sprintf('No response configured for request: %s %s', $method, $url));
+        };
 
-                $user            = new User();
-                $user->id        = new Uuid($resource->get('id'));
-                $user->name      = $resource->get('name');
-                $user->active    = $resource->get('is_active', false);
-                $user->email     = new EmailAddress($resource->get('email'));
-                $user->createdAt = DateTime::parseUtc($resource->get('created_at', 'now'));
-                $user->updatedAt = DateTime::parseUtc($resource->get('updated_at', 'now'));
+        $client = new MockHttpClient($callback);
+        $router = new ApiRouter($host, new RouteCollection());
+        $router->routes()->add('users.list', new ApiRoute('users'));
+        $router->routes()->add('users.view', new ApiRoute('users/{id}'));
 
-                $resource->value('addresses', new MutableCollection())->each(function ($address) use ($user) {
-                    $addr = new MutableCollection($address);
+        $connection = new Connection($client, $router, new EventDispatcher());
 
-                    $user->addresses->add(
-                        new Address(
-                            $addr->get('address_line_1'),
-                            $addr->get('address_line_2'),
-                            $addr->get('address_line_3'),
-                            $addr->get('town'),
-                            $addr->get('county'),
-                            $addr->get('postcode'),
-                            $addr->get('country') ? Country::memberOrNullBy('name', $addr->get('country')) : null
-                        )
-                    );
-                });
-
-                $resource->value('contacts', new MutableCollection())->each(function ($con) use ($user, $context) {
-                    $contact              = new Contact();
-                    $contact->type        = $con['type'];
-                    $contact->name        = $con['contact']['name'];
-                    $contact->email       = $con['contact']['email'] ? new EmailAddress($con['contact']['email']) : null;
-                    $contact->phoneNumber = $con['contact']['phone'] ? new PhoneNumber($con['contact']['phone']) : null;
-
-                    $user->contacts->add($contact);
-                });
-
-                return $user;
-            }
-        });
-
-        return $mapper;
+        return new Manager(
+            [
+                'default' => $connection,
+            ],
+            [
+                new TypeCasters\DateTimeCaster(),
+                new TypeCasters\SimpleValueObjectCaster(Uuid::class, ['uuid']),
+                new TypeCasters\SimpleValueObjectCaster(EmailAddress::class, ['email']),
+                new TypeCasters\SimpleValueObjectCaster(PhoneNumber::class, ['phone']),
+                new TypeCasters\EnumerableKeyCaster(Country::class, ['country']),
+            ]
+        );
     }
 }

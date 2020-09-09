@@ -1,19 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Tests\Client;
+namespace Somnambulist\Components\ApiClient\Tests\Client;
 
 use PHPUnit\Framework\TestCase;
-use Somnambulist\ApiClient\Client\ApiRoute;
-use Somnambulist\ApiClient\Client\ApiRouter;
-use Somnambulist\ApiClient\Client\ApiService;
+use Somnambulist\Components\ApiClient\Client\ApiRoute;
+use Somnambulist\Components\ApiClient\Client\ApiRouter;
+use Somnambulist\Components\ApiClient\Client\ApiService;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Class ApiRouterTest
  *
- * @package    Somnambulist\ApiClient\Tests\Client
- * @subpackage Somnambulist\ApiClient\Tests\Client\ApiRouterTest
+ * @package    Somnambulist\Components\ApiClient\Tests\Client
+ * @subpackage Somnambulist\Components\ApiClient\Tests\Client\ApiRouterTest
  *
  * @group client
  * @group client-api-router

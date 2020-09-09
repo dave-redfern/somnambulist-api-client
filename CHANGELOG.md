@@ -1,6 +1,29 @@
 Change Log
 ==========
 
+2020-09-09
+----------
+
+ * Add query encoders for JsonAPI, OpenStack and custom nested/compound
+ * Add pre/post request events when making API requests to allow for request changes
+ * Refactor ApiClient to Connection
+ * Remove hydrators
+ * Remove `EntityLocator`, interface, behaviours and tests
+ * Remove header injector interface
+
+2020-09-08
+----------
+
+ * Re-namespace to `Somnambulist\Components\ApiClient`
+ * Add AttributeModel as basis for API client models
+ * Add `QueryBuilder`, `Expression` and `ExpressionBuilder` for querying APIs
+ * Refactor all persistence classes into `Persistence` namespace 
+
+2020-09-06
+----------
+
+ * Require PHP 7.4
+
 2020-08-29 - 1.8.0
 ------------------
 

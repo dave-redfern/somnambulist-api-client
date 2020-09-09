@@ -55,9 +55,7 @@ alias as the second argument to the ApiService class.
 ```php
 <?php
 
-use Somnambulist\ApiClient\Client\ApiRouter;
-use Somnambulist\ApiClient\Client\ApiService;
-use Symfony\Component\Routing\RouteCollection;
+use Somnambulist\Components\ApiClient\Client\ApiRouter;use Somnambulist\Components\ApiClient\Client\ApiService;use Symfony\Component\Routing\RouteCollection;
 
 $router = new ApiRouter(new ApiService('http://api.somedomain.dev/users', 'users'), new RouteCollection());
 ```
@@ -67,9 +65,7 @@ Routes can then be added to the route collection (or pre-built before creating t
 ```php
 <?php
 
-use Somnambulist\ApiClient\Client\ApiRoute;use Somnambulist\ApiClient\Client\ApiRouter;
-use Somnambulist\ApiClient\Client\ApiService;
-use Symfony\Component\Routing\RouteCollection;
+use Somnambulist\Components\ApiClient\Client\ApiRoute;use Somnambulist\Components\ApiClient\Client\ApiRouter;use Somnambulist\Components\ApiClient\Client\ApiService;use Symfony\Component\Routing\RouteCollection;
 
 $router = new ApiRouter(new ApiService('http://api.somedomain.dev/users', 'users'), new RouteCollection());
 $router->routes()->add('users.list', new ApiRoute('/users'));
@@ -85,9 +81,7 @@ routes:
 ```php
 <?php
 
-use Psr\Log\LoggerInterface;use Somnambulist\ApiClient\Client\ApiRouter;
-use Somnambulist\ApiClient\Client\ApiService;
-use Symfony\Component\Routing\RouteCollection;
+use Psr\Log\LoggerInterface;use Somnambulist\Components\ApiClient
 
 class UserApiRouter extends ApiRouter
 {
@@ -125,11 +119,9 @@ requirements.
 
 ```php
 <?php
-use Somnambulist\ApiClient\Client\ApiClient;
-use Somnambulist\ApiClient\Client\ApiRouter;
-use Symfony\Component\HttpClient\HttpClient;
+use Somnambulist\Components\ApiClient\Client\Connection;use Somnambulist\Components\ApiClient\Client\ApiRouter;use Symfony\Component\HttpClient\HttpClient;
 
-$client = new ApiClient(HttpClient::create(), new ApiRouter());
+$client = new Connection(HttpClient::create(), new ApiRouter());
 ```
 
 In the same way that the ApiRouter can be extended, the ApiClient can be extended to provide
@@ -208,8 +200,7 @@ For example, to hydrate a User from an array it could be as simple as:
 
 ```php
 <?php
-use Somnambulist\ApiClient\Contracts\ObjectHydratorInterface;
-use Somnambulist\ApiClient\Mapper\ObjectHydratorContext;
+use Somnambulist\Components\ApiClient\Contracts\ObjectHydratorInterface;use Somnambulist\Components\ApiClient\Mapper\ObjectHydratorContext;
 
 $hydrator = new class implements ObjectHydratorInterface
 {
@@ -229,7 +220,7 @@ This would be added to the `ObjectMapper` by calling `->addHydrator()`:
 
 ```php
 <?php
-use Somnambulist\ApiClient\Mapper\ObjectMapper;
+use Somnambulist\Components\ApiClient\Mapper\ObjectMapper;
 
 $mapper = new ObjectMapper();
 $mapper->addHydrator($hydrator);
@@ -310,8 +301,7 @@ For example to set up recording:
 
 ```php
 <?php
-use Somnambulist\ApiClient\Client\Decorators\RecordResponseDecorator;
-use Somnambulist\ApiClient\Client\Decorators\ResponseStore;
+use Somnambulist\Components\ApiClient\Client\Decorators\RecordResponseDecorator;use Somnambulist\Components\ApiClient\Client\ResponseStore;
 
 ResponseStore::instance()->setStore($store);
 
@@ -353,8 +343,7 @@ The reset could be placed in the `tearDown()` or `setUp()` method, along with th
 
 ```php
 <?php
-use Somnambulist\ApiClient\Client\Decorators\RequestTracker;
-use Somnambulist\ApiClient\Client\Decorators\ResponseStore;
+use Somnambulist\Components\ApiClient\Client\RequestTracker;use Somnambulist\Components\ApiClient\Client\ResponseStore;
 
 class LoginTest extends WebTestCase
 {

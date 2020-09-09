@@ -1,22 +1,19 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Tests\Support\Behaviours;
+namespace Somnambulist\Components\ApiClient\Tests\Support\Behaviours;
 
-use Somnambulist\ApiClient\Tests\Support\Factory;
+use Somnambulist\Components\ApiClient\Tests\Support\Factory;
 
 /**
  * Trait UseFactory
  *
- * @package Somnambulist\ApiClient\Tests\Support\Behaviours
- * @subpackage Somnambulist\ApiClient\Tests\Support\Behaviours\UseFactory
+ * @package Somnambulist\Components\ApiClient\Tests\Support\Behaviours
+ * @subpackage Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory
  */
 trait UseFactory
 {
 
-    /**
-     * @var Factory
-     */
-    protected $factory;
+    protected ?Factory $factory = null;
 
     protected function factory(): Factory
     {

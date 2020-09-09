@@ -1,26 +1,23 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Client\Decorators;
+namespace Somnambulist\Components\ApiClient\Client\Decorators;
 
-use Somnambulist\ApiClient\Client\ApiRouter;
-use Somnambulist\ApiClient\Contracts\ApiClientInterface;
+use Somnambulist\Components\ApiClient\Client\ApiRouter;
+use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Class AbstractDecorator
  *
- * @package    Somnambulist\ApiClient\Client
- * @subpackage Somnambulist\ApiClient\Client\Decorators\AbstractDecorator
+ * @package    Somnambulist\Components\ApiClient\Client
+ * @subpackage Somnambulist\Components\ApiClient\Client\Decorators\AbstractDecorator
  */
-abstract class AbstractDecorator implements ApiClientInterface
+abstract class AbstractDecorator implements ConnectionInterface
 {
 
-    /**
-     * @var ApiClientInterface
-     */
-    protected $client;
+    protected ConnectionInterface $client;
 
-    public function client(): ApiClientInterface
+    public function client(): ConnectionInterface
     {
         return $this->client;
     }

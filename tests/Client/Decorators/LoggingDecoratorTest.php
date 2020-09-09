@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Tests\Client\Decorators;
+namespace Somnambulist\Components\ApiClient\Tests\Client\Decorators;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
-use Somnambulist\ApiClient\Client\ApiClient;
-use Somnambulist\ApiClient\Client\ApiRoute;
-use Somnambulist\ApiClient\Client\ApiRouter;
-use Somnambulist\ApiClient\Client\ApiService;
-use Somnambulist\ApiClient\Client\Decorators\LoggingDecorator;
-use Somnambulist\ApiClient\EntityLocator;
-use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
-use Somnambulist\ApiClient\Tests\Support\Behaviours\UseFactory;
+use Somnambulist\Components\ApiClient\Client\Connection;
+use Somnambulist\Components\ApiClient\Client\ApiRoute;
+use Somnambulist\Components\ApiClient\Client\ApiRouter;
+use Somnambulist\Components\ApiClient\Client\ApiService;
+use Somnambulist\Components\ApiClient\Client\Decorators\LoggingDecorator;
+use Somnambulist\Components\ApiClient\EntityLocator;
+use Somnambulist\Components\ApiClient\Tests\Stubs\Entities\User;
+use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpKernel\Log\Logger;
@@ -23,8 +23,8 @@ use function file_get_contents;
 /**
  * Class LoggingDecoratorTest
  *
- * @package    Somnambulist\ApiClient\Tests\Client\Decorators
- * @subpackage Somnambulist\ApiClient\Tests\Client\Decorators\LoggingDecoratorTest
+ * @package    Somnambulist\Components\ApiClient\Tests\Client\Decorators
+ * @subpackage Somnambulist\Components\ApiClient\Tests\Client\Decorators\LoggingDecoratorTest
  */
 class LoggingDecoratorTest extends TestCase
 {
@@ -67,7 +67,7 @@ class LoggingDecoratorTest extends TestCase
         }
 
         $client = new LoggingDecorator(
-            new ApiClient($client, $router),
+            new Connection($client, $router),
             new Logger(LogLevel::DEBUG, $this->log)
         );
 

@@ -1,71 +1,70 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Client\Decorators;
+namespace Somnambulist\Components\ApiClient\Client\Decorators;
 
-use Somnambulist\ApiClient\Contracts\ApiClientInterface;
+use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
+use Somnambulist\Components\ApiClient\Client\RequestTracker;
+use Somnambulist\Components\ApiClient\Client\ResponseStore;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use function in_array;
 
 /**
  * Class RecordResponseDecorator
  *
- * Decorates an ApiClientInterface adding the ability to record responses from the API.
+ * Decorates an ConnectionInterface adding the ability to record responses from the API.
  *
- * @package    Somnambulist\ApiClient\Client
- * @subpackage Somnambulist\ApiClient\Client\Decorators\RecordResponseDecorator
+ * @package    Somnambulist\Components\ApiClient\Client
+ * @subpackage Somnambulist\Components\ApiClient\Client\Decorators\RecordResponseDecorator
  */
 class RecordResponseDecorator extends AbstractDecorator
 {
 
-    const MODE_PASSTHRU = 'passthru';
-    const MODE_PLAYBACK = 'playback';
-    const MODE_RECORD   = 'record';
+    const PASSTHRU = 'passthru';
+    const PLAYBACK = 'playback';
+    const RECORD   = 'record';
 
-    /**
-     * @var string
-     */
-    private $mode;
+    private string $mode;
 
-    public function __construct(ApiClientInterface $client, string $mode = null)
+    public function __construct(ConnectionInterface $client, string $mode = null)
     {
         $this->client = $client;
-        $this->mode   = (in_array($mode, [self::MODE_RECORD, self::MODE_PLAYBACK, self::MODE_PASSTHRU]) ? $mode : self::MODE_PASSTHRU);
+        $this->mode   = in_array($mode, [self::RECORD, self::PLAYBACK, self::PASSTHRU], true) ? $mode : self::PASSTHRU;
     }
 
     public function record(): self
     {
-        $this->mode = self::MODE_RECORD;
+        $this->mode = self::RECORD;
 
         return $this;
     }
 
     public function passthru(): self
     {
-        $this->mode = self::MODE_PASSTHRU;
+        $this->mode = self::PASSTHRU;
 
         return $this;
     }
 
     public function playback(): self
     {
-        $this->mode = self::MODE_PLAYBACK;
+        $this->mode = self::PLAYBACK;
 
         return $this;
     }
 
     public function isRecording(): bool
     {
-        return self::MODE_RECORD === $this->mode;
+        return self::RECORD === $this->mode;
     }
 
     public function isPassingThru(): bool
     {
-        return self::MODE_PASSTHRU === $this->mode;
+        return self::PASSTHRU === $this->mode;
     }
 
     public function isPlayingBack(): bool
     {
-        return self::MODE_PLAYBACK === $this->mode;
+        return self::PLAYBACK === $this->mode;
     }
 
     protected function makeRequest(string $method, string $route, array $parameters = [], array $body = []): ResponseInterface

@@ -1,22 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Tests\Client\Decorators;
+namespace Somnambulist\Components\ApiClient\Tests\Client\Decorators;
 
 use IlluminateAgnostic\Str\Support\Str;
 use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
-use Somnambulist\ApiClient\Client\ApiClient;
-use Somnambulist\ApiClient\Client\ApiRoute;
-use Somnambulist\ApiClient\Client\ApiRouter;
-use Somnambulist\ApiClient\Client\ApiService;
-use Somnambulist\ApiClient\Client\Decorators\RecordResponseDecorator;
-use Somnambulist\ApiClient\Client\Decorators\RequestTracker;
-use Somnambulist\ApiClient\Client\Decorators\ResponseStore;
-use Somnambulist\ApiClient\EntityLocator;
-use Somnambulist\ApiClient\Tests\Stubs\Entities\User;
-use Somnambulist\ApiClient\Tests\Support\Behaviours\UseFactory;
+use Somnambulist\Components\ApiClient\Client\Connection;
+use Somnambulist\Components\ApiClient\Client\ApiRoute;
+use Somnambulist\Components\ApiClient\Client\ApiRouter;
+use Somnambulist\Components\ApiClient\Client\ApiService;
+use Somnambulist\Components\ApiClient\Client\Decorators\RecordResponseDecorator;
+use Somnambulist\Components\ApiClient\Client\RequestTracker;
+use Somnambulist\Components\ApiClient\EntityLocator;
+use Somnambulist\Components\ApiClient\Tests\Stubs\Entities\User;
+use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use SplFileInfo;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -28,8 +27,8 @@ use function rmdir;
 /**
  * Class RecordResponseDecoratorTest
  *
- * @package    Somnambulist\ApiClient\Tests\Client\Decorators
- * @subpackage Somnambulist\ApiClient\Tests\Client\Decorators\RecordResponseDecoratorTest
+ * @package    Somnambulist\Components\ApiClient\Tests\Client\Decorators
+ * @subpackage Somnambulist\Components\ApiClient\Tests\Client\Decorators\RecordResponseDecoratorTest
  */
 class RecordResponseDecoratorTest extends TestCase
 {
@@ -81,10 +80,10 @@ class RecordResponseDecoratorTest extends TestCase
         $router->routes()->add('users.list', new ApiRoute('/users'));
         $router->routes()->add('users.view', new ApiRoute('/users/{id}', ['id' => '[0-9a-f\-]{36}']));
 
-        $client = new RecordResponseDecorator(new ApiClient($client, $router));
+        $client = new RecordResponseDecorator(new Connection($client, $router));
         $client->record();
 
-        ResponseStore::instance()->setStore($this->store = dirname(__DIR__, 3) . '/var/cache');
+        \Somnambulist\Components\ApiClient\Client\ResponseStore::instance()->setStore($this->store = dirname(__DIR__, 3) . '/var/cache');
         RequestTracker::instance()->reset();
 
         $this->locator = new EntityLocator($client, $this->factory()->makeUserMapper(), User::class);

@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Client\Decorators;
+namespace Somnambulist\Components\ApiClient\Client\Decorators;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Somnambulist\ApiClient\Contracts\ApiClientInterface;
+use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use function sprintf;
 use function strtoupper;
@@ -14,23 +14,16 @@ use function strtoupper;
  *
  * For each call into the ApiClient, logs at a specified level (default: info)
  *
- * @package    Somnambulist\ApiClient\Client\Decorators
- * @subpackage Somnambulist\ApiClient\Client\Decorators\LoggingDecorator
+ * @package    Somnambulist\Components\ApiClient\Client\Decorators
+ * @subpackage Somnambulist\Components\ApiClient\Client\Decorators\LoggingDecorator
  */
 class LoggingDecorator extends AbstractDecorator
 {
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
+    private string $logLevel = LogLevel::INFO;
 
-    /**
-     * @var string
-     */
-    private $logLevel = LogLevel::INFO;
-
-    public function __construct(ApiClientInterface $client, LoggerInterface $logger)
+    public function __construct(ConnectionInterface $client, LoggerInterface $logger)
     {
         $this->client = $client;
         $this->logger = $logger;

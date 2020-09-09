@@ -1,57 +1,49 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Client;
+namespace Somnambulist\Components\ApiClient\Client;
 
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
+use function parse_url;
 
 /**
  * Class ApiRouter
  *
- * @package Somnambulist\ApiClient\Client
- * @subpackage Somnambulist\ApiClient\Client\ApiRouter
+ * @package    Somnambulist\Components\ApiClient\Client
+ * @subpackage Somnambulist\Components\ApiClient\Client\ApiRouter
  */
 class ApiRouter
 {
 
-    /**
-     * @var ApiService
-     */
-    private $service;
+    private string                $service;
+    private RouteCollection       $routes;
+    private UrlGeneratorInterface $generator;
+    private RequestContext        $context;
 
-    /**
-     * @var RouteCollection
-     */
-    private $routes;
-
-    /**
-     * @var UrlGenerator
-     */
-    private $generator;
-
-    /**
-     * @var LoggerInterface|null
-     */
-    private $logger;
-
-    /**
-     * Constructor
-     *
-     * @param ApiService           $service
-     * @param RouteCollection      $serviceRoutes
-     * @param LoggerInterface|null $logger
-     */
-    public function __construct(ApiService $service, RouteCollection $serviceRoutes, LoggerInterface $logger = null)
+    public function __construct(string $service, RouteCollection $routes)
     {
         $this->service = $service;
-        $this->routes  = $serviceRoutes;
-        $this->logger  = $logger;
+        $this->routes  = $routes;
+
+        $parsed = parse_url($this->service);
+
+        $this->context = new RequestContext(
+            $parsed['path'] ?? '',
+            'GET',
+            $parsed['host'] ?? 'localhost',
+            $parsed['scheme'] ?? 'http',
+            $parsed['port'] ?? 80,
+            $parsed['port'] ?? 443,
+            $parsed['path'] ?? '/',
+            $parsed['query'] ?? '',
+        );
+
+        $this->generator = new UrlGenerator($this->routes, $this->context);
     }
 
-    public function service(): ApiService
+    public function service(): string
     {
         return $this->service;
     }
@@ -63,20 +55,11 @@ class ApiRouter
 
     public function context(): RequestContext
     {
-        return $this->service->context();
+        return $this->context;
     }
 
     public function route(string $route, array $parameters = []): string
     {
-        return $this->generator()->generate($route, $parameters, UrlGenerator::ABSOLUTE_URL);
-    }
-
-    private function generator(): UrlGeneratorInterface
-    {
-        if ($this->generator) {
-            return $this->generator;
-        }
-
-        return $this->generator = new UrlGenerator($this->routes, $this->context(), $this->logger);
+        return $this->generator->generate($route, $parameters, UrlGenerator::ABSOLUTE_URL);
     }
 }

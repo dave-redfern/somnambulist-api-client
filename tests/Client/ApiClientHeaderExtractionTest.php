@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\ApiClient\Tests;
+namespace Somnambulist\Components\ApiClient\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Somnambulist\ApiClient\Client\ApiClient;
-use Somnambulist\ApiClient\Client\ApiRoute;
-use Somnambulist\ApiClient\Client\ApiRouter;
-use Somnambulist\ApiClient\Client\ApiService;
-use Somnambulist\ApiClient\Client\Injectors\InjectHeadersFromRequestStack;
+use Somnambulist\Components\ApiClient\Client\ApiRoute;
+use Somnambulist\Components\ApiClient\Client\ApiRouter;
+use Somnambulist\Components\ApiClient\Client\ApiService;
+use Somnambulist\Components\ApiClient\Client\Connection;
+use Somnambulist\Components\ApiClient\Client\EventListeners\InjectHeadersFromRequestStack;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +18,8 @@ use function file_get_contents;
 /**
  * Class ApiClientHeaderExtractionTest
  *
- * @package    Somnambulist\ApiClient\Tests
- * @subpackage Somnambulist\ApiClient\Tests\Client\ApiClientHeaderExtractionTest
+ * @package    Somnambulist\Components\ApiClient\Tests
+ * @subpackage Somnambulist\Components\ApiClient\Tests\Client\ApiClientHeaderExtractionTest
  *
  * @group      client
  * @group      client-entity-locator
@@ -28,14 +28,14 @@ class ApiClientHeaderExtractionTest extends TestCase
 {
 
     /**
-     * @var ApiClient
+     * @var Connection
      */
     private $client;
 
     protected function setUp(): void
     {
         $host    = 'http://api.example.dev/users/v1';
-        $default = new MockResponse(file_get_contents(__DIR__ . '/../Stubs/user_list.json'), [
+        $default = new MockResponse(file_get_contents(__DIR__ . '/../Support/Stubs/json/user_list.json'), [
             'http_code'        => 200,
             'response_headers' => [
                 'Content-Type' => 'application/json',
@@ -54,7 +54,7 @@ class ApiClientHeaderExtractionTest extends TestCase
         $router->routes()->add('users.list', new ApiRoute('/users'));
         $router->routes()->add('users.view', new ApiRoute('/users/{id}', ['id' => '[0-9a-f\-]{36}']));
 
-        $this->client = new ApiClient($client, $router, new InjectHeadersFromRequestStack($stack = new RequestStack(), [
+        $this->client = new Connection($client, $router, new InjectHeadersFromRequestStack($stack = new RequestStack(), [
             'X-Request-Id', 'X-Forwarded-For',
         ]));
 

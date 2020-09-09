@@ -1,0 +1,90 @@
+<?php declare(strict_types=1);
+
+namespace Somnambulist\Components\ApiClient\Client\Query\Encoders;
+
+use Somnambulist\Components\ApiClient\Client\Query\Behaviours\EncodeSimpleFilterConditions;
+use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderException;
+use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
+use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
+use function array_merge;
+use function implode;
+use function is_null;
+use function sprintf;
+use function strtolower;
+
+/**
+ * Class OpenStackApiEncoder
+ *
+ * Implements the spec from: https://specs.openstack.org/openstack/api-wg/guidelines/pagination_filter_sort.html#filtering
+ *
+ * Does not support OR conditions or nested conditions (only nested AND). Filters are
+ * inlined into the main query arguments and operators are prefixed before the value.
+ * Pagination is by limit and marker; page/per_page is not supported by the spec.
+ * Marker is a string but could be a numeric offset.
+ *
+ * @package    Somnambulist\Components\ApiClient\Client\Query\Encoders
+ * @subpackage Somnambulist\Components\ApiClient\Client\Query\Encoders\OpenStackApiEncoder
+ */
+class OpenStackApiEncoder extends AbstractEncoder
+{
+
+    use EncodeSimpleFilterConditions;
+
+    protected array $mappings = [
+        self::FILTERS  => null,
+        self::INCLUDE  => 'include',
+        self::LIMIT    => 'limit',
+        self::OFFSET   => 'marker',
+        self::ORDER_BY => 'sort',
+        self::PAGE     => 'page',
+        self::PER_PAGE => 'per_page',
+    ];
+
+    protected function createFilters(?CompositeExpression $expression): array
+    {
+        if (is_null($expression)) {
+            return [];
+        }
+
+        $filters = [];
+
+        foreach ($expression->getParts() as $part) {
+            if ($part instanceof Expression) {
+                $filters[$part->getField()] = (string)$part;
+            } elseif($part instanceof CompositeExpression) {
+                if ($part->isOr()) {
+                    throw QueryEncoderException::encoderDoesNotSupportNestedConditions(self::class, 'OR');
+                }
+
+                $filters = array_merge($filters, $this->createFilters($part));
+            }
+        }
+
+        return $filters;
+    }
+
+    protected function createOrderBy(array $orderBy = []): array
+    {
+        if (empty($orderBy)) {
+            return [];
+        }
+
+        $sort = [];
+
+        foreach ($orderBy as $field => $dir) {
+            $sort[] = sprintf('%s:%s', $field, strtolower($dir));
+        }
+
+        return [$this->mappings[self::ORDER_BY] => implode(',', $sort)];
+    }
+
+    protected function createPagination(int $page = null, int $perPage = null): array
+    {
+        return [];
+    }
+
+    protected function createPaginationFromLimitAndOffset(int $limit = null, int $offset = null): array
+    {
+        return [];
+    }
+}
