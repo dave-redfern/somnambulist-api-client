@@ -4,10 +4,8 @@ namespace Somnambulist\Components\ApiClient\Tests\Relationships;
 
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Collection\Contracts\Collection;
-use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\AssertRequestMade;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
-use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\Address;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 
 /**

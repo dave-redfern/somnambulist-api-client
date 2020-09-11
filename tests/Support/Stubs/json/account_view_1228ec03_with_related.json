@@ -1,0 +1,14 @@
+{
+    "id": "1228ec03-1a58-4e51-8cea-cb787104aa3d",
+    "name": "A Company",
+    "active": true,
+    "created_at": "2020-04-01 21:20:25",
+    "updated_at": "2020-04-01 21:20:25",
+    "related": [
+        {
+            "id": 388,
+            "related_account_id": "8c4ba4ea-c4f6-43ad-b97c-cb84f4314fa8",
+            "type": "child"
+        }
+    ]
+}

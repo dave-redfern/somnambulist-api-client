@@ -91,7 +91,7 @@ class ExpressionBuilderTest extends TestCase
     {
         $expr = (new ExpressionBuilder())->isNotNull('this');
 
-        $this->assertEquals('IS NOT NULL', $expr->getOperator());
+        $this->assertEquals('!null', $expr->getOperator());
     }
 
     public function testBetween()
@@ -136,6 +136,6 @@ class ExpressionBuilderTest extends TestCase
     {
         $expr = (new ExpressionBuilder())->isNull('this');
 
-        $this->assertEquals('IS NULL', $expr->getOperator());
+        $this->assertEquals('null', $expr->getOperator());
     }
 }

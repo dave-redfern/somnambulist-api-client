@@ -1,0 +1,9 @@
+{
+    "id": "1e335331-ee15-4871-a419-c6778e190a54",
+    "active": true,
+    "name": "Foo Bar",
+    "email": "foo.bar@example.com",
+    "created_at": "2020-05-12 18:36:48",
+    "updated_at": "2020-07-02 19:11:14",
+    "account_id": "1228ec03-1a58-4e51-8cea-cb787104aa3d"
+}

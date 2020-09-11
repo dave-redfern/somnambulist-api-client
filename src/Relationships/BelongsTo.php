@@ -10,28 +10,27 @@ use function get_class;
 use function is_null;
 
 /**
- * Class HasOne
- *
- * Loads a single record from the parents API call with the relationships passed
- * through.
+ * Class BelongsTo
  *
  * @package    Somnambulist\Components\ApiClient\Relationships
- * @subpackage Somnambulist\Components\ApiClient\Relationships\HasOne
+ * @subpackage Somnambulist\Components\ApiClient\Relationships\BelongsTo
  */
-class HasOne extends AbstractRelationship
+class BelongsTo extends AbstractRelationship
 {
 
+    private string $identityKey;
     private bool $nullOnNotFound;
 
-    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, bool $nullOnNotFound = true)
+    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, string $identityKey, bool $nullOnNotFound = true)
     {
         parent::__construct($parent, $related, $attributeKey);
 
-        if (!$parent instanceof Model) {
-            throw ModelRelationshipException::valueObjectNotAllowedForRelationship(get_class($parent), $attributeKey, get_class($related));
+        if (!$related instanceof Model) {
+            throw ModelRelationshipException::valueObjectNotAllowedForRelationship(get_class($parent), self::class, get_class($related));
         }
 
-        $this->query          = $parent->newQuery();
+        $this->query          = $related->newQuery();
+        $this->identityKey    = $identityKey;
         $this->nullOnNotFound = $nullOnNotFound;
     }
 
@@ -39,7 +38,7 @@ class HasOne extends AbstractRelationship
     {
         $models->each(function (AbstractModel $loaded) use ($relationship) {
             if (null === $data = $loaded->getRawAttribute($this->attributeKey)) {
-                $data = $this->query->with($relationship)->wherePrimaryKey($loaded->getPrimaryKey())->fetchRaw();
+                $data = $this->query->with($relationship)->wherePrimaryKey($loaded->getRawAttribute($this->identityKey))->fetchRaw();
 
                 if (isset($data[$this->attributeKey])) {
                     $data = $data[$this->attributeKey];

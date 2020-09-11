@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities;
 
 use Somnambulist\Components\ApiClient\Model;
+use Somnambulist\Components\ApiClient\Relationships\BelongsTo;
 use Somnambulist\Components\ApiClient\Relationships\HasMany;
 use Somnambulist\Components\ApiClient\Relationships\HasOne;
 
@@ -38,10 +39,10 @@ class User extends Model
         return $this->hasMany(Contact::class, 'contacts', 'type');
     }
 
-//    protected function group(): BelongsTo
-//    {
-//        return $this->belongsTo(Group::class, 'group', 'group_id');
-//    }
+    protected function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'account', 'account_id');
+    }
 
     protected function groups(): HasMany
     {

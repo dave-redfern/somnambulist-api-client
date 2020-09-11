@@ -3,8 +3,10 @@
 namespace Somnambulist\Components\ApiClient\Relationships;
 
 use Somnambulist\Collection\Contracts\Collection;
-use Somnambulist\Components\ApiClient\Contracts\RelatableInterface;
+use Somnambulist\Components\ApiClient\AbstractModel;
+use Somnambulist\Components\ApiClient\Exceptions\ModelRelationshipException;
 use Somnambulist\Components\ApiClient\Model;
+use function get_class;
 
 /**
  * Class HasMany
@@ -17,9 +19,13 @@ class HasMany extends AbstractRelationship
 
     private ?string $indexBy;
 
-    public function __construct(Model $parent, RelatableInterface $related, string $attributeKey, ?string $indexBy = null)
+    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, ?string $indexBy = null)
     {
         parent::__construct($parent, $related, $attributeKey);
+
+        if (!$parent instanceof Model) {
+            throw ModelRelationshipException::valueObjectNotAllowedForRelationship(get_class($parent), $attributeKey, get_class($related));
+        }
 
         $this->query   = $parent->newQuery();
         $this->indexBy = $indexBy;
@@ -27,7 +33,7 @@ class HasMany extends AbstractRelationship
 
     public function addRelationshipResultsToModels(Collection $models, string $relationship): self
     {
-        $models->each(function (Model $loaded) use ($relationship) {
+        $models->each(function (AbstractModel $loaded) use ($relationship) {
             $children = $this->related->getCollection();
 
             if (null === $data = $loaded->getRawAttribute($this->attributeKey)) {

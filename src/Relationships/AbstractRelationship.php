@@ -5,6 +5,7 @@ namespace Somnambulist\Components\ApiClient\Relationships;
 use BadMethodCallException;
 use IlluminateAgnostic\Str\Support\Str;
 use Somnambulist\Collection\Contracts\Collection;
+use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Behaviours\DecodeResponseArray;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
@@ -47,12 +48,12 @@ abstract class AbstractRelationship
 
     use DecodeResponseArray;
 
-    protected Model $parent;
-    protected ?ModelBuilder $query = null;
-    protected RelatableInterface $related;
+    protected AbstractModel $parent;
+    protected AbstractModel $related;
     protected string $attributeKey;
+    protected ?ModelBuilder $query = null;
 
-    public function __construct(Model $parent, RelatableInterface $related, string $attributeKey)
+    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey)
     {
         $this->parent       = $parent;
         $this->related      = $related;
