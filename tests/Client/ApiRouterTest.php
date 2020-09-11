@@ -5,7 +5,6 @@ namespace Somnambulist\Components\ApiClient\Tests\Client;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\ApiClient\Client\ApiRoute;
 use Somnambulist\Components\ApiClient\Client\ApiRouter;
-use Somnambulist\Components\ApiClient\Client\ApiService;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -23,18 +22,18 @@ class ApiRouterTest extends TestCase
 
     public function testCreate()
     {
-        $router = new ApiRouter(new ApiService('https://api.example.dev/users/v1'), new RouteCollection());
+        $router = new ApiRouter('https://api.example.dev/users/v1', new RouteCollection());
         $router->routes()->add('users.list', new ApiRoute('/users/'));
         $router->routes()->add('users.view', new ApiRoute('/users/{uuid}', ['uuid' => '[0-9a-f\-]{36}']));
 
         $this->assertInstanceOf(RouteCollection::class, $router->routes());
         $this->assertInstanceOf(RequestContext::class, $router->context());
-        $this->assertEquals('https://api.example.dev/users/v1', $router->service()->url());
+        $this->assertEquals('https://api.example.dev/users/v1', $router->service());
     }
 
     public function testCanGenerateUrlFromNamedRoute()
     {
-        $router = new ApiRouter(new ApiService('https://api.example.dev/users/v1'), new RouteCollection());
+        $router = new ApiRouter('https://api.example.dev/users/v1', new RouteCollection());
         $router->routes()->add('users.list', new ApiRoute('/users/'));
         $router->routes()->add('users.view', new ApiRoute('/users/{uuid}', ['uuid' => '[0-9a-f\-]{36}']));
 
@@ -50,7 +49,7 @@ class ApiRouterTest extends TestCase
 
     public function testCanGenerateUrlWithoutPathSegmentInService()
     {
-        $router = new ApiRouter(new ApiService('https://api.example.dev'), new RouteCollection());
+        $router = new ApiRouter('https://api.example.dev', new RouteCollection());
         $router->routes()->add('users.list', new ApiRoute('/users/'));
         $router->routes()->add('users.view', new ApiRoute('/users/{uuid}', ['uuid' => '[0-9a-f\-]{36}']));
 

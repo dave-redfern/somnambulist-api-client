@@ -1,6 +1,22 @@
 Change Log
 ==========
 
+2020-09-11
+----------
+
+ * Add `BelongsTo` relationship and tests
+ * Fix decorator tests and abstract implementation
+ * Fix header injector test
+ * Refactor `Model` / `ValueObject` for shared base so both have relationships
+ * Refactor relationship interfaces
+
+2020-09-10
+----------
+
+ * Add tests for `HasOne`, `HasMany`
+ * Fix implementation details of `HasOne`, `HasMany`
+ * Improve JSON test file names
+
 2020-09-09
 ----------
 

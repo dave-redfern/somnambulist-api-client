@@ -2,10 +2,10 @@
 
 namespace Somnambulist\Components\ApiClient\Client;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Client\Events\PostRequestEvent;
 use Somnambulist\Components\ApiClient\Client\Events\PreRequestEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -32,6 +32,11 @@ class Connection implements ConnectionInterface
     public function client(): HttpClientInterface
     {
         return $this->client;
+    }
+
+    public function dispatcher(): EventDispatcherInterface
+    {
+        return $this->dispatcher;
     }
 
     public function router(): ApiRouter

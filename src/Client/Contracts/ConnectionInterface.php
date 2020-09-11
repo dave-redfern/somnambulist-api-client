@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\ApiClient\Client\Contracts;
 
 use Somnambulist\Components\ApiClient\Client\ApiRouter;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -15,12 +16,9 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 interface ConnectionInterface
 {
 
-    /**
-     * Return the underlying HTTP client instance
-     *
-     * @return HttpClientInterface
-     */
     public function client(): HttpClientInterface;
+
+    public function dispatcher(): EventDispatcherInterface;
 
     /**
      * Return the current router instance being used for this client
