@@ -7,6 +7,7 @@ use RuntimeException;
 use Somnambulist\Components\ApiClient\Client\ApiRoute;
 use Somnambulist\Components\ApiClient\Client\ApiRouter;
 use Somnambulist\Components\ApiClient\Client\Connection;
+use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Tests\Support\Decorators\AssertableConnectionDecorator;
 use Somnambulist\Components\AttributeModel\TypeCasters;
@@ -19,6 +20,8 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Routing\RouteCollection;
 use function file_get_contents;
+use function is_callable;
+use function sprintf;
 
 /**
  * Class Factory
@@ -29,24 +32,14 @@ use function file_get_contents;
 class Factory
 {
 
-    public function makeManager(): Manager
+    public function makeManager(callable $decoratorFactory = null): Manager
     {
         $host = 'http://api.example.dev/users/v1';
 
         $callback = function ($method, $url, $options) {
-            dump($url);
             switch ($url) {
-                case Str::contains($url, '/v1/users'):
-                    return $this->userRoutes($method, $url, $options);
-
-                case Str::contains($url, '/v1/accounts/1228ec03-1a58-4e51-8cea-cb787104aa3d?include=related'):
-                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/account_view_1228ec03_with_related.json'));
-
-                case Str::contains($url, '/v1/accounts/1228ec03-1a58-4e51-8cea-cb787104aa3d'):
-                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/account_view_1228ec03.json'));
-
-                case Str::contains($url, '/v1/accounts/8c4ba4ea-c4f6-43ad-b97c-cb84f4314fa8'):
-                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/account_view_8c4ba4ea.json'));
+                case Str::contains($url, '/v1/users'):    return $this->userRoutes($method, $url, $options);
+                case Str::contains($url, '/v1/accounts'): return $this->accountRoutes($method, $url, $options);
 
                 case Str::contains($url, '/v1/groups/1?include=permissions'):
                     return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/group_view_with_permissions.json'));
@@ -69,6 +62,10 @@ class Factory
 
         $connection = new AssertableConnectionDecorator(new Connection($client, $router, new EventDispatcher()));
 
+        if (is_callable($decoratorFactory)) {
+            $connection = $decoratorFactory($connection);
+        }
+
         return new Manager(
             [
                 'default' => $connection,
@@ -81,6 +78,22 @@ class Factory
                 new TypeCasters\EnumerableKeyCaster(Country::class, ['country']),
             ]
         );
+    }
+
+    private function accountRoutes($method, $url, $options)
+    {
+        switch ($url) {
+            case Str::contains($url, '/v1/accounts/1228ec03-1a58-4e51-8cea-cb787104aa3d?include=related'):
+                return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/account_view_1228ec03_with_related.json'));
+
+            case Str::contains($url, '/v1/accounts/1228ec03-1a58-4e51-8cea-cb787104aa3d'):
+                return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/account_view_1228ec03.json'));
+
+            case Str::contains($url, '/v1/accounts/8c4ba4ea-c4f6-43ad-b97c-cb84f4314fa8'):
+                return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/account_view_8c4ba4ea.json'));
+        }
+
+        throw new RuntimeException(sprintf('No response configured for request: %s %s', $method, $url));
     }
 
     private function userRoutes($method, $url, $options)
@@ -118,6 +131,10 @@ class Factory
                 return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_list_no_result.json'));
 
             case Str::contains($url, '/v1/users?email=hodkiewicz.anastasia@feest.org'):
+            case Str::contains($url, '/v1/users?id=c8259b3b-8603-3098-8361-425325078c9a&per_page=10&page=1'):
+            case Str::contains($url, '/v1/users?id=c8259b3b-8603-3098-8361-425325078c9a&order=-name,created_at'):
+            case Str::contains($url, '/v1/users?id=c8259b3b-8603-3098-8361-425325078c9a&include=addresses,contacts'):
+            case Str::contains($url, '/v1/users?id=c8259b3b-8603-3098-8361-425325078c9a'):
                 return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_list_single.json'));
 
             case Str::contains($url, '/v1/users?include=addresses,contacts'):
@@ -126,5 +143,7 @@ class Factory
             case Str::contains($url, '/v1/users'):
                 return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_list.json'));
         }
+
+        throw new RuntimeException(sprintf('No response configured for request: %s %s', $method, $url));
     }
 }

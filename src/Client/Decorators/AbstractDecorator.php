@@ -2,9 +2,12 @@
 
 namespace Somnambulist\Components\ApiClient\Client\Decorators;
 
+use BadMethodCallException;
 use Somnambulist\Components\ApiClient\Client\ApiRouter;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use function method_exists;
 
 /**
  * Class AbstractDecorator
@@ -17,9 +20,23 @@ abstract class AbstractDecorator implements ConnectionInterface
 
     protected ConnectionInterface $connection;
 
-    public function client(): ConnectionInterface
+    public function __call($name, $arguments)
+    {
+        if (method_exists($this->connection, $name)) {
+            return $this->connection->$name(...$arguments);
+        }
+
+        throw new BadMethodCallException(sprintf('Unknown method "%s" on %s"', $name, static::class));
+    }
+
+    public function getConnection(): ConnectionInterface
     {
         return $this->connection;
+    }
+
+    public function client(): HttpClientInterface
+    {
+        return $this->connection->client();
     }
 
     public function router(): ApiRouter
