@@ -7,6 +7,7 @@ use IlluminateAgnostic\Str\Support\Str;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
 use Somnambulist\Collection\Contracts\Collection;
+use Somnambulist\Components\ApiClient\Behaviours\DecodeResponseArray;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
@@ -17,11 +18,9 @@ use Somnambulist\Components\ApiClient\Exceptions\NoResultsException;
 use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
 use Somnambulist\Components\ApiClient\Utils\GenerateRelationshipsToEagerLoad;
 use function array_key_exists;
-use function array_key_first;
 use function count;
 use function get_class;
 use function is_array;
-use function is_string;
 use function json_decode;
 use function method_exists;
 use function sprintf;
@@ -59,6 +58,8 @@ use const JSON_THROW_ON_ERROR;
 class ModelBuilder
 {
 
+    use DecodeResponseArray;
+
     private Model               $model;
     private QueryBuilder        $query;
     private ConnectionInterface $connection;
@@ -94,7 +95,7 @@ class ModelBuilder
      */
     public function find($id): ?Model
     {
-        return $this->useRoute('view')->wherePrimaryKey($id)->fetch()->first();
+        return $this->wherePrimaryKey($id)->fetch()->first();
     }
 
     /**
@@ -170,38 +171,40 @@ class ModelBuilder
         return $this->fetch()->first();
     }
 
-    public function fetch(): Collection
+    /**
+     * @internal
+     */
+    public function fetchRaw(): array
     {
-        $models   = $this->model->getCollection();
         $response = $this->connection->get(
             $this->route,
             $this->model->getQueryEncoder()->encode($this->query->with($this->eagerLoad))
         );
 
         if (200 !== $response->getStatusCode()) {
-            return $models;
+            return [];
         }
 
-        $data = json_decode((string)$response->getContent(), true, $depth = 512, JSON_THROW_ON_ERROR);
+        return json_decode((string)$response->getContent(), true, $depth = 512, JSON_THROW_ON_ERROR);
+    }
+
+    public function fetch(): Collection
+    {
+        $models = $this->model->getCollection();
+        $data   = $this->fetchRaw();
 
         if (!$data || !is_array($data)) {
             return $models;
         }
-        if (isset($data['data'])) {
-            // external response could contain a data element
-            $data = $data['data'];
-        }
-        if (is_string(array_key_first($data))) {
-            // treat single object responses like collections
-            $data = [$data];
-        }
+
+        $data = $this->ensureFlatArrayOfArrays($data);
 
         foreach ($data as $row) {
             $models->add($this->model->new($row));
         }
 
         if ($models->count() > 0) {
-            $this->eagerLoadRelationships($models, $data);
+            $this->eagerLoadRelationships($models);
         }
 
         return $models;
@@ -217,40 +220,27 @@ class ModelBuilder
      */
     public function paginate(int $page = 1, int $perPage = 30): Pagerfanta
     {
-        $models   = $this->model->getCollection();
-        $response = $this->connection->get(
-            $this->model->getRoute(),
-            $this->model->getQueryEncoder()->encode($this->query->with($this->eagerLoad)->page($page)->perPage($perPage))
-        );
+        $this->query->page($page)->perPage($perPage);
 
-        if (200 !== $response->getStatusCode()) {
+        $models = $this->model->getCollection();
+        $data   = $this->fetchRaw();
+
+        if (!$data || !is_array($data) || !isset($data['data'])) {
             return new Pagerfanta(new FixedAdapter(0, $models));
         }
 
-        $decoded = json_decode($response->getContent(), true, $depth = 512, JSON_THROW_ON_ERROR);
-        $data    = $decoded;
-        $total   = $perPage = count($data);
+        $total = $perPage = count($data['data']);
 
-        if (!$decoded || !is_array($decoded)) {
-            return new Pagerfanta(new FixedAdapter(0, $models));
-        }
+        $total   = $data['meta']['pagination']['total'] ?? $total;
+        $page    = $data['meta']['pagination']['current_page'] ?? $page;
+        $perPage = $data['meta']['pagination']['per_page'] ?? $perPage;
 
-        if (isset($decoded['data'])) {
-            // external response could contain a data element
-            $data  = $decoded['data'];
-            $total = $perPage = count($data);
-        }
-
-        $total   = $decoded['meta']['pagination']['total'] ?? $total;
-        $page    = $decoded['meta']['pagination']['current_page'] ?? $page;
-        $perPage = $decoded['meta']['pagination']['per_page'] ?? $perPage;
-
-        foreach ($data as $row) {
+        foreach ($data['data'] as $row) {
             $models->add($this->model->new($row));
         }
 
         if ($models->count() > 0) {
-            $this->eagerLoadRelationships($models, $data);
+            $this->eagerLoadRelationships($models);
         }
 
         return (new Pagerfanta(new FixedAdapter($total, $models)))
@@ -273,7 +263,7 @@ class ModelBuilder
         return $this;
     }
 
-    private function eagerLoadRelationships(Collection $models, array $data): void
+    private function eagerLoadRelationships(Collection $models): void
     {
         foreach ($this->eagerLoad as $name) {
             if (false === strpos($name, '.')) {
@@ -281,7 +271,7 @@ class ModelBuilder
                 $rel = $this->model->new()->getRelationship($name);
                 $rel
                     ->with($this->findNestedRelationshipsFor($name))
-                    ->addRelationshipResultsToModels($models, $name, $data)
+                    ->addRelationshipResultsToModels($models, $name)
                 ;
             }
         }
@@ -310,9 +300,19 @@ class ModelBuilder
         return $nested;
     }
 
+    /**
+     * Search by the models primary key; switching to the "view" route
+     *
+     * Note: this will at most return one object. If you wish to search by the primary
+     * id instead, use {@see ModelBuilder::whereField()}.
+     *
+     * @param string $id
+     *
+     * @return $this
+     */
     public function wherePrimaryKey($id): self
     {
-        return $this->whereField($this->model->getPrimaryKeyName(), 'eq', $id);
+        return $this->useRoute('view')->whereField($this->model->getPrimaryKeyName(), 'eq', $id);
     }
 
     /**

@@ -25,8 +25,8 @@ class LoggingDecorator extends AbstractDecorator
 
     public function __construct(ConnectionInterface $client, LoggerInterface $logger)
     {
-        $this->client = $client;
-        $this->logger = $logger;
+        $this->connection = $client;
+        $this->logger     = $logger;
     }
 
     public function setLogLevel(string $logLevel): void
@@ -38,6 +38,6 @@ class LoggingDecorator extends AbstractDecorator
     {
         $this->logger->log($this->logLevel, sprintf('Making a %s request to %s', strtoupper($method), $this->route($route, $parameters)));
 
-        return $this->client->$method($route, $parameters, $body);
+        return $this->connection->$method($route, $parameters, $body);
     }
 }

@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities;
 
 use Somnambulist\Components\ApiClient\Model;
+use Somnambulist\Components\ApiClient\Relationships\HasMany;
 
 class Group extends Model
 {
@@ -13,8 +14,12 @@ class Group extends Model
     ];
 
     protected array $casts = [
-        'id'         => 'uuid',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    protected function permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class, 'permissions');
+    }
 }

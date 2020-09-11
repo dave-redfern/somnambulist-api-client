@@ -15,21 +15,21 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 abstract class AbstractDecorator implements ConnectionInterface
 {
 
-    protected ConnectionInterface $client;
+    protected ConnectionInterface $connection;
 
     public function client(): ConnectionInterface
     {
-        return $this->client;
+        return $this->connection;
     }
 
     public function router(): ApiRouter
     {
-        return $this->client->router();
+        return $this->connection->router();
     }
 
     public function route(string $route, array $parameters = []): string
     {
-        return $this->client->route($route, $parameters);
+        return $this->connection->route($route, $parameters);
     }
 
     public function get(string $route, array $parameters = []): ResponseInterface

@@ -8,6 +8,7 @@ use Somnambulist\Components\ApiClient\Client\ApiRoute;
 use Somnambulist\Components\ApiClient\Client\ApiRouter;
 use Somnambulist\Components\ApiClient\Client\Connection;
 use Somnambulist\Components\ApiClient\Manager;
+use Somnambulist\Components\ApiClient\Tests\Support\Decorators\AssertableConnectionDecorator;
 use Somnambulist\Components\AttributeModel\TypeCasters;
 use Somnambulist\Domain\Entities\Types\Geography\Country;
 use Somnambulist\Domain\Entities\Types\Identity\EmailAddress;
@@ -37,11 +38,21 @@ class Factory
                 case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a?include=addresses,contacts'):
                     return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_addresses_contacts.json'));
 
+                case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a?include=addresses'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_addresses.json'));
+
                 case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a?include=address,contacts'):
                     return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_address_contacts.json'));
 
                 case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a?include=address'):
                     return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_address.json'));
+
+                case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a?include=groups,groups.permissions'):
+                case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a?include=groups.permissions'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_groups_permissions.json'));
+
+                case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a?include=groups'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_groups.json'));
 
                 case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a'):
                     return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view.json'));
@@ -58,6 +69,9 @@ class Factory
                 case Str::contains($url, '/v1/users'):
                     return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_list.json'));
 
+                case Str::contains($url, '/v1/groups/1?include=permissions'):
+                    return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/group_view_with_permissions.json'));
+
                 case Str::contains($url, '/v1/foobar'):
                     return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_foobar.json'));
             }
@@ -69,8 +83,10 @@ class Factory
         $router = new ApiRouter($host, new RouteCollection());
         $router->routes()->add('users.list', new ApiRoute('users'));
         $router->routes()->add('users.view', new ApiRoute('users/{id}'));
+        $router->routes()->add('groups.list', new ApiRoute('groups'));
+        $router->routes()->add('groups.view', new ApiRoute('groups/{id}'));
 
-        $connection = new Connection($client, $router, new EventDispatcher());
+        $connection = new AssertableConnectionDecorator(new Connection($client, $router, new EventDispatcher()));
 
         return new Manager(
             [

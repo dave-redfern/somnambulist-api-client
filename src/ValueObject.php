@@ -52,7 +52,7 @@ abstract class ValueObject extends AbstractModel implements RelatableInterface
         return new static($attributes);
     }
 
-    public function getCollectionClass(): Collection
+    public function getCollection(): Collection
     {
         return new $this->collectionClass;
     }

@@ -5,14 +5,13 @@ namespace Somnambulist\Components\ApiClient\Relationships;
 use BadMethodCallException;
 use IlluminateAgnostic\Str\Support\Str;
 use Somnambulist\Collection\Contracts\Collection;
+use Somnambulist\Components\ApiClient\Behaviours\DecodeResponseArray;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\ExpressionBuilder;
-use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 use Somnambulist\Components\ApiClient\Contracts\RelatableInterface;
 use Somnambulist\Components\ApiClient\Model;
 use Somnambulist\Components\ApiClient\ModelBuilder;
-use Somnambulist\Components\ApiClient\ValueObject;
 use function method_exists;
 use function sprintf;
 
@@ -21,7 +20,6 @@ use function sprintf;
  *
  * @package    Somnambulist\Components\ApiClient\Relationships
  * @subpackage Somnambulist\Components\ApiClient\Relationships\AbstractRelationship
- *
  *
  * @method ExpressionBuilder expr()
  *
@@ -47,24 +45,18 @@ use function sprintf;
 abstract class AbstractRelationship
 {
 
-    protected Model $parent;
-    protected ModelBuilder $query;
-    protected RelatableInterface $child;
-    protected string $attributeKey;
-    protected ?string $filterKey;
+    use DecodeResponseArray;
 
-    public function __construct(Model $parent, RelatableInterface $child, string $attributeKey, string $filterKey = null)
+    protected Model $parent;
+    protected ?ModelBuilder $query = null;
+    protected RelatableInterface $related;
+    protected string $attributeKey;
+
+    public function __construct(Model $parent, RelatableInterface $related, string $attributeKey)
     {
         $this->parent       = $parent;
-        $this->child        = $child;
-        $this->query        = $child instanceof Model ? $child->newQuery() : $parent->newQuery();
+        $this->related      = $related;
         $this->attributeKey = $attributeKey;
-        $this->filterKey    = $filterKey;
-    }
-
-    public function fetch(): ?object
-    {
-        return null;
     }
 
     abstract public function addRelationshipResultsToModels(Collection $models, string $relationship): self;

@@ -19,9 +19,9 @@ final class Manager
 
     private static ?Manager $instance = null;
     private ConnectionManager $connections;
-    private AttributeCaster  $caster;
+    private AttributeCaster $caster;
 
-    public function __construct(array $connections, iterable $casters = [])
+    public function __construct(array $connections = [], iterable $casters = [])
     {
         $this->connections = new ConnectionManager($connections);
         $this->caster      = new AttributeCaster($casters);

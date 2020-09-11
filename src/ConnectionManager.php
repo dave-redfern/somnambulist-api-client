@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\ApiClient;
 
 use Somnambulist\Components\ApiClient\Client\Connection;
+use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Exceptions\ConnectionManagerException;
 use function array_key_exists;
 
@@ -17,7 +18,7 @@ final class ConnectionManager
 
     private array $connections = [];
 
-    public function __construct(array $connections)
+    public function __construct(array $connections = [])
     {
         $this->forAll($connections);
     }
@@ -35,10 +36,10 @@ final class ConnectionManager
      * The model class name should be used and then that connection will be used with all
      * instances of that model. A default connection should still be provided as a fallback.
      *
-     * @param Connection $connection
-     * @param string     $model
+     * @param ConnectionInterface $connection
+     * @param string              $model
      */
-    public function add(Connection $connection, string $model = 'default'): void
+    public function add(ConnectionInterface $connection, string $model = 'default'): void
     {
         $this->connections[$model] = $connection;
     }
@@ -51,7 +52,7 @@ final class ConnectionManager
      * @return Connection
      * @throws ConnectionManagerException
      */
-    public function for(string $model = 'default'): Connection
+    public function for(string $model = 'default'): ConnectionInterface
     {
         $try = $model;
 

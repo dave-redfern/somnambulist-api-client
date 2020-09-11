@@ -25,21 +25,26 @@ class User extends Model
 
     protected function address(): HasOne
     {
-        return $this->hasOne(Address::class, 'address', null, false);
+        return $this->hasOne(Address::class, 'address', false);
     }
 
     protected function addresses(): HasMany
     {
-        return $this->hasMany(Address::class, 'addresses', null, 'type');
+        return $this->hasMany(Address::class, 'addresses', 'type');
     }
 
     protected function contacts(): HasMany
     {
-        return $this->hasMany(Contact::class, 'contacts', null, 'type');
+        return $this->hasMany(Contact::class, 'contacts', 'type');
     }
 
-    protected function group(): HasOne
+//    protected function group(): BelongsTo
+//    {
+//        return $this->belongsTo(Group::class, 'group', 'group_id');
+//    }
+
+    protected function groups(): HasMany
     {
-        return $this->hasOne(Group::class, 'contacts', 'group_id', false);
+        return $this->hasMany(Group::class, 'groups');
     }
 }

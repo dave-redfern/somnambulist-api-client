@@ -15,13 +15,5 @@
             "country": "Hong Kong",
             "type": "default"
         }
-    },
-    "contacts": {
-        "default": {
-            "name": "Laney Yundt",
-            "phone": null,
-            "email": "wdickinson@hotmail.com",
-            "type": "default"
-        }
     }
 }

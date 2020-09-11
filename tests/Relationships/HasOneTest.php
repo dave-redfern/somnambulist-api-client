@@ -3,7 +3,10 @@
 namespace Somnambulist\Components\ApiClient\Tests\Relationships;
 
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\ApiClient\Manager;
+use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\AssertRequestMade;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
+use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\Address;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 
 /**
@@ -20,23 +23,28 @@ class HasOneTest extends TestCase
 {
 
     use UseFactory;
+    use AssertRequestMade;
 
     protected function setUp(): void
     {
         $this->factory()->makeManager();
     }
 
-    public function testLoadingRelationship()
+    public function testEagerLoad()
     {
-        $user = User::with('address', 'contacts')->find('c8259b3b-8603-3098-8361-425325078c9a');
+        $user = User::with('address')->find('c8259b3b-8603-3098-8361-425325078c9a');
 
-        dump($user->address);
+        $this->assertInstanceOf(Address::class, $user->address);
+        $this->assertEquals('Hong Kong', $user->address->country);
     }
 
     public function testLazyLoadingRelationship()
     {
         $user = User::find('c8259b3b-8603-3098-8361-425325078c9a');
 
-        dump($user->address);
+        $this->assertRouteWasCalledWith('users.view', ['include' => 'address']);
+
+        $this->assertInstanceOf(Address::class, $user->address);
+        $this->assertEquals('Hong Kong', $user->address->country);
     }
 }

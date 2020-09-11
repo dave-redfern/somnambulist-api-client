@@ -27,8 +27,8 @@ class RecordResponseDecorator extends AbstractDecorator
 
     public function __construct(ConnectionInterface $client, string $mode = null)
     {
-        $this->client = $client;
-        $this->mode   = in_array($mode, [self::RECORD, self::PLAYBACK, self::PASSTHRU], true) ? $mode : self::PASSTHRU;
+        $this->connection = $client;
+        $this->mode       = in_array($mode, [self::RECORD, self::PLAYBACK, self::PASSTHRU], true) ? $mode : self::PASSTHRU;
     }
 
     public function record(): self
@@ -77,7 +77,7 @@ class RecordResponseDecorator extends AbstractDecorator
             return ResponseStore::instance()->fetch($hash, $method, $url, ['body' => $body]);
         }
 
-        $response = $this->client->$method($route, $parameters, $body);
+        $response = $this->connection->$method($route, $parameters, $body);
 
         if ($this->isRecording()) {
             return ResponseStore::instance()->store($hash, $response);

@@ -188,7 +188,7 @@ abstract class Model extends AbstractModel implements RelatableInterface
      */
     public function getAttribute(string $name)
     {
-        if (null !== $attr = parent::getAttribute($name)) {
+        if (!$this->isRelationship($name) && null !== $attr = parent::getAttribute($name)) {
             return $attr;
         }
 
@@ -256,6 +256,11 @@ abstract class Model extends AbstractModel implements RelatableInterface
         return null;
     }
 
+    private function isRelationship(string $method): bool
+    {
+        return method_exists($this, $method);
+    }
+
     private function getRelationshipFromMethod(string $method)
     {
         $relation = $this->$method();
@@ -272,7 +277,7 @@ abstract class Model extends AbstractModel implements RelatableInterface
             ));
         }
 
-        $relation->addRelationshipResultsToModels(new MutableCollection($this), $method, []);
+        $relation->addRelationshipResultsToModels(new MutableCollection($this), $method);
 
         return $this->relationships[$method];
     }
@@ -287,7 +292,8 @@ abstract class Model extends AbstractModel implements RelatableInterface
      *
      * Here, the parent has many children, so a User can have many addresses.
      * The related data is expected to be available via an include using the relationship
-     * name and will be converted to a collection of the specified class.
+     * name and will be converted to a collection of the specified class. Like with 1:1,
+     * this should be a direct relationship; loaded via a parent `with()` call.
      *
      * indexBy allows a column on the child to be used as the key in the returned
      * collection. Note: if this is specified, then there can be only a single
@@ -296,32 +302,31 @@ abstract class Model extends AbstractModel implements RelatableInterface
      * has a "type" field for: home, office, cell etc.
      *
      * @param string      $class
-     * @param string      $attributeKey
-     * @param string|null $filterKey
+     * @param string      $attributeKey The attribute name where data is located on the data source
      * @param string|null $indexBy
      *
      * @return HasMany
      */
-    protected function hasMany(string $class, string $attributeKey, string $filterKey = null, ?string $indexBy = null): HasMany
+    protected function hasMany(string $class, string $attributeKey, ?string $indexBy = null): HasMany
     {
-        return new HasMany($this, new $class, $attributeKey, $filterKey, $indexBy);
+        return new HasMany($this, new $class, $attributeKey, $indexBy);
     }
 
     /**
      * Defines a one to one relationship
      *
-     * Here the parent has only one child and the child only has that parent. If
-     * multiple records end up being stored, then only the first will be loaded.
+     * Here the parent has only one child and the child only has that parent. This data
+     * should be loaded directly from the parent via a `with()` call. For in-direct
+     * relationships, use {@see Model::belongsTo()}.
      *
      * @param string      $class
-     * @param string|null $attributeKey
-     * @param string|null $filterKey
+     * @param string|null $attributeKey   The attribute name where data is located on the data source
      * @param bool        $nullOnNotFound If false, returns an empty model as the related object
      *
      * @return HasOne
      */
-    protected function hasOne(string $class, string $attributeKey, string $filterKey = null, bool $nullOnNotFound = true): HasOne
+    protected function hasOne(string $class, string $attributeKey, bool $nullOnNotFound = true): HasOne
     {
-        return new HasOne($this, new $class, $attributeKey, $filterKey, $nullOnNotFound);
+        return new HasOne($this, new $class, $attributeKey, $nullOnNotFound);
     }
 }

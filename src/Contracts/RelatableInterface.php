@@ -2,6 +2,8 @@
 
 namespace Somnambulist\Components\ApiClient\Contracts;
 
+use Somnambulist\Collection\Contracts\Collection;
+
 /**
  * Interface RelatableInterface
  *
@@ -11,4 +13,13 @@ namespace Somnambulist\Components\ApiClient\Contracts;
 interface RelatableInterface
 {
 
+    public function new(array $attributes = []): RelatableInterface;
+
+    public function getCollection(): Collection;
+
+    public function getAttributes(): array;
+
+    public function getAttribute(string $name);
+
+    public function getRawAttribute(string $name);
 }
