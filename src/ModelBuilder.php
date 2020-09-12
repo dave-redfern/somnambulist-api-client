@@ -8,8 +8,10 @@ use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
 use Somnambulist\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\Client\Behaviours\DecodeResponseArray;
-use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
+use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface as Connection;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
+use Somnambulist\Components\ApiClient\Client\Contracts\QueryEncoderInterface;
+use Somnambulist\Components\ApiClient\Client\Contracts\ResponseDecoderInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\ExpressionBuilder;
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
@@ -56,13 +58,14 @@ use function substr;
 class ModelBuilder
 {
 
-    use DecodeResponseArray;
+    private Model        $model;
+    private QueryBuilder $query;
+    private Connection   $connection;
+    private array        $eagerLoad = [];
+    private ?string      $route;
 
-    private Model               $model;
-    private QueryBuilder        $query;
-    private ConnectionInterface $connection;
-    private array               $eagerLoad = [];
-    private ?string             $route     = null;
+    private QueryEncoderInterface    $encoder;
+    private ResponseDecoderInterface $decoder;
 
     public function __construct(Model $model)
     {
@@ -70,6 +73,9 @@ class ModelBuilder
         $this->route      = $model->getRoute('search');
         $this->query      = new QueryBuilder();
         $this->connection = Manager::instance()->connect($model);
+
+        $this->encoder = $model->getQueryEncoder();
+        $this->decoder = $model->getResponseDecoder();
     }
 
     private function useRoute(string $route): self
@@ -176,10 +182,10 @@ class ModelBuilder
     {
         $response = $this->connection->get(
             $this->route,
-            $this->model->getQueryEncoder()->encode($this->query->with($this->eagerLoad))
+            $this->encoder->encode($this->query->with($this->eagerLoad))
         );
 
-        return $this->decodeJsonResponse($response);
+        return $this->decoder->decode($response);
     }
 
     public function fetch(): Collection
@@ -191,7 +197,7 @@ class ModelBuilder
             return $models;
         }
 
-        $data = $this->ensureFlatArrayOfArrays($data);
+        $data = $this->decoder->collection($data);
 
         foreach ($data as $row) {
             $models->add($this->model->new($row));
@@ -229,7 +235,7 @@ class ModelBuilder
         $page    = $data['meta']['pagination']['current_page'] ?? $page;
         $perPage = $data['meta']['pagination']['per_page'] ?? $perPage;
 
-        foreach ($data['data'] as $row) {
+        foreach ($this->decoder->collection($data['data']) as $row) {
             $models->add($this->model->new($row));
         }
 

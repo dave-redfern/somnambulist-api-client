@@ -38,8 +38,8 @@
             "updated_at": "2019-04-02 17:03:31",
             "email": "hodkiewicz.anastasia@feest.org",
             "addresses": [],
-            "contacts": {
-                "default": {
+            "contacts": [
+                {
                     "id": "90",
                     "user_id": "424",
                     "type": "default",
@@ -51,7 +51,7 @@
                         "email": "wdickinson@hotmail.com"
                     }
                 }
-            }
+            ]
         },
         {
             "id": "af338e87-25d3-3756-b566-c6d18e946fd0",
@@ -111,8 +111,8 @@
             "updated_at": "2019-02-28 23:55:29",
             "email": "jbrown@yahoo.com",
             "addresses": [],
-            "contacts": {
-                "default": {
+            "contacts": [
+                {
                     "id": "91",
                     "user_id": "430",
                     "type": "default",
@@ -124,7 +124,7 @@
                         "email": null
                     }
                 }
-            }
+            ]
         },
         {
             "id": "1e84df34-b4a8-33a8-9192-2934bde65981",
@@ -143,16 +143,17 @@
             "created_at": "2018-12-21 14:52:42",
             "updated_at": "2018-12-21 14:52:42",
             "email": "wkiehn@gmail.com",
-            "addresses": {
-                "default": {
+            "addresses": [
+                {
                     "address_line_1": "85052 Alana Shoals",
                     "address_line_2": "Apt. 612",
                     "town": "West Borisburgh",
                     "county": "Alabama",
                     "postcode": "31745-7201",
-                    "country": "Hong Kong"
+                    "country": "Hong Kong",
+                    "type": "default"
                 }
-            },
+            ],
             "contacts": []
         },
         {
@@ -193,8 +194,8 @@
             "updated_at": "2019-03-12 12:51:06",
             "email": "rubie.bechtelar@hotmail.com",
             "addresses": [],
-            "contacts": {
-                "default": {
+            "contacts": [
+                {
                     "id": "92",
                     "user_id": "436",
                     "type": "default",
@@ -206,7 +207,7 @@
                         "email": null
                     }
                 }
-            }
+            ]
         },
         {
             "id": "f08c220d-a128-38d8-aa64-77fb358dbbf1",
@@ -245,24 +246,26 @@
             "created_at": "2018-09-29 15:19:17",
             "updated_at": "2018-09-29 15:19:17",
             "email": "henry.leuschke@hotmail.com",
-            "addresses": {
-                "default": {
+            "addresses": [
+                {
                     "address_line_1": "911 Karina Causeway",
                     "address_line_2": "Suite 044",
                     "town": "Efrenhaven",
                     "county": "Indiana",
                     "postcode": "09804",
-                    "country": "Brunei Darussalam"
+                    "country": "Brunei Darussalam",
+                    "type": "default"
                 },
-                "delivery": {
+                {
                     "address_line_1": "82383 Bailey Corner Apt. 679",
                     "address_line_2": "Suite 496",
                     "town": "South Danikashire",
                     "county": "Virginia",
                     "postcode": "44510-4453",
-                    "country": "Singapore"
+                    "country": "Singapore",
+                    "type": "delivery"
                 }
-            },
+            ],
             "contacts": []
         },
         {
@@ -273,8 +276,8 @@
             "updated_at": "2018-12-14 11:40:34",
             "email": "brycen.schuster@hirthe.com",
             "addresses": [],
-            "contacts": {
-                "default": {
+            "contacts": [
+                {
                     "id": "93",
                     "user_id": "441",
                     "type": "default",
@@ -286,7 +289,7 @@
                         "email": null
                     }
                 }
-            }
+            ]
         },
         {
             "id": "cda20d46-3ff8-3256-9cf7-2572ee7208f5",
@@ -315,24 +318,26 @@
             "created_at": "2019-06-10 00:23:48",
             "updated_at": "2019-06-10 00:23:48",
             "email": "jules59@ullrich.biz",
-            "addresses": {
-                "default": {
+            "addresses": [
+                {
                     "address_line_1": "2692 Janae Junctions",
                     "address_line_2": "Suite 308",
                     "town": "East Maxineberg",
                     "county": "West Virginia",
                     "postcode": "88284",
-                    "country": "New Zealand"
+                    "country": "New Zealand",
+                    "type": "default"
                 },
-                "work": {
+                {
                     "address_line_1": "23897 Layne Well Apt. 245",
                     "address_line_2": "Suite 899",
                     "town": "New Derricktown",
                     "county": "West Virginia",
                     "postcode": "36489-9227",
-                    "country": "Tajikistan"
+                    "country": "Tajikistan",
+                    "type": "work"
                 }
-            },
+            ],
             "contacts": []
         },
         {
@@ -343,8 +348,8 @@
             "updated_at": "2019-04-12 02:44:52",
             "email": "maybelle.beier@gmail.com",
             "addresses": [],
-            "contacts": {
-                "default": {
+            "contacts": [
+                {
                     "id": "94",
                     "user_id": "445",
                     "type": "default",
@@ -356,7 +361,7 @@
                         "email": "rachael37@gmail.com"
                     }
                 }
-            }
+            ]
         },
         {
             "id": "a0c5bc09-c635-3198-9d28-76826c1f309f",
@@ -365,16 +370,17 @@
             "created_at": "2019-07-03 19:42:38",
             "updated_at": "2019-07-03 19:42:38",
             "email": "kohler.guido@bailey.net",
-            "addresses": {
-                "default": {
+            "addresses": [
+                {
                     "address_line_1": "760 Wolf Ridges Suite 871",
                     "address_line_2": "Apt. 726",
                     "town": "Ericaland",
                     "county": "South Dakota",
                     "postcode": "53498",
-                    "country": "Dominica"
+                    "country": "Dominica",
+                    "type": "default"
                 }
-            },
+            ],
             "contacts": []
         },
         {
@@ -394,16 +400,17 @@
             "created_at": "2018-11-24 08:02:47",
             "updated_at": "2018-11-24 08:02:47",
             "email": "ashley31@gmail.com",
-            "addresses": {
-                "default": {
+            "addresses": [
+                {
                     "address_line_1": "696 Feil Inlet",
                     "address_line_2": "Suite 182",
                     "town": "Kihnburgh",
                     "county": "Indiana",
                     "postcode": "97072",
-                    "country": "Lebanon"
+                    "country": "Lebanon",
+                    "type": "default"
                 }
-            },
+            ],
             "contacts": []
         },
         {

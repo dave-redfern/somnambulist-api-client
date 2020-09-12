@@ -46,6 +46,7 @@ class HasManyTest extends TestCase
         $this->assertRouteWasCalledWith('users.view', ['include' => 'addresses']);
 
         $this->assertInstanceOf(Collection::class, $user->addresses);
+
         $this->assertEquals('Hong Kong', $user->addresses->default->country);
     }
 

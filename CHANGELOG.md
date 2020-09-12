@@ -5,6 +5,8 @@ Change Log
 ----------
 
  * Expanding documentation
+ * Add `ResponseDecoderInterface` and `SimpleJsonDecoder` implementation
+ * Update fetching to use decoder
 
 2020-09-11
 ----------

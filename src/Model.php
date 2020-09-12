@@ -3,19 +3,12 @@
 namespace Somnambulist\Components\ApiClient;
 
 use InvalidArgumentException;
-use LogicException;
-use Somnambulist\Collection\Contracts\Collection;
-use Somnambulist\Collection\MutableCollection;
+use Somnambulist\Components\ApiClient\Client\Connection\Decoders\SimpleJsonDecoder;
 use Somnambulist\Components\ApiClient\Client\Contracts\QueryEncoderInterface;
+use Somnambulist\Components\ApiClient\Client\Contracts\ResponseDecoderInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Encoders\SimpleEncoder;
 use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
-use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
-use Somnambulist\Components\ApiClient\Relationships\BelongsTo;
-use Somnambulist\Components\ApiClient\Relationships\HasMany;
-use Somnambulist\Components\ApiClient\Relationships\HasOne;
 use function array_key_exists;
-use function is_null;
-use function method_exists;
 
 /**
  * Class Model
@@ -41,6 +34,15 @@ abstract class Model extends AbstractModel
      * query arguments as needed by your API.
      */
     protected string $queryEncoder = SimpleEncoder::class;
+
+    /**
+     * The response decoder to use to create the internal array structures
+     *
+     * The default handles only a basic JSON structure as defined in the docs.
+     * For other response formats, implement a decoder to convert to the simpler
+     * array syntax expected.
+     */
+    protected string $responseDecoder = SimpleJsonDecoder::class;
 
     /**
      * The route names to use for searching / loading this Model.
@@ -115,6 +117,11 @@ abstract class Model extends AbstractModel
     public function getQueryEncoder(): QueryEncoderInterface
     {
         return new $this->queryEncoder;
+    }
+
+    public function getResponseDecoder(): ResponseDecoderInterface
+    {
+        return new $this->responseDecoder;
     }
 
     public function getRoute(string $type = 'search'): string

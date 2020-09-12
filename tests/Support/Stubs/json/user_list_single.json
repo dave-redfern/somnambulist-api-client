@@ -7,18 +7,19 @@
             "created_at": "2019-04-02 17:03:31",
             "updated_at": "2019-04-02 17:03:31",
             "email": "hodkiewicz.anastasia@feest.org",
-            "addresses": {
-                "default": {
+            "addresses": [
+                {
                     "address_line_1": "85052 Alana Shoals",
                     "address_line_2": "Apt. 612",
                     "town": "West Borisburgh",
                     "county": "Alabama",
                     "postcode": "31745-7201",
-                    "country": "Hong Kong"
+                    "country": "Hong Kong",
+                    "type": "default"
                 }
-            },
-            "contacts": {
-                "default": {
+            ],
+            "contacts": [
+                {
                     "id": "90",
                     "user_id": "424",
                     "type": "default",
@@ -30,7 +31,7 @@
                         "email": "wdickinson@hotmail.com"
                     }
                 }
-            }
+            ]
         }
     ],
     "meta": {

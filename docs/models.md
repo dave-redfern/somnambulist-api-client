@@ -103,6 +103,18 @@ class User extends Model
 }
 ```
 
+#### Model Options
+
+The following properties may be customised per model:
+
+ * routes - the routes to use for search and view
+ * casts - any attributes that should be converted to other types
+ * with - any relationships to always eager load when fetching data
+ * primaryKey - the name of the primary key; both attribute and root option
+ * collectionClass - the type of collection to return when fetching many results
+ * queryEncoder - the class to use to encode search requests to the API
+ * responseDecoder - the class to use to decode API responses to PHP arrays
+
 ### API Searches
 
 To load a user: `User::find(id)` or `User::query()->whereField('name', 'like', 'foo%')->fetch()`.

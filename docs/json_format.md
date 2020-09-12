@@ -46,6 +46,9 @@ element names:
 }
 ```
 
+__Note:__ collections must be arrays of objects. Collections defined as objects will not be
+correctly decoded by default. A custom response decoder will be required in those instances.
+
 ### Paginated Response Format
 
 A paginated result set is expected to have the following structure:

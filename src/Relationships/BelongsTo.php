@@ -38,11 +38,9 @@ class BelongsTo extends AbstractRelationship
     {
         $models->each(function (AbstractModel $loaded) use ($relationship) {
             if (null === $data = $loaded->getRawAttribute($this->attributeKey)) {
-                $data = $this->query->with($relationship)->wherePrimaryKey($loaded->getRawAttribute($this->identityKey))->fetchRaw();
-
-                if (isset($data[$this->attributeKey])) {
-                    $data = $data[$this->attributeKey];
-                }
+                $data = $this->related->getResponseDecoder()->object(
+                    $this->query->with($relationship)->wherePrimaryKey($loaded->getRawAttribute($this->identityKey))->fetchRaw()
+                );
 
                 if (empty($data)) {
                     $data = null;

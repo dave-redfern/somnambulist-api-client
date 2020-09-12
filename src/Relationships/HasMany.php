@@ -37,7 +37,9 @@ class HasMany extends AbstractRelationship
             $children = $this->related->getCollection();
 
             if (null === $data = $loaded->getRawAttribute($this->attributeKey)) {
-                $data = $this->query->with($relationship)->wherePrimaryKey($loaded->getPrimaryKey())->fetchRaw();
+                $data = $this->parent->getResponseDecoder()->object(
+                    $this->query->with($relationship)->wherePrimaryKey($loaded->getPrimaryKey())->fetchRaw()
+                );
 
                 if (isset($data[$this->attributeKey])) {
                     $data = $data[$this->attributeKey];
