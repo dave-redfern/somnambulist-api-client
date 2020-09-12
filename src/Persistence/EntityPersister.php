@@ -4,15 +4,14 @@ namespace Somnambulist\Components\ApiClient\Persistence;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Somnambulist\Components\ApiClient\Behaviours\EntityLocator\HydrateSingleObject;
-use Somnambulist\Components\ApiClient\Behaviours\LoggerWrapper;
+use Somnambulist\Components\ApiClient\Client\Behaviours\DecodeResponseArray;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
-use Somnambulist\Components\ApiClient\Mapper\ObjectMapper;
 use Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeCreateRequest;
 use Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeDestroyRequest;
 use Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeRequest;
 use Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeUpdateRequest;
 use Somnambulist\Components\ApiClient\Persistence\Contracts\EntityPersisterInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Class EntityPersister
@@ -34,33 +33,24 @@ use Somnambulist\Components\ApiClient\Persistence\Contracts\EntityPersisterInter
 class EntityPersister implements EntityPersisterInterface, LoggerAwareInterface
 {
 
-    use HydrateSingleObject;
     use LoggerAwareTrait;
 
+    use DecodeResponseArray;
     use MakeRequest;
     use MakeCreateRequest;
     use MakeUpdateRequest;
     use MakeDestroyRequest;
 
-    /**
-     * @var ConnectionInterface
-     */
-    protected $client;
+    protected ConnectionInterface $connection;
 
-    /**
-     * @var ObjectMapper
-     */
-    protected $mapper;
-
-    public function __construct(ConnectionInterface $client, ObjectMapper $mapper)
+    public function __construct(ConnectionInterface $connection)
     {
-        $this->mapper = $mapper;
-        $this->client = $client;
+        $this->connection = $connection;
     }
 
-    public function getClient(): ConnectionInterface
+    public function getConnection(): ConnectionInterface
     {
-        return $this->client;
+        return $this->connection;
     }
 
     protected function log(string $level, string $message, array $context = []): void
@@ -68,5 +58,20 @@ class EntityPersister implements EntityPersisterInterface, LoggerAwareInterface
         if ($this->logger) {
             $this->logger->log($level, $message, $context);
         }
+    }
+
+    protected function hydrateObject(ResponseInterface $response, string $className): ?object
+    {
+        $data = $this->decodeJsonResponse($response, [200, 201]);
+
+        if (!$data || !is_array($data)) {
+            return null;
+        }
+        if (isset($data['data'])) {
+            // external response could contain a data element
+            $data = $data['data'];
+        }
+
+        return new $className($data);
     }
 }

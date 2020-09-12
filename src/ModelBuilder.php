@@ -7,7 +7,7 @@ use IlluminateAgnostic\Str\Support\Str;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
 use Somnambulist\Collection\Contracts\Collection;
-use Somnambulist\Components\ApiClient\Behaviours\DecodeResponseArray;
+use Somnambulist\Components\ApiClient\Client\Behaviours\DecodeResponseArray;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
@@ -21,13 +21,11 @@ use function array_key_exists;
 use function count;
 use function get_class;
 use function is_array;
-use function json_decode;
 use function method_exists;
 use function sprintf;
 use function strlen;
 use function strtolower;
 use function substr;
-use const JSON_THROW_ON_ERROR;
 
 /**
  * Class ModelBuilder
@@ -181,11 +179,7 @@ class ModelBuilder
             $this->model->getQueryEncoder()->encode($this->query->with($this->eagerLoad))
         );
 
-        if (200 !== $response->getStatusCode()) {
-            return [];
-        }
-
-        return json_decode((string)$response->getContent(), true, $depth = 512, JSON_THROW_ON_ERROR);
+        return $this->decodeJsonResponse($response);
     }
 
     public function fetch(): Collection

@@ -23,7 +23,7 @@ interface EntityPersisterInterface
      * @param ApiActionInterface $action
      *
      * @return object
-     * @throws \Somnambulist\Components\ApiClient\Persistence\Exceptions\EntityPersisterException
+     * @throws EntityPersisterException
      */
     public function create(ApiActionInterface $action): object;
 

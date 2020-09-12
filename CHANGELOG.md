@@ -7,6 +7,7 @@ Change Log
  * Add `BelongsTo` relationship and tests
  * Fix decorator tests and abstract implementation
  * Fix header injector test
+ * Fix `EntityPersister` and tests
  * Refactor `Model` / `ValueObject` for shared base so both have relationships
  * Refactor relationship interfaces
 

@@ -13,7 +13,7 @@ use function json_decode;
 /**
  * Class EntityPersisterException
  *
- * @package    Somnambulist\Components\ApiClient\Exceptions
+ * @package    Somnambulist\Components\ApiClient\Persistence\Exceptions
  * @subpackage Somnambulist\Components\ApiClient\Persistence\Exceptions\EntityPersisterException
  *
  * @method ClientExceptionInterface getPrevious()
@@ -21,26 +21,9 @@ use function json_decode;
 class EntityPersisterException extends Exception
 {
 
-    /**
-     * The API response from the HTTP Client instance
-     *
-     * @var ResponseInterface
-     */
-    private $response;
-
-    /**
-     * All decoded fields from the JSON payload
-     *
-     * @var MutableCollection
-     */
-    private $payload;
-
-    /**
-     * Any decoded error fields from the JSON payload
-     *
-     * @var MutableCollection
-     */
-    private $errors;
+    private ResponseInterface $response;
+    private MutableCollection $payload;
+    private MutableCollection $errors;
 
     public function __construct($message, ClientExceptionInterface $error)
     {

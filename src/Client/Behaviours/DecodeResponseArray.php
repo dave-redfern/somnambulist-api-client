@@ -1,17 +1,29 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\Components\ApiClient\Behaviours;
+namespace Somnambulist\Components\ApiClient\Client\Behaviours;
 
+use Symfony\Contracts\HttpClient\ResponseInterface;
 use function is_string;
+use function json_decode;
+use const JSON_THROW_ON_ERROR;
 
 /**
  * Trait DecodeResponseArray
  *
- * @package    Somnambulist\Components\ApiClient\Behaviours
- * @subpackage Somnambulist\Components\ApiClient\Behaviours\DecodeResponseArray
+ * @package    Somnambulist\Components\ApiClient\Client
+ * @subpackage Somnambulist\Components\ApiClient\Client\Behaviours\DecodeResponseArray
  */
 trait DecodeResponseArray
 {
+
+    protected function decodeJsonResponse(ResponseInterface $response, array $ok = [200]): array
+    {
+        if (!in_array($response->getStatusCode(), $ok)) {
+            return [];
+        }
+
+        return json_decode((string)$response->getContent(), true, $depth = 512, JSON_THROW_ON_ERROR);
+    }
 
     /**
      * Ensures that the array data is a set of arrays

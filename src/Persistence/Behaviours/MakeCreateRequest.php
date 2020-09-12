@@ -14,7 +14,7 @@ use Symfony\Component\HttpClient\Exception\ClientException;
  * @package    Somnambulist\Components\ApiClient\Persistence\Behaviours
  * @subpackage Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeCreateRequest
  *
- * @property-read ConnectionInterface $client
+ * @property-read ConnectionInterface $connection
  */
 trait MakeCreateRequest
 {
@@ -24,7 +24,7 @@ trait MakeCreateRequest
         $action->isValid();
 
         try {
-            $response = $this->client->post($action->getRoute(), $action->getRouteParams(), $action->getProperties());
+            $response = $this->connection->post($action->getRoute(), $action->getRouteParams(), $action->getProperties());
 
             if (201 !== $response->getStatusCode()) {
                 throw EntityPersisterException::entityNotCreated($action->getClass(), new ClientException($response));
@@ -35,7 +35,7 @@ trait MakeCreateRequest
         } catch (ClientException $e) {
             $this->log(LogLevel::ERROR, $e->getMessage(), [
                 'class' => $action->getClass(),
-                'route' => $this->client->route($action->getRoute(), $action->getRouteParams()),
+                'route' => $this->connection->route($action->getRoute(), $action->getRouteParams()),
             ]);
 
             throw EntityPersisterException::serverError($e->getMessage(), $e);

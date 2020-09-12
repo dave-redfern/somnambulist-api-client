@@ -13,19 +13,8 @@ use function is_null;
 trait HasObjectData
 {
 
-    /**
-     * The class that will be returned after calling the API
-     *
-     * @var string
-     */
-    protected $class;
-
-    /**
-     * The array of required properties to create the object
-     *
-     * @var array
-     */
-    protected $properties;
+    protected ?string $class = null;
+    protected array $properties;
 
     public function hydrateClass(string $class): self
     {

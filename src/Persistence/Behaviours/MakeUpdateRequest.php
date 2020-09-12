@@ -16,7 +16,7 @@ use function implode;
  * @package    Somnambulist\Components\ApiClient\Persistence\Behaviours
  * @subpackage Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeCreateRequest
  *
- * @property-read \Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface $client
+ * @property-read ConnectionInterface $connection
  */
 trait MakeUpdateRequest
 {
@@ -28,7 +28,7 @@ trait MakeUpdateRequest
         $id = implode(':', array_values($action->getRouteParams()));
 
         try {
-            $response = $this->client->put($action->getRoute(), $action->getRouteParams(), $action->getProperties());
+            $response = $this->connection->put($action->getRoute(), $action->getRouteParams(), $action->getProperties());
 
             if (200 !== $response->getStatusCode()) {
                 throw EntityPersisterException::entityNotUpdated($action->getClass(), $id, new ClientException($response));
@@ -39,7 +39,7 @@ trait MakeUpdateRequest
         } catch (ClientException $e) {
             $this->log(LogLevel::ERROR, $e->getMessage(), [
                 'class' => $action->getClass(),
-                'route' => $this->client->route($action->getRoute(), $action->getRouteParams()),
+                'route' => $this->connection->route($action->getRoute(), $action->getRouteParams()),
             ]);
 
             throw EntityPersisterException::serverError($e->getMessage(), $e);

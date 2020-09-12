@@ -16,26 +16,9 @@ use function trim;
 trait HasRouteData
 {
 
-    /**
-     * The named route to use for the request
-     *
-     * @var string
-     */
-    protected $route;
-
-    /**
-     * Any route parameters if needed by the route
-     *
-     * @var array
-     */
-    protected $params;
-
-    /**
-     * HTTP method
-     *
-     * @var string|null
-     */
-    protected $method;
+    protected ?string $route = null;
+    protected ?string $method = null;
+    protected array $params = [];
 
     protected function validateHttpMethod(?string $method): ?string
     {

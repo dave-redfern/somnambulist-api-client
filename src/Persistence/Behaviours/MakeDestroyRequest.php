@@ -16,7 +16,7 @@ use function implode;
  * @package    Somnambulist\Components\ApiClient\Persistence\Behaviours
  * @subpackage Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeDestroyRequest
  *
- * @property-read \Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface $client
+ * @property-read ConnectionInterface $connection
  */
 trait MakeDestroyRequest
 {
@@ -28,7 +28,7 @@ trait MakeDestroyRequest
         $id = implode(':', array_values($action->getRouteParams()));
 
         try {
-            $response = $this->client->delete($action->getRoute(), $action->getRouteParams());
+            $response = $this->connection->delete($action->getRoute(), $action->getRouteParams());
 
             if (204 !== $response->getStatusCode()) {
                 throw EntityPersisterException::entityNotDestroyed($action->getClass(), $id, new ClientException($response));
@@ -39,7 +39,7 @@ trait MakeDestroyRequest
         } catch (ClientException $e) {
             $this->log(LogLevel::ERROR, $e->getMessage(), [
                 'class' => $action->getClass(),
-                'route' => $this->client->route($action->getRoute(), $action->getRouteParams()),
+                'route' => $this->connection->route($action->getRoute(), $action->getRouteParams()),
             ]);
 
             throw EntityPersisterException::serverError($e->getMessage(), $e);

@@ -15,7 +15,7 @@ use function strtolower;
  * @package    Somnambulist\Components\ApiClient\Persistence\Behaviours
  * @subpackage Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeRequest
  *
- * @property-read \Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface $client
+ * @property-read ConnectionInterface $connection
  */
 trait MakeRequest
 {
@@ -26,17 +26,18 @@ trait MakeRequest
 
         try {
             $method   = strtolower($action->getMethod() ?? 'post');
-            $response = $this->client->{$method}($action->getRoute(), $action->getRouteParams(), $action->getProperties());
+            $response = $this->connection->{$method}($action->getRoute(), $action->getRouteParams(), $action->getProperties());
 
             if ($code !== $response->getStatusCode()) {
                 throw EntityPersisterException::serverError('Failed to complete API request', new ClientException($response));
             }
 
             return $this->hydrateObject($response, $action->getClass());
+
         } catch (ClientException $e) {
             $this->log(LogLevel::ERROR, $e->getMessage(), [
                 'class'  => $action->getClass(),
-                'route'  => $this->client->route($action->getRoute(), $action->getRouteParams()),
+                'route'  => $this->connection->route($action->getRoute(), $action->getRouteParams()),
                 'method' => $action->getMethod(),
             ]);
 
