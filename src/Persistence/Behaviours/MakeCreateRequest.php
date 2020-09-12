@@ -5,7 +5,7 @@ namespace Somnambulist\Components\ApiClient\Persistence\Behaviours;
 use Psr\Log\LogLevel;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Persistence\Contracts\ApiActionInterface;
-use Somnambulist\Components\ApiClient\Persistence\Exceptions\EntityPersisterException;
+use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException;
 use Symfony\Component\HttpClient\Exception\ClientException;
 
 /**
@@ -27,7 +27,7 @@ trait MakeCreateRequest
             $response = $this->connection->post($action->getRoute(), $action->getRouteParams(), $action->getProperties());
 
             if (201 !== $response->getStatusCode()) {
-                throw EntityPersisterException::entityNotCreated($action->getClass(), new ClientException($response));
+                throw ActionPersisterException::entityNotCreated($action->getClass(), new ClientException($response));
             }
 
             return $this->hydrateObject($response, $action->getClass());
@@ -38,7 +38,7 @@ trait MakeCreateRequest
                 'route' => $this->connection->route($action->getRoute(), $action->getRouteParams()),
             ]);
 
-            throw EntityPersisterException::serverError($e->getMessage(), $e);
+            throw ActionPersisterException::serverError($e->getMessage(), $e);
         }
     }
 }

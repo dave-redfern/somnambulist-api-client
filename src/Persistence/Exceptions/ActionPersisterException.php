@@ -11,14 +11,14 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 use function json_decode;
 
 /**
- * Class EntityPersisterException
+ * Class ActionPersisterException
  *
  * @package    Somnambulist\Components\ApiClient\Persistence\Exceptions
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Exceptions\EntityPersisterException
+ * @subpackage Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException
  *
  * @method ClientExceptionInterface getPrevious()
  */
-class EntityPersisterException extends Exception
+class ActionPersisterException extends Exception
 {
 
     private ResponseInterface $response;

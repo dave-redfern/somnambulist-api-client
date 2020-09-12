@@ -46,5 +46,36 @@ element names:
 }
 ```
 
+### Paginated Response Format
+
+A paginated result set is expected to have the following structure:
+
+```json
+{
+    "data": [
+        {
+            "id": "52530121-cc5c-4f56-9c39-734db94c0607",
+            "name": "bob"
+        },
+        {
+            "id": "05dbf6d3-2042-4363-bfb8-00153417e812",
+            "name": "foo"
+        }
+    ],
+    "meta": {
+        "pagination": {
+            "total": 200,
+            "count": 30,
+            "per_page": 30,
+            "current_page": 1,
+            "total_pages": 7,
+            "links": {
+                "next": "http:\\/\\/api.example.dev\\/v1\\/users?page=2"
+            }
+        }
+    }
+}
+```
+
 This behaviour can be changed by overriding the `ModelBuilder` and re-implementing the logic in
 `fetch()`.

@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-09-12
+----------
+
+ * Expanding documentation
+
 2020-09-11
 ----------
 
@@ -10,6 +15,7 @@ Change Log
  * Fix `EntityPersister` and tests
  * Refactor `Model` / `ValueObject` for shared base so both have relationships
  * Refactor relationship interfaces
+ * Rename `EntityPersister` to `ActionPersister`
  * Expanding documentation
 
 2020-09-10

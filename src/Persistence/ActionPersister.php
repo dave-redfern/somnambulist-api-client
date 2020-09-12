@@ -5,16 +5,18 @@ namespace Somnambulist\Components\ApiClient\Persistence;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Somnambulist\Components\ApiClient\Client\Behaviours\DecodeResponseArray;
+use Somnambulist\Components\ApiClient\Client\Connection\Decoders\SimpleJsonDecoder;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
+use Somnambulist\Components\ApiClient\Client\Contracts\ResponseDecoderInterface;
 use Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeCreateRequest;
 use Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeDestroyRequest;
 use Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeRequest;
 use Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeUpdateRequest;
-use Somnambulist\Components\ApiClient\Persistence\Contracts\EntityPersisterInterface;
+use Somnambulist\Components\ApiClient\Persistence\Contracts\ActionPersisterInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * Class EntityPersister
+ * Class ActionPersister
  *
  * Provides a set of common methods for creating (storing) new objects,
  * updating an existing object or deleting (destroying) an existing object.
@@ -28,24 +30,25 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  * history via the ApiErrorException wrapper class.
  *
  * @package    Somnambulist\Components\ApiClient
- * @subpackage Somnambulist\Components\ApiClient\Persistence\EntityPersister
+ * @subpackage Somnambulist\Components\ApiClient\Persistence\ActionPersister
  */
-class EntityPersister implements EntityPersisterInterface, LoggerAwareInterface
+class ActionPersister implements ActionPersisterInterface, LoggerAwareInterface
 {
 
     use LoggerAwareTrait;
 
-    use DecodeResponseArray;
     use MakeRequest;
     use MakeCreateRequest;
     use MakeUpdateRequest;
     use MakeDestroyRequest;
 
     protected ConnectionInterface $connection;
+    protected ResponseDecoderInterface $decoder;
 
-    public function __construct(ConnectionInterface $connection)
+    public function __construct(ConnectionInterface $connection, ResponseDecoderInterface $decoder = null)
     {
         $this->connection = $connection;
+        $this->decoder    = $decoder ?? new SimpleJsonDecoder();
     }
 
     public function getConnection(): ConnectionInterface
@@ -62,14 +65,10 @@ class EntityPersister implements EntityPersisterInterface, LoggerAwareInterface
 
     protected function hydrateObject(ResponseInterface $response, string $className): ?object
     {
-        $data = $this->decodeJsonResponse($response, [200, 201]);
+        $data = $this->decoder->object($this->decoder->decode($response, [200, 201]));
 
-        if (!$data || !is_array($data)) {
+        if (empty($data)) {
             return null;
-        }
-        if (isset($data['data'])) {
-            // external response could contain a data element
-            $data = $data['data'];
         }
 
         return new $className($data);

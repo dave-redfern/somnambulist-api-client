@@ -2,35 +2,35 @@
 
 namespace Somnambulist\Components\ApiClient\Persistence\Contracts;
 
-use Somnambulist\Components\ApiClient\Persistence\Exceptions\EntityPersisterException;
+use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException;
 
 /**
- * Interface EntityPersisterInterface
+ * Interface ActionPersisterInterface
  *
- * @package    Somnambulist\Components\ApiClient\Contracts
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Contracts\EntityPersisterInterface
+ * @package    Somnambulist\Components\ApiClient\Persistence\Contracts
+ * @subpackage Somnambulist\Components\ApiClient\Persistence\Contracts\ActionPersisterInterface
  */
-interface EntityPersisterInterface
+interface ActionPersisterInterface
 {
 
     /**
      * Create a new record returning the hydrated result
      *
-     * All exceptions should be converted to the EntityPersisterException type and
+     * All exceptions should be converted to the ActionPersisterException type and
      * include an appropriate ClientExceptionInterface trace exception that includes
      * the API response object.
      *
      * @param ApiActionInterface $action
      *
      * @return object
-     * @throws EntityPersisterException
+     * @throws ActionPersisterException
      */
     public function create(ApiActionInterface $action): object;
 
     /**
      * Update an existing record, returning the new representation
      *
-     * All exceptions should be converted to the EntityPersisterException type and
+     * All exceptions should be converted to the ActionPersisterException type and
      * include an appropriate ClientExceptionInterface trace exception that includes
      * the API response object.
      *
@@ -47,7 +47,7 @@ interface EntityPersisterInterface
      * response. True should be returned if successfully removed, or an exception
      * raised for all other cases.
      *
-     * All exceptions should be converted to the EntityPersisterException type and
+     * All exceptions should be converted to the ActionPersisterException type and
      * include an appropriate ClientExceptionInterface trace exception that includes
      * the API response object.
      *

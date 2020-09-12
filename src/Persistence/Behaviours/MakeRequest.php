@@ -5,7 +5,7 @@ namespace Somnambulist\Components\ApiClient\Persistence\Behaviours;
 use Psr\Log\LogLevel;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Persistence\Contracts\ApiActionInterface;
-use Somnambulist\Components\ApiClient\Persistence\Exceptions\EntityPersisterException;
+use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use function strtolower;
 
@@ -29,7 +29,7 @@ trait MakeRequest
             $response = $this->connection->{$method}($action->getRoute(), $action->getRouteParams(), $action->getProperties());
 
             if ($code !== $response->getStatusCode()) {
-                throw EntityPersisterException::serverError('Failed to complete API request', new ClientException($response));
+                throw ActionPersisterException::serverError('Failed to complete API request', new ClientException($response));
             }
 
             return $this->hydrateObject($response, $action->getClass());
@@ -41,7 +41,7 @@ trait MakeRequest
                 'method' => $action->getMethod(),
             ]);
 
-            throw EntityPersisterException::serverError($e->getMessage(), $e);
+            throw ActionPersisterException::serverError($e->getMessage(), $e);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Somnambulist\Components\ApiClient\Persistence\Behaviours;
 use Psr\Log\LogLevel;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Persistence\Contracts\ApiActionInterface;
-use Somnambulist\Components\ApiClient\Persistence\Exceptions\EntityPersisterException;
+use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use function array_values;
 use function implode;
@@ -31,7 +31,7 @@ trait MakeDestroyRequest
             $response = $this->connection->delete($action->getRoute(), $action->getRouteParams());
 
             if (204 !== $response->getStatusCode()) {
-                throw EntityPersisterException::entityNotDestroyed($action->getClass(), $id, new ClientException($response));
+                throw ActionPersisterException::entityNotDestroyed($action->getClass(), $id, new ClientException($response));
             }
 
             return true;
@@ -42,7 +42,7 @@ trait MakeDestroyRequest
                 'route' => $this->connection->route($action->getRoute(), $action->getRouteParams()),
             ]);
 
-            throw EntityPersisterException::serverError($e->getMessage(), $e);
+            throw ActionPersisterException::serverError($e->getMessage(), $e);
         }
     }
 }

@@ -12,8 +12,8 @@ use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Persistence\Actions\CreateAction;
 use Somnambulist\Components\ApiClient\Persistence\Actions\DestroyAction;
 use Somnambulist\Components\ApiClient\Persistence\Actions\UpdateAction;
-use Somnambulist\Components\ApiClient\Persistence\EntityPersister;
-use Somnambulist\Components\ApiClient\Persistence\Exceptions\EntityPersisterException;
+use Somnambulist\Components\ApiClient\Persistence\ActionPersister;
+use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Somnambulist\Components\AttributeModel\TypeCasters;
@@ -30,20 +30,20 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 use function file_get_contents;
 
 /**
- * Class EntityPersisterTest
+ * Class ActionPersisterTest
  *
  * @package    Somnambulist\Components\ApiClient\Tests
- * @subpackage Somnambulist\Components\ApiClient\Tests\Persistence\EntityPersisterTest
+ * @subpackage Somnambulist\Components\ApiClient\Tests\Persistence\ActionPersisterTest
  *
  * @group      client
- * @group      client-entity-persister
+ * @group      client-action-persister
  */
-class EntityPersisterTest extends TestCase
+class ActionPersisterTest extends TestCase
 {
 
     use UseFactory;
 
-    private ?EntityPersister $persister = null;
+    private ?ActionPersister $persister = null;
 
     protected function setUp(): void
     {
@@ -107,7 +107,7 @@ class EntityPersisterTest extends TestCase
             new TypeCasters\EnumerableKeyCaster(Country::class, ['country']),
         ]);
 
-        $this->persister = new EntityPersister($client);
+        $this->persister = new ActionPersister($client);
     }
 
     protected function tearDown(): void
@@ -135,7 +135,7 @@ class EntityPersisterTest extends TestCase
 
     public function testStoreRaisesWrappedError()
     {
-        $this->expectException(EntityPersisterException::class);
+        $this->expectException(ActionPersisterException::class);
         $this->expectExceptionCode(422);
         $this->expectExceptionMessage(sprintf('Entity of type "%s" could not be created', User::class));
 
@@ -163,7 +163,7 @@ class EntityPersisterTest extends TestCase
             ;
 
             $repo->create($req);
-        } catch (EntityPersisterException $e) {
+        } catch (ActionPersisterException $e) {
             $this->assertInstanceOf(ClientExceptionInterface::class, $e->getPrevious());
             $this->assertInstanceOf(Collection::class, $e->getPayload());
             $this->assertInstanceOf(Collection::class, $e->getErrors());
@@ -213,7 +213,7 @@ class EntityPersisterTest extends TestCase
             ;
 
             $repo->create($req);
-        } catch (EntityPersisterException $e) {
+        } catch (ActionPersisterException $e) {
             $errors = $e->remapErrorFieldsToFormFieldNames(['email' => 'email_address', 'name' => 'first_name']);
 
             $this->assertTrue($errors->has('email_address'));

@@ -1,62 +1,84 @@
 
 ## Type Casting
 
-Hydration is handled by the `ObjectMapper`. This forgoes serializers or docblock mappings
-in favour of a much simpler: do-it-yourself approach. This ensures better performance and
-no need for DSLs or complex config files.
+In `1.X` models were hydrated using an `ObjectMapper`; however `2.0` now uses type casting
+and the same type caster system that [read models](https://github.com/somnambulist-tech/read-models)
+uses. This type casting is defined in [somnambulist/attribute-model](https://github.com/somnambulist-tech/attribute-model)
+package.
 
-Hydrators are added to an instance of the ObjectMapper and are mapped to a specific class.
-That class will always be hydrated by that hydrator. There is nothing preventing you from
-adding the ObjectMapper to your hydrator if you wish to hydrate sub-objects; though if you
-do this, be sure to use `ObjectMapperAwareInterface` and implement the method or use the
-included trait.
+This allows type casters to be shared between read-models and api-client allowing for much
+better re-use, especially in e.g. Symfony were they can be loaded as services.
 
-__Note:__ if you receive out of memory errors when using constructor dependency injection
-of the mapper instance, switch to using the interface and allow the mapper to inject itself
-when binding the hydrator to the mapper.
+A type caster is a class that can convert attribute(s) to a PHP object or PHP type. They can
+work on a single or many attributes allowing complex value objects to be created; further
+the used attributes can be removed in place of the main attribute. See the attribute model
+docs for more details.
 
-Hydrators can be as simple as they need to be. The only requirement is that they return an
-object and this could be a `stdClass`; though that would defeat the purpose of the hydrator.
-For example, to hydrate a User from an array it could be as simple as:
+Type casters are added to the main `Manager` instance and can be extended at runtime if
+needed.
+
+For example to convert an email string to an `EmailAddress` object:
 
 ```php
 <?php
-use Somnambulist\Components\ApiClient\Contracts\ObjectHydratorInterface;use Somnambulist\Components\ApiClient\Mapper\ObjectHydratorContext;
+use Somnambulist\Components\ApiClient\Manager;
+use Somnambulist\Components\ApiClient\Client\Connection;
+use Somnambulist\Components\ApiClient\Client\ApiRouter;
+use Somnambulist\Components\AttributeModel\TypeCasters\SimpleValueObjectCaster;
+use Somnambulist\Domain\Entities\Types\Identity\EmailAddress;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpClient\HttpClient;
 
-$hydrator = new class implements ObjectHydratorInterface
+new Manager(
+    [
+        'default' => new Connection(HttpClient::create(), new ApiRouter(), new EventDispatcher()),
+    ],
+    [
+        new SimpleValueObjectCaster(EmailAddress::class, ['email'])
+    ]   
+);
+```
+
+### Casting Complex Objects
+
+For more complex needs, define your own type caster:
+
+```php
+<?php
+use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\Address;
+use Somnambulist\Components\AttributeModel\Contracts\AttributeCasterInterface;
+
+class AddressCaster implements AttributeCasterInterface
 {
-    public function supports() : string
+    public function types() : array
     {
-        return User::class;
+        return ['address'];
     }
 
-    public function hydrate($resource, ObjectHydratorContext $context) : object
+    public function supports(string $type) : bool
     {
-        return new User($resource['id'], $resource['name'], $resource['email']);
+        return in_array($type, $this->types());
     }
-};
+
+    public function cast(array &$attributes, $attribute, string $type) : void{
+        $attributes[$attribute] = new Address(
+            $attributes['address_line_1'],
+            $attributes['address_line_2'],
+            $attributes['address_city'],
+            $attributes['address_state'],
+            $attributes['address_postcode'],
+            $attributes['address_country'],
+        );
+        
+        // remove the attributes from the main array
+        unset($attributes['address_line_1'], $attributes['address_line_2']...);
+    }
+}
 ```
 
-This would be added to the `ObjectMapper` by calling `->addHydrator()`:
+If this is then used, an Address value object (as-in an actual defined value object) will
+be created at the given attribute and the attributes used to make it will be removed.
 
-```php
-<?php
-use Somnambulist\Components\ApiClient\Mapper\ObjectMapper;
-
-$mapper = new ObjectMapper();
-$mapper->addHydrator($hydrator);
-```
-
-The ObjectMapper supports iterators in the constructor to batch assign tagged hydrators.
-For example: if using the Symfony Container, then you can tag your hydrators and assign
-the tagged services as the dependency on the service definition.
-
-__Note:__ if doing this, then you must use an alias and not reference the class name for
-the service; otherwise there will be only a single ObjectMapper shared across all clients.
-That might be what you want, but is not recommended.
-
-During object hydration, a context object is passed along. This can contain any additional
-information about the current API response. For example, it can include the current result
-number, or URL information. The context additionally allows for already processed records
-to share information with other objects that need hydrating; for example: if hydrating
-child objects you could include the parent in the context, or some other reference. 
+Technically related objects defined in the attributes could be hydrated into collections
+of objects without needing the relationships; however they would not be loaded after the
+fact.
