@@ -1,0 +1,50 @@
+
+## Default JSON Response Structure
+
+The JSON response from an API is expected to be a JSON document containing either a single
+object, or a JSON document that contains a `data` element that is an array of objects.
+
+For example a single object could be:
+
+```json
+{
+    "id": "52530121-cc5c-4f56-9c39-734db94c0607",
+    "name": "bob"
+}
+```
+
+Or a collection or objects:
+
+```json
+{
+    "data": [
+        {
+            "id": "52530121-cc5c-4f56-9c39-734db94c0607",
+            "name": "bob"
+        },
+        {
+            "id": "05dbf6d3-2042-4363-bfb8-00153417e812",
+            "name": "foo"
+        }
+    ]
+}
+```
+
+For nested related data; it is expected to be keyed on a property name without any other
+element names:
+
+```json
+{
+    "id": "52530121-cc5c-4f56-9c39-734db94c0607",
+    "name": "bob",
+    "groups": [
+        {
+            "id": "31ea5893-809a-4512-b44d-43cad1da35cf",
+            "name": "user"
+        }
+    ]
+}
+```
+
+This behaviour can be changed by overriding the `ModelBuilder` and re-implementing the logic in
+`fetch()`.

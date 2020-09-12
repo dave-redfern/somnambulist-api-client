@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\ApiClient\Client\EventListeners;
 
 use Somnambulist\Components\ApiClient\Client\Events\PreRequestEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @package    Somnambulist\Components\ApiClient\Client\EventListeners
  * @subpackage Somnambulist\Components\ApiClient\Client\EventListeners\InjectHeadersFromRequestStack
  */
-class InjectHeadersFromRequestStack
+class InjectHeadersFromRequestStack implements EventSubscriberInterface
 {
 
     private RequestStack $stack;
@@ -23,6 +24,11 @@ class InjectHeadersFromRequestStack
     {
         $this->stack   = $stack;
         $this->headers = $headers;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return [PreRequestEvent::class => 'onPreRequest'];
     }
 
     public function onPreRequest(PreRequestEvent $event): void

@@ -10,6 +10,7 @@ Change Log
  * Fix `EntityPersister` and tests
  * Refactor `Model` / `ValueObject` for shared base so both have relationships
  * Refactor relationship interfaces
+ * Expanding documentation
 
 2020-09-10
 ----------
