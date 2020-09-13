@@ -38,18 +38,19 @@ are included along with a `AbstractDecorator` base class.
 
 From `2.0.0` the `Connection` object makes use of the Symfony EventDispatcher and will fire:
 
- * PreRequestEvent
- * PostRequestEvent
+ * `PreRequestEvent`
+ * `PostRequestEvent`
  
-The PreRequestEvent receives:
+The `PreRequestEvent` receives:
 
  * the named route of the request
  * route parameters
  * body parameters
  
-Additionally headers may be added at this point, or the body / route modified as needed.
+Headers may be added via the `PreRequestEvent` (e.g.: Request-ID), or the body / route modified
+as needed (e.g.: to handle BC API calls transparently or tag the current user etc).
 
-The PostRequestEvent receives:
+The `PostRequestEvent` receives:
 
  * HttpClient Response object
  * the original route, parameters, body and headers

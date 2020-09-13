@@ -3,8 +3,10 @@
 [![GitHub Actions Build Status](https://github.com/somnambulist-tech/api-client/workflows/tests/badge.svg)](https://github.com/somnambulist-tech/api-client/actions?query=workflow%3Atests)
 
 The ApiClient library is intended to help build client libraries for consuming JSON APIs.
-The library includes a simple ApiClient and EntityLocator and a basic ObjectMapper to
-convert JSON payloads from an array to objects.
+The library provides abstract models for primary resource objects and related value objects.
+Persistence requests are handled by ApiActions that encapsulate a change request.
+
+Models and ValueObjects make use of [somnambulist/attribute-model](https://github.com/somnambulist-tech/attribute-model) type casting system.
 
 The library uses Symfony HTTP Client under the hood.
 
@@ -12,6 +14,7 @@ The library uses Symfony HTTP Client under the hood.
 
  * PHP 7.4+
  * cURL
+ * symfony/event-dispatcher
  * symfony/http-client
  * symfony/routing
 
@@ -33,6 +36,7 @@ own implementations.
 
 The docs are available in the docs folder with a suggested reading order as follows:
 
+ * [upgrade notes](docs/upgrading_from_1.X_to_2.0.md)
  * [adding routes](docs/routing.md)
  * [defining API connections](docs/connections.md)
  * [expected JSON structure](docs/json_format.md)
