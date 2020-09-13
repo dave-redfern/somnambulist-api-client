@@ -10,7 +10,9 @@ use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Symfony\Component\HttpKernel\Log\Logger;
 use function dirname;
+use function file_exists;
 use function file_get_contents;
+use function mkdir;
 
 /**
  * Class LoggingDecoratorTest
@@ -28,6 +30,10 @@ class LoggingDecoratorTest extends TestCase
     protected function setUp(): void
     {
         $this->log = dirname(__DIR__, 3) . '/var/logs/test.log';
+        
+        if (!file_exists(dirname($this->log))) {
+            mkdir(dirname($this->log), 0775, true);
+        }
     }
 
     protected function tearDown(): void
