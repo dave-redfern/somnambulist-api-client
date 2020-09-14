@@ -39,6 +39,13 @@ new Manager(
 );
 ```
 
+To prevent issues with overwriting an existing instance, there is a `factory` method that
+can be used. This will return the current instance, or make a new instance with the provided
+connections and casters.
+
+Note: `factory` requires connections and casters. If you require only the instance, use the
+`instance` method.
+
 ### Types of Model
 
 ApiClient has two types of model that extend from a common `AbstractModel` base class.

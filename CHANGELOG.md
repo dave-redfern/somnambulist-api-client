@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-09-14
+----------
+
+ * Add `factory` method to allow extending an existing instance
+
 2020-09-12
 ----------
 

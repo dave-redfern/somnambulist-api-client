@@ -29,6 +29,26 @@ final class Manager
         self::$instance = $this;
     }
 
+    /**
+     * Build or extend an existing Manager instance
+     *
+     * @param array          $connections
+     * @param array|iterable $casters
+     *
+     * @return Manager
+     */
+    public static function factory(array $connections, iterable $casters): Manager
+    {
+        if (!self::$instance instanceof Manager) {
+            return new Manager($connections, $casters);
+        }
+
+        self::$instance->connections->forAll($connections);
+        self::$instance->caster->addAll($casters);
+
+        return self::$instance;
+    }
+
     public static function instance(): self
     {
         if (!self::$instance instanceof Manager) {
