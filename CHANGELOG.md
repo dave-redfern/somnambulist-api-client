@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-09-15 - 2.1.2
+------------------
+
+ * Fix `EntityLocator::query()` should be protected not private
+
 2020-09-15 - 2.1.1
 ------------------
 

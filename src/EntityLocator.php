@@ -65,7 +65,7 @@ class EntityLocator
         return $qb->paginate($page, $perPage);
     }
 
-    private function query(): ModelBuilder
+    protected function query(): ModelBuilder
     {
         $qb = $this->class::with($this->with);
 
