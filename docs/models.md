@@ -35,7 +35,7 @@ new Manager(
     [
         new DateTimeCaster(),
         new SimpleValueObjectCaster(Uuid::class, ['uuid'])
-    ]   
+    ]
 );
 ```
 
@@ -45,6 +45,10 @@ connections and casters.
 
 Note: `factory` requires connections and casters. If you require only the instance, use the
 `instance` method.
+
+Note: the `Manager` must be instantiated during boot so that the static instance is available.
+In a Symfony project this means ensuring that the Manager service is accessed at least once
+in a boot method.
 
 ### Types of Model
 
