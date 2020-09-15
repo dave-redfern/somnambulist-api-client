@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-09-15 - 2.1.1
+------------------
+
+ * Fix bug in `EncodeSimpleFilterConditions` trait aborting early when building query string
+
 2020-09-15 - 2.1.0
 ------------------
 

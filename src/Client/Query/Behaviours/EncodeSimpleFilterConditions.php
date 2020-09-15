@@ -21,11 +21,7 @@ trait EncodeSimpleFilterConditions
 
     public function encode(QueryBuilder $builder): array
     {
-        if (is_null($builder->getWhere())) {
-            return [];
-        }
-
-        if ($builder->getWhere()->isOr()) {
+        if ($builder->getWhere() && $builder->getWhere()->isOr()) {
             throw QueryEncoderException::encoderDoesNotSupportComplexConditions(self::class, 'OR');
         }
 

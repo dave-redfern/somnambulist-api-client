@@ -51,6 +51,29 @@ class SimpleEncoderTest extends TestCase
         $this->assertEquals('that', $args['this']);
     }
 
+    public function testEncodeWithNoConditions()
+    {
+        $qb = new QueryBuilder();
+        $qb
+            ->with('foo', 'bar', 'this.that')
+            ->page(1)
+            ->perPage(30)
+            ->orderBy('this')
+            ->addOrderBy('that', 'desc')
+        ;
+
+        $encoder = new SimpleEncoder();
+        $args = $encoder->encode($qb);
+
+        $this->assertArrayNotHasKey('filters', $args);
+        $this->assertArrayHasKey('order', $args);
+
+        $this->assertEquals('this,-that', $args['order']);
+        $this->assertEquals('foo,bar,this.that', $args['include']);
+        $this->assertEquals(1, $args['page']);
+        $this->assertEquals(30, $args['per_page']);
+    }
+
     public function testEncodeFailsWithOrConditions()
     {
         $qb = new QueryBuilder();
