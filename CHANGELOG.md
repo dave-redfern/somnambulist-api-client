@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-09-15 - 2.1.3
+------------------
+
+ * Fix `EntityLocator::findBy()` should cast offset to string for `ModelBuilder`
+
 2020-09-15 - 2.1.2
 ------------------
 
