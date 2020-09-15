@@ -1,13 +1,18 @@
 Change Log
 ==========
 
-2020-09-14
-----------
+2020-09-15 - 2.1.0
+------------------
+
+ * Add `EntityLocator` back to ease migrating to 2.0
+
+2020-09-14 - 2.0.1
+------------------
 
  * Add `factory` method to allow extending an existing instance
 
-2020-09-12
-----------
+2020-09-12 - 2.0.0
+------------------
 
  * Expanding documentation
  * Add `ResponseDecoderInterface` and `SimpleJsonDecoder` implementation

@@ -4,22 +4,23 @@ namespace Somnambulist\Components\ApiClient\Tests;
 
 use Pagerfanta\Pagerfanta;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\ApiClient\EntityLocator;
+use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\UserCollection;
-use Somnambulist\Domain\Entities\Types\DateTime\DateTime;
-use Somnambulist\Domain\Entities\Types\Identity\Uuid;
 
 /**
- * Class ModelTest
+ * Class EntityLocatorTest
  *
  * @package    Somnambulist\Components\ApiClient\Tests
- * @subpackage Somnambulist\Components\ApiClient\Tests\ModelTest
+ * @subpackage Somnambulist\Components\ApiClient\Tests\EntityLocatorTest
  *
- * @group model
+ * @group entity-locator
  */
-class ModelTest extends TestCase
+class EntityLocatorTest extends TestCase
 {
+
     use UseFactory;
 
     protected function setUp(): void
@@ -27,20 +28,21 @@ class ModelTest extends TestCase
         $this->factory()->makeManager();
     }
 
-    public function testFind()
+    public function testEntityLocator()
     {
-        $user = User::find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
+        $locator = new EntityLocator(Manager::instance(), User::class);
 
-        $this->assertInstanceOf(Uuid::class, $user->id);
-        $this->assertInstanceOf(Uuid::class, $user->id());
-        $this->assertInstanceOf(DateTime::class, $user->created_at);
-        $this->assertInstanceOf(DateTime::class, $user->updated_at);
+        $user = $locator->find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
+
+        $this->assertInstanceOf(User::class, $user);
         $this->assertEquals($id, $user->id->toString());
     }
 
     public function testFindBy()
     {
-        $users = User::query()->findBy([]);
+        $locator = new EntityLocator(Manager::instance(), User::class);
+
+        $users = $locator->findBy([]);
 
         $this->assertInstanceOf(UserCollection::class, $users);
         $this->assertCount(30, $users);
@@ -49,14 +51,18 @@ class ModelTest extends TestCase
 
     public function testFindOneBy()
     {
-        $user = User::query()->findOneBy([]);
+        $locator = new EntityLocator(Manager::instance(), User::class);
+
+        $user = $locator->findOneBy([]);
 
         $this->assertInstanceOf(User::class, $user);
     }
 
     public function testPaginate()
     {
-        $users = User::query()->paginate();
+        $locator = new EntityLocator(Manager::instance(), User::class);
+
+        $users = $locator->findByPaginated([]);
 
         $this->assertInstanceOf(Pagerfanta::class, $users);
     }
