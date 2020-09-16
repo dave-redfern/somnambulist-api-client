@@ -2,8 +2,10 @@
 
 namespace Somnambulist\Components\ApiClient\Client\Query\Encoders;
 
+use IlluminateAgnostic\Str\Support\Str;
 use Somnambulist\Components\ApiClient\Client\Contracts\QueryEncoderInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
+use function array_map;
 use function count;
 use function floor;
 use function implode;
@@ -39,6 +41,8 @@ abstract class AbstractEncoder implements QueryEncoderInterface
         self::ORDER_BY => 'order',
     ];
 
+    protected bool $snakeCaseIncludes = true;
+
     abstract protected function createFilters(?CompositeExpression $expression): array;
 
     protected function sort(array &$args = []): void
@@ -56,6 +60,10 @@ abstract class AbstractEncoder implements QueryEncoderInterface
     {
         if (0 === count($includes)) {
             return [];
+        }
+
+        if ($this->snakeCaseIncludes) {
+            $includes = array_map(fn($include) => Str::snake($include), $includes);
         }
 
         return [$this->mappings[self::INCLUDE] => implode(',', $includes)];

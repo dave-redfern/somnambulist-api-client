@@ -29,4 +29,14 @@ class Account extends Model
     {
         return $this->hasMany(AccountRelation::class, 'related');
     }
+
+    protected function relatedAccounts()
+    {
+        return $this->hasMany(AccountRelation::class, 'related');
+    }
+
+    protected function related_accounts()
+    {
+        return $this->relatedAccounts();
+    }
 }

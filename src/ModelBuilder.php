@@ -20,6 +20,8 @@ use Somnambulist\Components\ApiClient\Exceptions\NoResultsException;
 use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
 use Somnambulist\Components\ApiClient\Utils\GenerateRelationshipsToEagerLoad;
 use function array_key_exists;
+use function array_merge;
+use function array_unique;
 use function count;
 use function get_class;
 use function is_array;
@@ -258,7 +260,11 @@ class ModelBuilder
      */
     public function with(...$relations): self
     {
-        $this->eagerLoad = (new GenerateRelationshipsToEagerLoad())($this->eagerLoad, ...$relations);
+        if (is_array($relations[0])) {
+            $relations = $relations[0];
+        }
+
+        $this->eagerLoad = array_unique(array_merge($this->eagerLoad, $relations));
 
         return $this;
     }

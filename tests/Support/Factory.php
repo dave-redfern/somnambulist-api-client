@@ -83,6 +83,9 @@ class Factory
     private function accountRoutes($method, $url, $options)
     {
         switch ($url) {
+            case Str::contains($url, '/v1/accounts/1228ec03-1a58-4e51-8cea-cb787104aa3d?include=related_accounts'):
+                return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/account_view_1228ec03_with_related_accounts.json'));
+
             case Str::contains($url, '/v1/accounts/1228ec03-1a58-4e51-8cea-cb787104aa3d?include=related'):
                 return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/account_view_1228ec03_with_related.json'));
 

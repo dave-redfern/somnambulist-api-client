@@ -100,4 +100,14 @@ class OpenStackApiEncoderTest extends TestCase
         $encoder = new OpenStackApiEncoder();
         $encoder->encode($qb);
     }
+
+    public function testPreservesCaseOfIncludes()
+    {
+        $qb = new QueryBuilder();
+        $qb->with('fooBar', 'baz_bar',);
+
+        $query = (new OpenStackApiEncoder())->encode($qb);
+
+        $this->assertEquals('fooBar,baz_bar', $query['include']);
+    }
 }

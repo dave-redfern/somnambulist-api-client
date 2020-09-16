@@ -105,4 +105,14 @@ class JsonApiEncoderTest extends TestCase
         $encoder = new JsonApiEncoder();
         $encoder->encode($qb);
     }
+
+    public function testPreservesCaseOfIncludes()
+    {
+        $qb = new QueryBuilder();
+        $qb->with('fooBar', 'baz_bar',);
+
+        $query = (new JsonApiEncoder())->encode($qb);
+
+        $this->assertEquals('fooBar,baz_bar', $query['include']);
+    }
 }

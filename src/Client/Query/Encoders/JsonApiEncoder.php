@@ -37,6 +37,8 @@ class JsonApiEncoder extends AbstractEncoder
         self::PER_PAGE => 'per_page',
     ];
 
+    protected bool $snakeCaseIncludes = false;
+
     protected function createFilters(?CompositeExpression $expression): array
     {
         if (is_null($expression)) {

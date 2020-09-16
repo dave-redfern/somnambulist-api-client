@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+2020-09-16 - 2.2.0
+------------------
+
+ * Remove eager loading helper that would pre-process includes; now uses includes as-is
+ * Added to snake_case as option on `AbstractEncoder`, disabled on JSONAPI and OpenStack
+ * Added extra tests for `relationshipCamel` and `relationship_snake`
+
 2020-09-15 - 2.1.3
 ------------------
 

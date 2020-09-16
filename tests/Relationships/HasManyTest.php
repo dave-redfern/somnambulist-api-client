@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Somnambulist\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\AssertRequestMade;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
+use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\Account;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 
 /**
@@ -73,5 +74,16 @@ class HasManyTest extends TestCase
         $this->assertRouteWasCalledWith('groups.view', ['include' => 'permissions']);
 
         $this->assertInstanceOf(Collection::class, $user->groups->first()->permissions);
+    }
+
+    public function testCamelCaseRelationshipName()
+    {
+        $user = Account::with('relatedAccounts')->find('1228ec03-1a58-4e51-8cea-cb787104aa3d');
+
+        $this->assertInstanceOf(Collection::class, $user->relatedAccounts);
+
+        $user = Account::with('related_accounts')->find('1228ec03-1a58-4e51-8cea-cb787104aa3d');
+
+        $this->assertInstanceOf(Collection::class, $user->related_accounts);
     }
 }

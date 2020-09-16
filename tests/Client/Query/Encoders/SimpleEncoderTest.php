@@ -130,4 +130,14 @@ class SimpleEncoderTest extends TestCase
         $encoder = new SimpleEncoder();
         $encoder->encode($qb);
     }
+
+    public function testEncodeIncludesLowerSnakeCasesIncludes()
+    {
+        $qb = new QueryBuilder();
+        $qb->with('fooBar', 'baz_bar',);
+
+        $query = (new SimpleEncoder())->encode($qb);
+
+        $this->assertEquals('foo_bar,baz_bar', $query['include']);
+    }
 }
