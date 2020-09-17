@@ -4,6 +4,7 @@ namespace Somnambulist\Components\ApiClient;
 
 use Pagerfanta\Pagerfanta;
 use Somnambulist\Collection\Contracts\Collection;
+use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
 
 /**
  * Class EntityLocator
@@ -39,6 +40,11 @@ class EntityLocator
     public function find($id): ?object
     {
         return $this->query()->find($id);
+    }
+
+    public function findOrFail($id): object
+    {
+        return $this->query()->findOrFail($id);
     }
 
     public function findBy(array $criteria = [], array $orderBy = [], int $limit = null, int $offset = null): Collection

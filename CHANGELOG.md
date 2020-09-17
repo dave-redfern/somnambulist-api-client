@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2020-09-17 - 2.3.0
+------------------
+
+ * Added `findOrFail` to `EntityLocator`, was missed when re-adding to lib
+
 2020-09-16 - 2.2.0
 ------------------
 
