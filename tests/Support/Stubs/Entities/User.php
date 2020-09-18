@@ -29,6 +29,11 @@ class User extends Model
         return $this->hasOne(Address::class, 'address', false);
     }
 
+    public function address2(): HasOne
+    {
+        return $this->hasOne(Address::class, 'address', false);
+    }
+
     protected function addresses(): HasMany
     {
         return $this->hasMany(Address::class, 'addresses', 'type');
@@ -39,7 +44,17 @@ class User extends Model
         return $this->hasMany(Contact::class, 'contacts', 'type');
     }
 
+    public function contacts2(): HasMany
+    {
+        return $this->hasMany(Contact::class, 'contacts', 'type');
+    }
+
     protected function account(): BelongsTo
+    {
+        return $this->belongsTo(Account::class, 'account', 'account_id');
+    }
+
+    public function account2(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'account', 'account_id');
     }

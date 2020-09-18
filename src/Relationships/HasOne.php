@@ -23,9 +23,9 @@ class HasOne extends AbstractRelationship
 
     private bool $nullOnNotFound;
 
-    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, bool $nullOnNotFound = true)
+    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, bool $nullOnNotFound = true, bool $lazyLoading = true)
     {
-        parent::__construct($parent, $related, $attributeKey);
+        parent::__construct($parent, $related, $attributeKey, $lazyLoading);
 
         if (!$parent instanceof Model) {
             throw ModelRelationshipException::valueObjectNotAllowedForRelationship(get_class($parent), $attributeKey, get_class($related));
@@ -35,21 +35,22 @@ class HasOne extends AbstractRelationship
         $this->nullOnNotFound = $nullOnNotFound;
     }
 
+    public function fetch(): Collection
+    {
+        $ret = $this->related->getCollection();
+
+        if (null !== $data = $this->callApi($this->parent, $this->attributeKey)) {
+            $ret->add($this->related->new($data));
+        }
+
+        return $ret;
+    }
+
     public function addRelationshipResultsToModels(Collection $models, string $relationship): self
     {
         $models->each(function (AbstractModel $loaded) use ($relationship) {
-            if (null === $data = $loaded->getRawAttribute($this->attributeKey)) {
-                $data = $this->parent->getResponseDecoder()->object(
-                    $this->query->with($relationship)->wherePrimaryKey($loaded->getPrimaryKey())->fetchRaw()
-                );
-
-                if (isset($data[$this->attributeKey])) {
-                    $data = $data[$this->attributeKey];
-                }
-
-                if (empty($data)) {
-                    $data = null;
-                }
+            if ((null === $data = $loaded->getRawAttribute($this->attributeKey)) && $this->lazyLoading) {
+                $data = $this->callApi($loaded, $relationship);
             }
 
             $related = is_null($data) ? ($this->nullOnNotFound ? null : $this->related->new()) : $this->related->new($data);
@@ -58,5 +59,22 @@ class HasOne extends AbstractRelationship
         });
 
         return $this;
+    }
+
+    private function callApi(Model $model, string $relationship): ?array
+    {
+        $data = $this->parent->getResponseDecoder()->object(
+            $this->query->with($relationship)->wherePrimaryKey($model->getPrimaryKey())->fetchRaw()
+        );
+
+        if (isset($data[$this->attributeKey])) {
+            $data = $data[$this->attributeKey];
+        }
+
+        if (empty($data)) {
+            $data = null;
+        }
+
+        return $data;
     }
 }

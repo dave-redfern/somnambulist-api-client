@@ -4,6 +4,8 @@ namespace Somnambulist\Components\ApiClient\Tests\Relationships;
 
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Collection\Contracts\Collection;
+use Somnambulist\Components\ApiClient\Relationships\BelongsTo;
+use Somnambulist\Components\ApiClient\Relationships\HasMany;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\AssertRequestMade;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\Account;
@@ -85,5 +87,19 @@ class HasManyTest extends TestCase
         $user = Account::with('related_accounts')->find('1228ec03-1a58-4e51-8cea-cb787104aa3d');
 
         $this->assertInstanceOf(Collection::class, $user->related_accounts);
+    }
+
+    public function testFetchingRelationship()
+    {
+        $user = User::find('1e335331-ee15-4871-a419-c6778e190a54');
+        $rel = $user->contacts2();
+
+        $this->assertInstanceOf(HasMany::class, $rel);
+
+        $ret = $rel->fetch();
+
+        $this->assertInstanceOf(Collection::class, $ret);
+        $this->assertCount(2, $ret);
+        $this->assertEquals('Foo Bar', $ret->get('other')->name);
     }
 }

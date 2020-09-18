@@ -182,13 +182,14 @@ abstract class AbstractModel extends AttributeModel
      * @param string $attributeKey   The attribute name where data is located on the data source
      * @param string $identityKey    The attribute name for the related identity
      * @param bool   $nullOnNotFound If false, returns an empty model as the related object
+     * @param bool   $lazyLoading    If false, will not auto-load the relationship data from the API
      *
      * @return BelongsTo
      * @throws Exceptions\ModelRelationshipException
      */
-    protected function belongsTo(string $class, string $attributeKey, string $identityKey, bool $nullOnNotFound = true): BelongsTo
+    protected function belongsTo(string $class, string $attributeKey, string $identityKey, bool $nullOnNotFound = true, bool $lazyLoading = true): BelongsTo
     {
-        return new BelongsTo($this, new $class, $attributeKey, $identityKey, $nullOnNotFound);
+        return new BelongsTo($this, new $class, $attributeKey, $identityKey, $nullOnNotFound, $lazyLoading);
     }
 
     /**
@@ -208,12 +209,14 @@ abstract class AbstractModel extends AttributeModel
      * @param string      $class
      * @param string      $attributeKey The attribute name where data is located on the data source
      * @param string|null $indexBy
+     * @param bool        $lazyLoading  If false, will not auto-load the relationship data from the API
      *
      * @return HasMany
+     * @throws Exceptions\ModelRelationshipException
      */
-    protected function hasMany(string $class, string $attributeKey, ?string $indexBy = null): HasMany
+    protected function hasMany(string $class, string $attributeKey, ?string $indexBy = null, bool $lazyLoading = true): HasMany
     {
-        return new HasMany($this, new $class, $attributeKey, $indexBy);
+        return new HasMany($this, new $class, $attributeKey, $indexBy, $lazyLoading);
     }
 
     /**
@@ -226,11 +229,13 @@ abstract class AbstractModel extends AttributeModel
      * @param string      $class
      * @param string|null $attributeKey   The attribute name where data is located on the data source
      * @param bool        $nullOnNotFound If false, returns an empty model as the related object
+     * @param bool        $lazyLoading    If false, will not auto-load the relationship data from the API
      *
      * @return HasOne
+     * @throws Exceptions\ModelRelationshipException
      */
-    protected function hasOne(string $class, string $attributeKey, bool $nullOnNotFound = true): HasOne
+    protected function hasOne(string $class, string $attributeKey, bool $nullOnNotFound = true, bool $lazyLoading = true): HasOne
     {
-        return new HasOne($this, new $class, $attributeKey, $nullOnNotFound);
+        return new HasOne($this, new $class, $attributeKey, $nullOnNotFound, $lazyLoading);
     }
 }

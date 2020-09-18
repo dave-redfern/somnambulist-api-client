@@ -36,16 +36,34 @@ abstract class AbstractRelationship
     protected AbstractModel $parent;
     protected AbstractModel $related;
     protected string $attributeKey;
+    protected bool $lazyLoading;
     protected ?ModelBuilder $query = null;
 
-    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey)
+    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, bool $lazyLoading = true)
     {
         $this->parent       = $parent;
         $this->related      = $related;
         $this->attributeKey = $attributeKey;
+        $this->lazyLoading  = $lazyLoading;
     }
 
+    abstract public function fetch(): Collection;
+
     abstract public function addRelationshipResultsToModels(Collection $models, string $relationship): self;
+
+    public function enableLazyLoading(): self
+    {
+        $this->lazyLoading = true;
+
+        return $this;
+    }
+
+    public function disableLazyLoading(): self
+    {
+        $this->lazyLoading = false;
+
+        return $this;
+    }
 
     public function __call($name, $arguments)
     {

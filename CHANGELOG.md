@@ -1,17 +1,24 @@
 Change Log
 ==========
 
+2020-09-18 - 2.4.0
+------------------
+
+ * Add ability to disable lazy loading of relationships
+ * Add note for Symfony manager setup in models.md
+ * Add support for `fetch` on relationships for loading separately
+
 2020-09-17 - 2.3.0
 ------------------
 
- * Added `findOrFail` to `EntityLocator`, was missed when re-adding to lib
+ * Add `findOrFail` to `EntityLocator`, was missed when re-adding to lib
 
 2020-09-16 - 2.2.0
 ------------------
 
  * Remove eager loading helper that would pre-process includes; now uses includes as-is
- * Added to snake_case as option on `AbstractEncoder`, disabled on JSONAPI and OpenStack
- * Added extra tests for `relationshipCamel` and `relationship_snake`
+ * Add to snake_case as option on `AbstractEncoder`, disabled on JSONAPI and OpenStack
+ * Add extra tests for `relationshipCamel` and `relationship_snake`
 
 2020-09-15 - 2.1.3
 ------------------

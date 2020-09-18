@@ -105,6 +105,9 @@ class Factory
             case Str::contains($url, '/v1/users/1e335331-ee15-4871-a419-c6778e190a54?include=account.related.related'):
                 return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_account_relations.json'));
 
+            case Str::contains($url, '/v1/users/1e335331-ee15-4871-a419-c6778e190a54?include=contacts'):
+                return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_contacts.json'));
+
             case Str::contains($url, '/v1/users/1e335331-ee15-4871-a419-c6778e190a54'):
                 return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_1e335331.json'));
 

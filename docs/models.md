@@ -43,12 +43,66 @@ To prevent issues with overwriting an existing instance, there is a `factory` me
 can be used. This will return the current instance, or make a new instance with the provided
 connections and casters.
 
-Note: `factory` requires connections and casters. If you require only the instance, use the
+__Note:__ `factory` requires connections and casters. If you require only the instance, use the
 `instance` method.
 
-Note: the `Manager` must be instantiated during boot so that the static instance is available.
+__Note:__ the `Manager` must be instantiated during boot so that the static instance is available.
 In a Symfony project this means ensuring that the Manager service is accessed at least once
 in a boot method.
+
+#### Manager in Symfony Bundles
+
+If creating a client bundle that may be used with other api-client bundles, then some additional
+setup steps are required to ensure that the Manager will function correctly.
+
+First: be sure to create the bundle HTTP client instance, connection and any specific type casters.
+Be sure to tag the type casters with a tag for that bundle.
+
+Finally: instead of adding a Manager service directly, you must implement a `CompilerPass` that runs
+`beforeOptimization`. In this pass, check for the `Manager` and then configure it appropriately.
+This can be added in the Bundle `build` method and an anonymous class can be used. For example:
+
+```php
+<?php
+use Somnambulist\Components\ApiClient\Manager;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+
+class MyBundle extends Bundle
+{
+    public function boot()
+    {
+        $this->container->get(Manager::class);
+    }
+
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new class implements CompilerPassInterface {
+            public function process(ContainerBuilder $container)
+            {
+                if (!$container->hasDefinition(Manager::class)) {
+                    $container->register(Manager::class, Manager::class)->setPublic(true);
+                }
+
+                $def = $container->getDefinition(Manager::class);
+                $def->addMethodCall('factory', [
+                    '$connections' => [
+                        MyModel::class => $container->getDefinition('my_bundle.my_model.connection'),
+                    ],
+                    '$casters'     => tagged_iterator('my_bundle.my_model.type_caster'),
+                ]);
+            }
+
+        }, PassConfig::TYPE_BEFORE_OPTIMIZATION);
+    }
+}
+```
+
+The reason for this, is that when the bundle is configured, the whole container is not available so
+each bundle will replace the `Manager` rather than adding a new `factory` call.
 
 ### Types of Model
 
@@ -96,6 +150,7 @@ For example:
 
 ```php
 <?php
+use Somnambulist\Components\ApiClient\Model;
 
 class User extends Model
 {
@@ -218,3 +273,7 @@ class User extends Model
 // User has: first as foo, and last as bar -> "foo bar"
 User::find()->fullName();
 ```
+
+__Note:__ due to the use of relationships and magic getters / call, you should always use the
+attribute mutators for methods to avoid any potential issues e.g.: trying to call a method but
+it is interpreted as a relationship access.

@@ -9,6 +9,10 @@ __Note:__ lazy loading API responses may severely impact on your applications pe
 sure to profile thoroughly and check the number of API calls being made. In a Symfony app, be
 sure that all HttpClients are tagged:
 
+__Note:__ lazy loading may be disabled to prevent run-away API calls on each relationship. This
+can be changed at runtime by accessing the relationship (if allowed) and using enable/disable
+lazy loading methods.
+
 ```yaml
 services:
     app.clients.service_api_client:

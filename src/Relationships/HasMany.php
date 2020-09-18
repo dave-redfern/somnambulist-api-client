@@ -19,9 +19,9 @@ class HasMany extends AbstractRelationship
 
     private ?string $indexBy;
 
-    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, ?string $indexBy = null)
+    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, ?string $indexBy = null, bool $lazyLoading = true)
     {
-        parent::__construct($parent, $related, $attributeKey);
+        parent::__construct($parent, $related, $attributeKey, $lazyLoading);
 
         if (!$parent instanceof Model) {
             throw ModelRelationshipException::valueObjectNotAllowedForRelationship(get_class($parent), $attributeKey, get_class($related));
@@ -31,34 +31,55 @@ class HasMany extends AbstractRelationship
         $this->indexBy = $indexBy;
     }
 
+    public function fetch(): Collection
+    {
+        return $this->buildCollection($this->callApi($this->parent, $this->attributeKey));
+    }
+
     public function addRelationshipResultsToModels(Collection $models, string $relationship): self
     {
         $models->each(function (AbstractModel $loaded) use ($relationship) {
-            $children = $this->related->getCollection();
-
             if (null === $data = $loaded->getRawAttribute($this->attributeKey)) {
-                $data = $this->parent->getResponseDecoder()->object(
-                    $this->query->with($relationship)->wherePrimaryKey($loaded->getPrimaryKey())->fetchRaw()
-                );
+                $data = [];
 
-                if (isset($data[$this->attributeKey])) {
-                    $data = $data[$this->attributeKey];
+                if ($this->lazyLoading) {
+                    $data = $this->callApi($loaded, $relationship);
                 }
             }
 
-            foreach ($data as $row) {
-                $child = $this->related->new($row);
-
-                if ($this->indexBy) {
-                    $children->set($child->getRawAttribute($this->indexBy), $child);
-                } else {
-                    $children->add($child);
-                }
-            }
-
-            $loaded->setRelationshipValue($this->attributeKey, $relationship, $children);
+            $loaded->setRelationshipValue($this->attributeKey, $relationship, $this->buildCollection($data));
         });
 
         return $this;
+    }
+
+    private function callApi(Model $model, string $relationship): array
+    {
+        $data = $this->parent->getResponseDecoder()->object(
+            $this->query->with($relationship)->wherePrimaryKey($model->getPrimaryKey())->fetchRaw()
+        );
+
+        if (isset($data[$this->attributeKey])) {
+            $data = $data[$this->attributeKey];
+        }
+
+        return $data;
+    }
+
+    private function buildCollection(array $data): Collection
+    {
+        $children = $this->related->getCollection();
+
+        foreach ($data as $row) {
+            $child = $this->related->new($row);
+
+            if ($this->indexBy) {
+                $children->set($child->getRawAttribute($this->indexBy), $child);
+            } else {
+                $children->add($child);
+            }
+        }
+
+        return $children;
     }
 }

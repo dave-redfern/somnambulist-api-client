@@ -21,9 +21,16 @@ class BelongsTo extends AbstractRelationship
     private string $identityKey;
     private bool $nullOnNotFound;
 
-    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, string $identityKey, bool $nullOnNotFound = true)
+    public function __construct(
+        AbstractModel $parent,
+        AbstractModel $related,
+        string $attributeKey,
+        string $identityKey,
+        bool $nullOnNotFound = true,
+        bool $lazyLoading = true
+    )
     {
-        parent::__construct($parent, $related, $attributeKey);
+        parent::__construct($parent, $related, $attributeKey, $lazyLoading);
 
         if (!$related instanceof Model) {
             throw ModelRelationshipException::valueObjectNotAllowedForRelationship(get_class($parent), self::class, get_class($related));
@@ -34,10 +41,15 @@ class BelongsTo extends AbstractRelationship
         $this->nullOnNotFound = $nullOnNotFound;
     }
 
+    public function fetch(): Collection
+    {
+        return $this->query->wherePrimaryKey($this->parent->getRawAttribute($this->identityKey))->fetch();
+    }
+
     public function addRelationshipResultsToModels(Collection $models, string $relationship): self
     {
         $models->each(function (AbstractModel $loaded) use ($relationship) {
-            if (null === $data = $loaded->getRawAttribute($this->attributeKey)) {
+            if ((null === $data = $loaded->getRawAttribute($this->attributeKey)) && $this->lazyLoading) {
                 $data = $this->related->getResponseDecoder()->object(
                     $this->query->with($relationship)->wherePrimaryKey($loaded->getRawAttribute($this->identityKey))->fetchRaw()
                 );
