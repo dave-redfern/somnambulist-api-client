@@ -6,8 +6,7 @@ use BadMethodCallException;
 use IlluminateAgnostic\Str\Support\Str;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
-use Somnambulist\Collection\Contracts\Collection;
-use Somnambulist\Components\ApiClient\Client\Behaviours\DecodeResponseArray;
+use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface as Connection;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
 use Somnambulist\Components\ApiClient\Client\Contracts\QueryEncoderInterface;
@@ -18,7 +17,6 @@ use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
 use Somnambulist\Components\ApiClient\Exceptions\NoResultsException;
 use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
-use Somnambulist\Components\ApiClient\Utils\GenerateRelationshipsToEagerLoad;
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
@@ -27,6 +25,7 @@ use function get_class;
 use function is_array;
 use function method_exists;
 use function sprintf;
+use function str_contains;
 use function strlen;
 use function strtolower;
 use function substr;
@@ -272,7 +271,7 @@ class ModelBuilder
     private function eagerLoadRelationships(Collection $models): void
     {
         foreach ($this->eagerLoad as $name) {
-            if (false === strpos($name, '.')) {
+            if (false === str_contains($name, '.')) {
                 /** @var AbstractRelationship $load */
                 $rel = $this->model->new()->getRelationship($name);
                 $rel

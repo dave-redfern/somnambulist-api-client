@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
-use Somnambulist\Components\ApiClient\Client\Connection;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Client\Decorators\RecordResponseDecorator;
 use Somnambulist\Components\ApiClient\Client\RequestTracker;

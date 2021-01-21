@@ -1,22 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace Somnambulist\Components\ApiClient\Tests;
+namespace Somnambulist\Components\ApiClient\Tests\Client;
 
 use PHPUnit\Framework\TestCase;
-use Somnambulist\Components\ApiClient\Client\ApiRoute;
-use Somnambulist\Components\ApiClient\Client\ApiRouter;
-use Somnambulist\Components\ApiClient\Client\ApiService;
-use Somnambulist\Components\ApiClient\Client\Connection;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Client\EventListeners\InjectHeadersFromRequestStack;
 use Somnambulist\Components\ApiClient\Client\Events\PreRequestEvent;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
-use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\RouteCollection;
-use function file_get_contents;
 
 /**
  * Class ApiClientHeaderExtractionTest

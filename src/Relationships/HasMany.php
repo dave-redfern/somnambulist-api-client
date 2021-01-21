@@ -2,7 +2,7 @@
 
 namespace Somnambulist\Components\ApiClient\Relationships;
 
-use Somnambulist\Collection\Contracts\Collection;
+use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Exceptions\ModelRelationshipException;
 use Somnambulist\Components\ApiClient\Model;

@@ -5,7 +5,7 @@ namespace Somnambulist\Components\ApiClient\Tests\Persistence\Actions;
 use Assert\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\ApiClient\Persistence\Actions\CreateAction;
-use Somnambulist\Components\ApiClient\Tests\Stubs\Entities\User;
+use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 
 /**
  * Class CreateActionTest

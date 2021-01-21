@@ -6,10 +6,8 @@ use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpressio
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 use function array_filter;
-use function array_multisort;
 use function http_build_query;
 use function is_null;
-use function ksort;
 
 /**
  * Class NestedArrayEncoder

@@ -3,7 +3,7 @@
 namespace Somnambulist\Components\ApiClient\Tests\Relationships;
 
 use PHPUnit\Framework\TestCase;
-use Somnambulist\Collection\Contracts\Collection;
+use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\Relationships\BelongsTo;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\AssertRequestMade;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;

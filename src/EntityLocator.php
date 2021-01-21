@@ -3,8 +3,7 @@
 namespace Somnambulist\Components\ApiClient;
 
 use Pagerfanta\Pagerfanta;
-use Somnambulist\Collection\Contracts\Collection;
-use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
+use Somnambulist\Components\Collection\Contracts\Collection;
 
 /**
  * Class EntityLocator

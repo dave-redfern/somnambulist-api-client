@@ -3,13 +3,12 @@
 namespace Somnambulist\Components\ApiClient\Tests\Relationships;
 
 use PHPUnit\Framework\TestCase;
-use Somnambulist\Collection\Contracts\Collection;
-use Somnambulist\Components\ApiClient\Relationships\BelongsTo;
 use Somnambulist\Components\ApiClient\Relationships\HasOne;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\AssertRequestMade;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\Address;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
+use Somnambulist\Components\Collection\Contracts\Collection;
 
 /**
  * Class HasOneTest

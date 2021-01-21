@@ -36,7 +36,7 @@ trait HasObjectData
      *
      * @return $this
      */
-    public function set($name, $value = null): self
+    public function set($name, mixed $value = null): self
     {
         if (is_array($name) && is_null($value)) {
             return $this->with($name);

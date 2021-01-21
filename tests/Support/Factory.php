@@ -7,14 +7,13 @@ use RuntimeException;
 use Somnambulist\Components\ApiClient\Client\ApiRoute;
 use Somnambulist\Components\ApiClient\Client\ApiRouter;
 use Somnambulist\Components\ApiClient\Client\Connection;
-use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Tests\Support\Decorators\AssertableConnectionDecorator;
 use Somnambulist\Components\AttributeModel\TypeCasters;
-use Somnambulist\Domain\Entities\Types\Geography\Country;
-use Somnambulist\Domain\Entities\Types\Identity\EmailAddress;
-use Somnambulist\Domain\Entities\Types\Identity\Uuid;
-use Somnambulist\Domain\Entities\Types\PhoneNumber;
+use Somnambulist\Components\Domain\Entities\Types\Geography\Country;
+use Somnambulist\Components\Domain\Entities\Types\Identity\EmailAddress;
+use Somnambulist\Components\Domain\Entities\Types\Identity\Uuid;
+use Somnambulist\Components\Domain\Entities\Types\PhoneNumber;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -80,7 +79,7 @@ class Factory
         );
     }
 
-    private function accountRoutes($method, $url, $options)
+    private function accountRoutes($method, $url, $options): MockResponse
     {
         switch ($url) {
             case Str::contains($url, '/v1/accounts/1228ec03-1a58-4e51-8cea-cb787104aa3d?include=related_accounts'):
@@ -99,7 +98,7 @@ class Factory
         throw new RuntimeException(sprintf('No response configured for request: %s %s', $method, $url));
     }
 
-    private function userRoutes($method, $url, $options)
+    private function userRoutes($method, $url, $options): MockResponse
     {
         switch ($url) {
             case Str::contains($url, '/v1/users/1e335331-ee15-4871-a419-c6778e190a54?include=account.related.related'):

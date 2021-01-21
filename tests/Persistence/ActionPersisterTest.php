@@ -4,7 +4,7 @@ namespace Somnambulist\Components\ApiClient\Tests\Persistence;
 
 use IlluminateAgnostic\Str\Support\Str;
 use PHPUnit\Framework\TestCase;
-use Somnambulist\Collection\Contracts\Collection;
+use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\Client\ApiRoute;
 use Somnambulist\Components\ApiClient\Client\ApiRouter;
 use Somnambulist\Components\ApiClient\Client\Connection;
@@ -17,10 +17,10 @@ use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterExce
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Somnambulist\Components\AttributeModel\TypeCasters;
-use Somnambulist\Domain\Entities\Types\Geography\Country;
-use Somnambulist\Domain\Entities\Types\Identity\EmailAddress;
-use Somnambulist\Domain\Entities\Types\Identity\Uuid;
-use Somnambulist\Domain\Entities\Types\PhoneNumber;
+use Somnambulist\Components\Domain\Entities\Types\Geography\Country;
+use Somnambulist\Components\Domain\Entities\Types\Identity\EmailAddress;
+use Somnambulist\Components\Domain\Entities\Types\Identity\Uuid;
+use Somnambulist\Components\Domain\Entities\Types\PhoneNumber;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;

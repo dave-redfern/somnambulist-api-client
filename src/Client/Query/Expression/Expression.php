@@ -18,13 +18,9 @@ class Expression implements ExpressionInterface
 
     private string $field;
     private string $operator;
+    private mixed $value;
 
-    /**
-     * @var mixed|null
-     */
-    private $value;
-
-    public function __construct(string $field, string $operator, $value)
+    public function __construct(string $field, string $operator, mixed $value)
     {
         if (is_object($value)) {
             $value = (string)$value;
@@ -35,7 +31,7 @@ class Expression implements ExpressionInterface
         $this->value    = $value;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $val = $this->getValueAsString();
 
@@ -56,7 +52,7 @@ class Expression implements ExpressionInterface
         return $this->operator;
     }
 
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }

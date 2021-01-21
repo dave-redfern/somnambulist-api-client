@@ -3,13 +3,13 @@
 namespace Somnambulist\Components\ApiClient;
 
 use LogicException;
-use Somnambulist\Collection\Contracts\Collection;
-use Somnambulist\Collection\MutableCollection;
 use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
 use Somnambulist\Components\ApiClient\Relationships\BelongsTo;
 use Somnambulist\Components\ApiClient\Relationships\HasMany;
 use Somnambulist\Components\ApiClient\Relationships\HasOne;
 use Somnambulist\Components\AttributeModel\AbstractModel as AttributeModel;
+use Somnambulist\Components\Collection\Contracts\Collection;
+use Somnambulist\Components\Collection\MutableCollection;
 use function array_key_exists;
 use function is_null;
 use function method_exists;
@@ -56,7 +56,7 @@ abstract class AbstractModel extends AttributeModel
         parent::__construct(Manager::instance()->caster()->cast($attributes, $this->casts));
     }
 
-    public function new(array $attributes = []): AbstractModel
+    public function new(array $attributes = []): static
     {
         return new static($attributes);
     }
@@ -78,9 +78,9 @@ abstract class AbstractModel extends AttributeModel
      *
      * @param string $name
      *
-     * @return mixed|null
+     * @return mixed
      */
-    public function getAttribute(string $name)
+    public function getAttribute(string $name): mixed
     {
         if (!$this->isRelationship($name) && null !== $attr = parent::getAttribute($name)) {
             return $attr;
@@ -187,7 +187,8 @@ abstract class AbstractModel extends AttributeModel
      * @return BelongsTo
      * @throws Exceptions\ModelRelationshipException
      */
-    protected function belongsTo(string $class, string $attributeKey, string $identityKey, bool $nullOnNotFound = true, bool $lazyLoading = true): BelongsTo
+    protected function belongsTo(string $class, string $attributeKey, string $identityKey, bool $nullOnNotFound = true,
+        bool $lazyLoading = true): BelongsTo
     {
         return new BelongsTo($this, new $class, $attributeKey, $identityKey, $nullOnNotFound, $lazyLoading);
     }
@@ -226,10 +227,10 @@ abstract class AbstractModel extends AttributeModel
      * should be loaded directly from the parent via a `with()` call. For in-direct
      * relationships, use {@see Model::belongsTo()}.
      *
-     * @param string      $class
-     * @param string|null $attributeKey   The attribute name where data is located on the data source
-     * @param bool        $nullOnNotFound If false, returns an empty model as the related object
-     * @param bool        $lazyLoading    If false, will not auto-load the relationship data from the API
+     * @param string $class
+     * @param string $attributeKey   The attribute name where data is located on the data source
+     * @param bool   $nullOnNotFound If false, returns an empty model as the related object
+     * @param bool   $lazyLoading    If false, will not auto-load the relationship data from the API
      *
      * @return HasOne
      * @throws Exceptions\ModelRelationshipException

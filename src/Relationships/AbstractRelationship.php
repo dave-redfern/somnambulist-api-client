@@ -4,7 +4,7 @@ namespace Somnambulist\Components\ApiClient\Relationships;
 
 use BadMethodCallException;
 use IlluminateAgnostic\Str\Support\Str;
-use Somnambulist\Collection\Contracts\Collection;
+use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\ModelBuilder;

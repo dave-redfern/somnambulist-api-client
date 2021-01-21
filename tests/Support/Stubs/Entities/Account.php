@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities;
 
 use Somnambulist\Components\ApiClient\Model;
+use Somnambulist\Components\ApiClient\Relationships\HasMany;
 
 /**
  * Class Account
@@ -25,17 +26,17 @@ class Account extends Model
         'updated_at' => 'datetime',
     ];
 
-    protected function related()
+    protected function related(): HasMany
     {
         return $this->hasMany(AccountRelation::class, 'related');
     }
 
-    protected function relatedAccounts()
+    protected function relatedAccounts(): HasMany
     {
         return $this->hasMany(AccountRelation::class, 'related');
     }
 
-    protected function related_accounts()
+    protected function related_accounts(): HasMany
     {
         return $this->relatedAccounts();
     }

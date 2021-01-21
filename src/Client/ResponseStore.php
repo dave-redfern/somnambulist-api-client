@@ -31,15 +31,8 @@ use const JSON_THROW_ON_ERROR;
 class ResponseStore
 {
 
-    /**
-     * @var ResponseStore
-     */
-    private static $instance;
-
-    /**
-     * @var string
-     */
-    private $store;
+    private static ?ResponseStore $instance = null;
+    private ?string $store;
 
     private function __construct(string $store = null)
     {

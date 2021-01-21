@@ -3,9 +3,9 @@
 namespace Somnambulist\Components\ApiClient\Persistence\Exceptions;
 
 use Exception;
-use Somnambulist\Collection\Contracts\Immutable;
-use Somnambulist\Collection\FrozenCollection;
-use Somnambulist\Collection\MutableCollection;
+use Somnambulist\Components\Collection\Contracts\Immutable;
+use Somnambulist\Components\Collection\FrozenCollection;
+use Somnambulist\Components\Collection\MutableCollection;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use function json_decode;

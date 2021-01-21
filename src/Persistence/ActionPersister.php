@@ -4,7 +4,6 @@ namespace Somnambulist\Components\ApiClient\Persistence;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use Somnambulist\Components\ApiClient\Client\Behaviours\DecodeResponseArray;
 use Somnambulist\Components\ApiClient\Client\Connection\Decoders\SimpleJsonDecoder;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Client\Contracts\ResponseDecoderInterface;

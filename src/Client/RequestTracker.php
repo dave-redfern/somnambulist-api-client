@@ -23,17 +23,8 @@ use function sprintf;
 class RequestTracker
 {
 
-    /**
-     * @var RequestTracker
-     */
-    private static $instance;
-    
-    /**
-     * Array of hash -> counts
-     *
-     * @var array
-     */
-    private $requests = [];
+    private static ?RequestTracker $instance = null;
+    private array $requests = [];
 
     private function __construct()
     {
