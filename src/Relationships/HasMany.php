@@ -39,15 +39,11 @@ class HasMany extends AbstractRelationship
     public function addRelationshipResultsToModels(Collection $models, string $relationship): self
     {
         $models->each(function (AbstractModel $loaded) use ($relationship) {
-            if (null === $data = $loaded->getRawAttribute($this->attributeKey)) {
-                $data = [];
-
-                if ($this->lazyLoading) {
-                    $data = $this->callApi($loaded, $relationship);
-                }
+            if ((null === $data = $loaded->getRawAttribute($this->attributeKey)) && !$loaded->isRelationshipLoaded($relationship) && $this->lazyLoading) {
+                $data = $this->callApi($loaded, $relationship);
             }
 
-            $loaded->setRelationshipValue($this->attributeKey, $relationship, $this->buildCollection($data));
+            $loaded->setRelationshipValue($this->attributeKey, $relationship, $this->buildCollection((array)$data));
         });
 
         return $this;
@@ -59,11 +55,7 @@ class HasMany extends AbstractRelationship
             $this->query->with($relationship)->wherePrimaryKey($model->getPrimaryKey())->fetchRaw()
         );
 
-        if (isset($data[$this->attributeKey])) {
-            $data = $data[$this->attributeKey];
-        }
-
-        return $data;
+        return $data[$this->attributeKey] ?? [];
     }
 
     private function buildCollection(array $data): Collection

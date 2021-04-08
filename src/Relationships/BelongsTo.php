@@ -43,13 +43,19 @@ class BelongsTo extends AbstractRelationship
 
     public function fetch(): Collection
     {
-        return $this->query->wherePrimaryKey($this->parent->getRawAttribute($this->identityKey))->fetch();
+        $ret = $this->query->wherePrimaryKey($this->parent->getRawAttribute($this->identityKey))->fetch();
+
+        if (!$ret->count() && (null !== $rel = $this->newOrNull(null))) {
+            $ret->add($rel);
+        }
+
+        return $ret;
     }
 
     public function addRelationshipResultsToModels(Collection $models, string $relationship): self
     {
         $models->each(function (AbstractModel $loaded) use ($relationship) {
-            if ((null === $data = $loaded->getRawAttribute($this->attributeKey)) && $this->lazyLoading) {
+            if ((null === $data = $loaded->getRawAttribute($this->attributeKey)) && !$loaded->isRelationshipLoaded($relationship) && $this->lazyLoading) {
                 $data = $this->related->getResponseDecoder()->object(
                     $this->query->with($relationship)->wherePrimaryKey($loaded->getRawAttribute($this->identityKey))->fetchRaw()
                 );
@@ -59,11 +65,14 @@ class BelongsTo extends AbstractRelationship
                 }
             }
 
-            $related = is_null($data) ? ($this->nullOnNotFound ? null : $this->related->new()) : $this->related->new($data);
-
-            $loaded->setRelationshipValue($this->attributeKey, $relationship, $related);
+            $loaded->setRelationshipValue($this->attributeKey, $relationship, $this->newOrNull($data));
         });
 
         return $this;
+    }
+
+    private function newOrNull(?array $data): ?object
+    {
+        return is_null($data) ? ($this->nullOnNotFound ? null : $this->related->new()) : $this->related->new($data);
     }
 }

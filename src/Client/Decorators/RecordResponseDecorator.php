@@ -11,7 +11,7 @@ use function in_array;
 /**
  * Class RecordResponseDecorator
  *
- * Decorates an ConnectionInterface adding the ability to record responses from the API.
+ * Decorates a ConnectionInterface adding the ability to record responses from the API.
  *
  * @package    Somnambulist\Components\ApiClient\Client
  * @subpackage Somnambulist\Components\ApiClient\Client\Decorators\RecordResponseDecorator

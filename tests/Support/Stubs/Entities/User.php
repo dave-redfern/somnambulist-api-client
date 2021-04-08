@@ -34,6 +34,11 @@ class User extends Model
         return $this->hasOne(Address::class, 'address', false);
     }
 
+    public function address3(): HasOne
+    {
+        return $this->hasOne(Address::class, 'address');
+    }
+
     protected function addresses(): HasMany
     {
         return $this->hasMany(Address::class, 'addresses', 'type');

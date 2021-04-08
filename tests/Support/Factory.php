@@ -101,6 +101,9 @@ class Factory
     private function userRoutes($method, $url, $options): MockResponse
     {
         switch ($url) {
+            case Str::contains($url, '/v1/users/468185d5-4238-44bb-ae34-44909e35e4fe?include=address3'):
+                return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_no_address.json'));
+
             case Str::contains($url, '/v1/users/1e335331-ee15-4871-a419-c6778e190a54?include=account.related.related'):
                 return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_with_account_relations.json'));
 

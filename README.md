@@ -12,7 +12,7 @@ The library uses Symfony HTTP Client under the hood.
 
 ## Requirements
 
- * PHP 7.4+
+ * PHP 8.0+
  * cURL
  * symfony/event-dispatcher
  * symfony/http-client

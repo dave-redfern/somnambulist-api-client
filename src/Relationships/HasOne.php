@@ -6,6 +6,7 @@ use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Exceptions\ModelRelationshipException;
 use Somnambulist\Components\ApiClient\Model;
+use function array_key_exists;
 use function get_class;
 use function is_null;
 
@@ -39,8 +40,8 @@ class HasOne extends AbstractRelationship
     {
         $ret = $this->related->getCollection();
 
-        if (null !== $data = $this->callApi($this->parent, $this->attributeKey)) {
-            $ret->add($this->related->new($data));
+        if (null !== $related = $this->newOrNull($this->callApi($this->parent, $this->attributeKey))) {
+            $ret->add($related);
         }
 
         return $ret;
@@ -49,16 +50,19 @@ class HasOne extends AbstractRelationship
     public function addRelationshipResultsToModels(Collection $models, string $relationship): self
     {
         $models->each(function (AbstractModel $loaded) use ($relationship) {
-            if ((null === $data = $loaded->getRawAttribute($this->attributeKey)) && $this->lazyLoading) {
+            if ((null === $data = $loaded->getRawAttribute($this->attributeKey)) && !$loaded->isRelationshipLoaded($relationship) && $this->lazyLoading) {
                 $data = $this->callApi($loaded, $relationship);
             }
 
-            $related = is_null($data) ? ($this->nullOnNotFound ? null : $this->related->new()) : $this->related->new($data);
-
-            $loaded->setRelationshipValue($this->attributeKey, $relationship, $related);
+            $loaded->setRelationshipValue($this->attributeKey, $relationship, $this->newOrNull($data));
         });
 
         return $this;
+    }
+
+    private function newOrNull(?array $data): ?object
+    {
+        return is_null($data) ? ($this->nullOnNotFound ? null : $this->related->new()) : $this->related->new($data);
     }
 
     private function callApi(Model $model, string $relationship): ?array
@@ -67,14 +71,6 @@ class HasOne extends AbstractRelationship
             $this->query->with($relationship)->wherePrimaryKey($model->getPrimaryKey())->fetchRaw()
         );
 
-        if (isset($data[$this->attributeKey])) {
-            $data = $data[$this->attributeKey];
-        }
-
-        if (empty($data)) {
-            $data = null;
-        }
-
-        return $data;
+        return $data[$this->attributeKey] ?? null;
     }
 }

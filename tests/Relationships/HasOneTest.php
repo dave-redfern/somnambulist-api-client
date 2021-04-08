@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\ApiClient\Tests\Relationships;
 
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Relationships\HasOne;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\AssertRequestMade;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
@@ -47,6 +48,17 @@ class HasOneTest extends TestCase
 
         $this->assertInstanceOf(Address::class, $user->address);
         $this->assertEquals('Hong Kong', $user->address->country);
+    }
+
+    public function testLazyLoadingRelationshipDoesNotReloadIfRelationshipLoadedAlready()
+    {
+        $user = User::with('address3')->find('468185d5-4238-44bb-ae34-44909e35e4fe');
+
+        $this->assertTrue($user->isRelationshipLoaded('address3'));
+        $this->assertRouteWasNotCalledWith('users.view', ['include' => 'address']);
+
+        $user->address3;
+        $user->address3;
     }
 
     public function testFetchingRelationship()

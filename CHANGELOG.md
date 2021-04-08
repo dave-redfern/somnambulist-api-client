@@ -1,6 +1,14 @@
 Change Log
 ==========
 
+2021-04-08 - 3.0.1
+------------------
+
+ * Add checks to prevent circular API calls if the relationship result is null and lazy loading is enabled
+ * Add `first()` to `AbstractRelationship` to fetch the first object (or null)
+ * Fix bug in `HasOne` not loading an empty object when using `fetch()` and `nullOnNotFound` is false
+ * Fix bug in `BelongsTo` not loading an empty object when using `fetch()` and `nullOnNotFound` is false
+
 2021-01-21 - 3.0.0
 ------------------
 

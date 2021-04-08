@@ -51,6 +51,11 @@ abstract class AbstractRelationship
 
     abstract public function addRelationshipResultsToModels(Collection $models, string $relationship): self;
 
+    public function first(): ?object
+    {
+        return $this->fetch()->first();
+    }
+
     public function enableLazyLoading(): self
     {
         $this->lazyLoading = true;

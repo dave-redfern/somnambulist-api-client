@@ -35,7 +35,10 @@ class BelongsToTest extends TestCase
     {
         $user = User::with('account')->find('1e335331-ee15-4871-a419-c6778e190a54');
 
+        $this->assertRouteWasNotCalledWith('accounts.view', ['id' => '1228ec03-1a58-4e51-8cea-cb787104aa3d', 'include' => 'account']);
+
         $this->assertInstanceOf(Account::class, $user->account);
+
         $this->assertEquals('1228ec03-1a58-4e51-8cea-cb787104aa3d', (string)$user->account->id);
     }
 

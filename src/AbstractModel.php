@@ -166,7 +166,10 @@ abstract class AbstractModel extends AttributeModel
         return $this->relationships[$method];
     }
 
-    private function isRelationshipLoaded(string $key): bool
+    /**
+     * @internal
+     */
+    public function isRelationshipLoaded(string $key): bool
     {
         return array_key_exists($key, $this->relationships);
     }
@@ -187,8 +190,7 @@ abstract class AbstractModel extends AttributeModel
      * @return BelongsTo
      * @throws Exceptions\ModelRelationshipException
      */
-    protected function belongsTo(string $class, string $attributeKey, string $identityKey, bool $nullOnNotFound = true,
-        bool $lazyLoading = true): BelongsTo
+    protected function belongsTo(string $class, string $attributeKey, string $identityKey, bool $nullOnNotFound = true, bool $lazyLoading = true): BelongsTo
     {
         return new BelongsTo($this, new $class, $attributeKey, $identityKey, $nullOnNotFound, $lazyLoading);
     }
