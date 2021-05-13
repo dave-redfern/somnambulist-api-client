@@ -52,4 +52,16 @@ class NestedArrayEncoderTest extends TestCase
         $this->assertArrayHasKey('parts', $args['filters']);
         $this->assertArrayHasKey('type', $args['filters']);
     }
+
+    public function testEncodeWithRouteParams()
+    {
+        $qb = new QueryBuilder();
+        $qb->routeRequires(['user_id' => 'f6af1fc2-6d02-4041-a8dc-985c757b828a']);
+
+        $encoder = new NestedArrayEncoder();
+        $args = $encoder->encode($qb);
+
+        $this->assertArrayHasKey('user_id', $args);
+        $this->assertEquals('f6af1fc2-6d02-4041-a8dc-985c757b828a', $args['user_id']);
+    }
 }

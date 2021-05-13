@@ -62,6 +62,14 @@ class QueryBuilderTest extends TestCase
         $this->assertEmpty($qb->getWith());
     }
 
+    public function testRouteRequires()
+    {
+        $qb = new QueryBuilder();
+        $qb->routeRequires(['this' => 'that']);
+
+        $this->assertEquals(['this' => 'that'], $qb->getRouteParams());
+    }
+
     public function testOrderBy()
     {
         $qb = new QueryBuilder();

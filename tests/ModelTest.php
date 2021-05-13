@@ -4,11 +4,14 @@ namespace Somnambulist\Components\ApiClient\Tests;
 
 use Pagerfanta\Pagerfanta;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\ApiClient\Exceptions\MissingRequiredRouteParametersException;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
+use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\Inbox;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\UserCollection;
 use Somnambulist\Components\Domain\Entities\Types\DateTime\DateTime;
 use Somnambulist\Components\Domain\Entities\Types\Identity\Uuid;
+use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 
 /**
  * Class ModelTest
@@ -59,5 +62,21 @@ class ModelTest extends TestCase
         $users = User::query()->paginate();
 
         $this->assertInstanceOf(Pagerfanta::class, $users);
+    }
+
+    public function testMissingRequiredRouteParametersRaisesException()
+    {
+        $this->expectException(MissingMandatoryParametersException::class);
+        $this->expectExceptionMessage('Some mandatory parameters are missing ("accountId", "userId") to generate a URL for route "inbox.list".');
+
+        Inbox::query()->paginate();
+    }
+
+    public function testMissingRequiredRouteParametersRaisesException2()
+    {
+        $this->expectException(MissingMandatoryParametersException::class);
+        $this->expectExceptionMessage('Some mandatory parameters are missing ("userId") to generate a URL for route "inbox.list".');
+
+        Inbox::query()->routeRequires(['accountId' => '93830726-b727-4e0f-8984-7da3dc2d5de4'])->paginate();
     }
 }

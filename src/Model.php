@@ -135,12 +135,12 @@ abstract class Model extends AbstractModel
         return $this->routes[$type];
     }
 
-    public function getPrimaryKeyName()
+    public function getPrimaryKeyName(): string
     {
         return $this->primaryKey;
     }
 
-    public function getPrimaryKey()
+    public function getPrimaryKey(): mixed
     {
         return $this->attributes[$this->primaryKey] ?? null;
     }

@@ -39,6 +39,7 @@ class CompoundNestedArrayEncoder extends AbstractEncoder
     {
         $res = array_filter(
             array_merge(
+                $builder->getRouteParams(),
                 $this->createInclude($builder->getWith()),
                 $this->createOrderBy($builder->getOrderBy()),
                 $this->createLimit($builder->getLimit()),

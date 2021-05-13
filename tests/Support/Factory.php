@@ -58,6 +58,8 @@ class Factory
         $router->routes()->add('groups.view', new ApiRoute('groups/{id}'));
         $router->routes()->add('accounts.list', new ApiRoute('accounts'));
         $router->routes()->add('accounts.view', new ApiRoute('accounts/{id}'));
+        $router->routes()->add('inbox.list', new ApiRoute('{accountId}/user/{userId}/inbox'));
+        $router->routes()->add('inbox.view', new ApiRoute('{accountId}/user/{userId}/inbox/{itemid}'));
 
         $connection = new AssertableConnectionDecorator(new Connection($client, $router, new EventDispatcher()));
 

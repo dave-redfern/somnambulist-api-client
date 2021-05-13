@@ -6,6 +6,7 @@ use BadMethodCallException;
 use IlluminateAgnostic\Str\Support\Str;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
+use Somnambulist\Components\ApiClient\Exceptions\MissingRequiredRouteParametersException;
 use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface as Connection;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
@@ -17,6 +18,8 @@ use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
 use Somnambulist\Components\ApiClient\Exceptions\NoResultsException;
 use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
+use function array_diff;
+use function array_intersect;
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
@@ -47,9 +50,11 @@ use function substr;
  * @method ModelBuilder perPage(int $perPage = null)
  * @method ModelBuilder limit(int $limit = null)
  * @method ModelBuilder offset(string $offset = null)
+ * @method ModelBuilder routeRequires(array $params)
  *
  * @method array getWith()
  * @method array getOrderBy()
+ * @method array getRouteParams()
  * @method null|CompositeExpression getWhere()
  * @method null|int getLimit()
  * @method null|string getOffset()

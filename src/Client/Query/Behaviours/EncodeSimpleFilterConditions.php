@@ -27,6 +27,7 @@ trait EncodeSimpleFilterConditions
 
         $res = array_filter(
             array_merge(
+                $builder->getRouteParams(),
                 $this->createInclude($builder->getWith()),
                 $this->createOrderBy($builder->getOrderBy()),
                 $this->createLimit($builder->getLimit(), $builder->getOffset()),

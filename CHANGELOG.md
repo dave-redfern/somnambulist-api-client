@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2021-05-13 - 3.1.0
+------------------
+
+ * Add `routeRequires` to `QueryBuilder` to allow setting route parameters for route prefixes e.g. `/<id>/thing`
+
 2021-04-08 - 3.0.1
 ------------------
 

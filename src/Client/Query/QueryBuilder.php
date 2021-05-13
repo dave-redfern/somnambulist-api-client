@@ -24,6 +24,7 @@ use function is_null;
 class QueryBuilder
 {
 
+    private array $routeParams = [];
     private array $with = [];
     private array $orderBy = [];
     private ?int $page = null;
@@ -62,6 +63,20 @@ class QueryBuilder
         }
 
         $this->with = $relationship;
+
+        return $this;
+    }
+
+    /**
+     * An array of key => value pairs needed to satisfy any route parameters
+     *
+     * @param array $params
+     *
+     * @return $this
+     */
+    public function routeRequires(array $params): self
+    {
+        $this->routeParams = $params;
 
         return $this;
     }
@@ -177,6 +192,11 @@ class QueryBuilder
     public function getWith(): array
     {
         return $this->with;
+    }
+
+    public function getRouteParams(): array
+    {
+        return $this->routeParams;
     }
 
     public function getWhere(): ?CompositeExpression
