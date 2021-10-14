@@ -31,7 +31,7 @@ final class ConnectionManager
     }
 
     /**
-     * Set the DBAL Connection to use by default or for a specific model
+     * Set the Connection to use by default or for a specific model
      *
      * The model class name should be used and then that connection will be used with all
      * instances of that model. A default connection should still be provided as a fallback.

@@ -5,6 +5,7 @@ namespace Somnambulist\Components\ApiClient\Client\EventListeners;
 use Somnambulist\Components\ApiClient\Client\Events\PreRequestEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use function method_exists;
 
 /**
  * Class InjectHeadersFromRequestStack
@@ -33,7 +34,7 @@ class InjectHeadersFromRequestStack implements EventSubscriberInterface
 
     public function onPreRequest(PreRequestEvent $event): void
     {
-        if (null === $request = $this->stack->getMasterRequest()) {
+        if (null === $request = $this->stack->getMainRequest()) {
             return;
         }
 

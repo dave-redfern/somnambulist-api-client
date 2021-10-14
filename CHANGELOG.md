@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2021-10-14 - 3.2.0
+------------------
+
+ * Require Symfony 5.3+ to remove deprecated method calls
+
 2021-05-13 - 3.1.0
 ------------------
 
