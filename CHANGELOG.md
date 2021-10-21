@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2021-10-21 - 3.2.1
+------------------
+
+ * Fix #2 TypeError when throwing not found exception 
+
 2021-10-14 - 3.2.0
 ------------------
 

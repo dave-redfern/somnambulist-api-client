@@ -137,6 +137,9 @@ class Factory
             case Str::contains($url, '/v1/users/c8259b3b-8603-3098-8361-425325078c9a'):
                 return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_view_c8259b3b.json'));
 
+            case Str::contains($url, '/v1/users/c8259b3b-0000-0000-0000-425325078c9a'):
+                return new MockResponse('{"message":"Record not found"}', ['http_code' => 404]);
+
             case Str::contains($url, '/v1/users?email=noresults@example.com'):
                 return new MockResponse(file_get_contents(__DIR__ . '/Stubs/json/user_list_no_result.json'));
 

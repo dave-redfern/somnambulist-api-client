@@ -5,6 +5,7 @@ namespace Somnambulist\Components\ApiClient\Tests;
 use Pagerfanta\Pagerfanta;
 use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\ApiClient\EntityLocator;
+use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
 use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
@@ -28,7 +29,7 @@ class EntityLocatorTest extends TestCase
         $this->factory()->makeManager();
     }
 
-    public function testEntityLocator()
+    public function testFind()
     {
         $locator = new EntityLocator(Manager::instance(), User::class);
 
@@ -36,6 +37,25 @@ class EntityLocatorTest extends TestCase
 
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals($id, $user->id->toString());
+    }
+
+    public function testFindOrFail()
+    {
+        $locator = new EntityLocator(Manager::instance(), User::class);
+
+        $user = $locator->findOrFail($id = 'c8259b3b-8603-3098-8361-425325078c9a');
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($id, $user->id->toString());
+    }
+
+    public function testFindOrFailRaisesExceptionWhenNotFound()
+    {
+        $locator = new EntityLocator(Manager::instance(), User::class);
+
+        $this->expectException(EntityNotFoundException::class);
+
+        $locator->findOrFail('c8259b3b-0000-0000-0000-425325078c9a');
     }
 
     public function testFindBy()

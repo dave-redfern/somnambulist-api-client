@@ -161,7 +161,7 @@ class ModelBuilder
     public function findOrFail($id): Model
     {
         if (null === $model = $this->find($id)) {
-            throw EntityNotFoundException::noMatchingRecordFor(get_class($this->model), $this->model->getPrimaryKey(), $id);
+            throw EntityNotFoundException::noMatchingRecordFor(get_class($this->model), $this->model->getPrimaryKeyName(), $id);
         }
 
         return $model;
