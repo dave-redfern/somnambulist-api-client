@@ -20,7 +20,6 @@ use function implode;
  */
 trait MakeDestroyRequest
 {
-
     public function destroy(ApiActionInterface $action): bool
     {
         $action->isValid();

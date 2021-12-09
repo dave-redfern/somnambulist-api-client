@@ -3,6 +3,7 @@
 namespace Somnambulist\Components\ApiClient\Persistence\Behaviours;
 
 use function is_null;
+use function trigger_deprecation;
 
 /**
  * Trait HasObjectData
@@ -12,7 +13,6 @@ use function is_null;
  */
 trait HasObjectData
 {
-
     protected ?string $class = null;
     protected array $properties;
 
@@ -30,15 +30,10 @@ trait HasObjectData
         return $this;
     }
 
-    /**
-     * @param string|array $name  The property name to set/change or an array of properties to set
-     * @param mixed        $value
-     *
-     * @return $this
-     */
-    public function set($name, mixed $value = null): self
+    public function set(string|array $name, mixed $value = null): self
     {
         if (is_array($name) && is_null($value)) {
+            trigger_deprecation('somnambulist/api-client', '3.2.2', 'Passing an array as first arg is deprecated, use "with()"');
             return $this->with($name);
         }
 

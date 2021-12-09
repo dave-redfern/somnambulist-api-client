@@ -20,7 +20,6 @@ use function json_decode;
  */
 class ActionPersisterException extends Exception
 {
-
     private ResponseInterface $response;
     private MutableCollection $payload;
     private MutableCollection $errors;
@@ -31,7 +30,7 @@ class ActionPersisterException extends Exception
 
         $this->response = $error->getResponse();
         $this->code     = $this->response->getStatusCode();
-        $this->payload  = $payload = new MutableCollection(json_decode((string)$this->response->getContent(false), true, $depth = 512) ?? []);
+        $this->payload  = $payload = new MutableCollection(json_decode($this->response->getContent(false), true) ?? []);
         $this->errors   = $payload->value('errors', new MutableCollection());
     }
 

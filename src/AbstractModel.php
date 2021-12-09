@@ -22,7 +22,6 @@ use function method_exists;
  */
 abstract class AbstractModel extends AttributeModel
 {
-
     /**
      * The collection type to instantiate when returning multiple results for this Model
      */

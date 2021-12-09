@@ -18,7 +18,6 @@ use function in_array;
  */
 class RecordResponseDecorator extends AbstractDecorator
 {
-
     const PASSTHRU = 'passthru';
     const PLAYBACK = 'playback';
     const RECORD   = 'record';

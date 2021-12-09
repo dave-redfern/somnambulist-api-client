@@ -20,7 +20,6 @@ use function implode;
  */
 trait MakeUpdateRequest
 {
-
     public function update(ApiActionInterface $action): object
     {
         $action->isValid();

@@ -12,7 +12,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 interface ResponseDecoderInterface
 {
-
     /**
      * Decodes the response content to a PHP array
      *

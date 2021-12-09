@@ -1,7 +1,7 @@
 
 ## Upgrading from 1.X to 2.0
 
-`2.0` represents an enormous change to the internals, API and structure. Some of the main
+`2.0` represents an enormous change to the internals, API and structure. The main
 changes include:
 
  * PHP 7.4
@@ -31,8 +31,8 @@ The EntityLocator has been removed in favour of "active" Model instances. These 
 similarly to ActiveRecord style ORM models in that the Model will query the API for the
 data instead using a repository.
 
-An entity locator / repository can be re-implement by wrapping the model calls instead.
-For example a UserLocator can be implemented as:
+An entity locator / repository can be re-implement by wrapping the model calls. For example
+a UserLocator can be implemented as:
 
 ```php
 <?php
@@ -72,14 +72,14 @@ class UserLocator
 }
 ```
 
-This can be easily turned into an abstract class and made re-usable.
+This can be turned into an abstract class and made re-usable.
 
 ### ApiClient Rename / Signature Change
 
 The ApiClient class is now Connection and requires an EventDispatcher instance on create. Be
 sure to inject the Symfony event dispatcher. The other parameters are still the same.
 
-The Connection no longer accepts a header injector. Instead use [events](connections.md).
+The Connection no longer accepts a header injector, instead use [events](connections.md).
 
 ### Introduction of Model and ValueObject
 

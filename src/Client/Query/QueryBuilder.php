@@ -10,6 +10,7 @@ use function array_unshift;
 use function count;
 use function is_array;
 use function is_null;
+use function trigger_deprecation;
 
 /**
  * Class QueryBuilder
@@ -23,7 +24,6 @@ use function is_null;
  */
 class QueryBuilder
 {
-
     private array $routeParams = [];
     private array $with = [];
     private array $orderBy = [];
@@ -47,22 +47,33 @@ class QueryBuilder
     /**
      * Eager load the specified relationships when requesting data
      *
-     * An array of strings can be specified as the only arg, instead of multiple strings;
-     * or if null is passed, the relationships will be cleared.
-     *
      * @param string ...$relationship
      *
      * @return $this
      */
     public function with(...$relationship): self
     {
-        if (is_array($relationship[0])) {
+        if (isset($relationship[0]) && is_array($relationship[0])) {
+            trigger_deprecation('somnambulist/api-client', '3.2.2', 'Passing an array as first arg is deprecated, use separate string arguments');
             $relationship = $relationship[0];
-        } elseif (is_null($relationship[0])) {
+        } elseif (array_key_exists(0, $relationship) && is_null($relationship[0])) {
+            trigger_deprecation('somnambulist/api-client', '3.2.2', 'Passing null is deprecated, use "withoutRelationships()"');
             $relationship = [];
         }
 
         $this->with = $relationship;
+
+        return $this;
+    }
+
+    /**
+     * Removes any set relationships preventing any eager loading of resources
+     *
+     * @return $this
+     */
+    public function withoutRelationships(): self
+    {
+        $this->with = [];
 
         return $this;
     }
@@ -161,7 +172,7 @@ class QueryBuilder
 
     public function page(int $page = null): self
     {
-        $this->page = !is_null($page) ? ($page < 1 ? 1 : $page) : null;
+        $this->page = !is_null($page) ? max($page, 1) : null;
 
         return $this;
     }

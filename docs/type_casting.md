@@ -60,7 +60,8 @@ class AddressCaster implements AttributeCasterInterface
         return in_array($type, $this->types());
     }
 
-    public function cast(array &$attributes, $attribute, string $type) : void{
+    public function cast(array &$attributes, $attribute, string $type) : void
+    {
         $attributes[$attribute] = new Address(
             $attributes['address_line_1'],
             $attributes['address_line_2'],

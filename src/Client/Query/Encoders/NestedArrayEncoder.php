@@ -21,7 +21,6 @@ use function is_null;
  */
 class NestedArrayEncoder extends AbstractEncoder
 {
-
     protected array $mappings = [
         self::FILTERS  => 'filters',
         self::INCLUDE  => 'include',

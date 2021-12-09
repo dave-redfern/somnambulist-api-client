@@ -62,6 +62,18 @@ class QueryBuilderTest extends TestCase
         $this->assertEmpty($qb->getWith());
     }
 
+    public function testWithoutRelationships()
+    {
+        $qb = new QueryBuilder();
+        $qb->with('this', 'that');
+
+        $this->assertEquals(['this', 'that'], $qb->getWith());
+
+        $qb->withoutRelationships();
+
+        $this->assertEmpty($qb->getWith());
+    }
+
     public function testRouteRequires()
     {
         $qb = new QueryBuilder();

@@ -16,11 +16,10 @@ use function parse_url;
  */
 class ApiRouter
 {
-
-    private string                $service;
-    private RouteCollection       $routes;
+    private string $service;
+    private RouteCollection $routes;
     private UrlGeneratorInterface $generator;
-    private RequestContext        $context;
+    private RequestContext $context;
 
     public function __construct(string $service, RouteCollection $routes)
     {
@@ -60,6 +59,6 @@ class ApiRouter
 
     public function route(string $route, array $parameters = []): string
     {
-        return $this->generator->generate($route, $parameters, UrlGenerator::ABSOLUTE_URL);
+        return $this->generator->generate($route, $parameters, UrlGeneratorInterface::ABSOLUTE_URL);
     }
 }

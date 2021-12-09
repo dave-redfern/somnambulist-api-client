@@ -18,7 +18,6 @@ use function array_key_exists;
  */
 abstract class Model extends AbstractModel
 {
-
     /**
      * The primary key for the model
      *
@@ -62,22 +61,22 @@ abstract class Model extends AbstractModel
     protected array $with = [];
 
     /**
-     * @param string $id
+     * @param mixed $id
      *
      * @return Model|null
      */
-    public static function find($id): ?Model
+    public static function find(mixed $id): ?Model
     {
         return static::query()->find($id);
     }
 
     /**
-     * @param string $id
+     * @param mixed $id
      *
      * @return Model
      * @throws EntityNotFoundException
      */
-    public static function findOrFail($id): Model
+    public static function findOrFail(mixed $id): Model
     {
         return static::query()->findOrFail($id);
     }

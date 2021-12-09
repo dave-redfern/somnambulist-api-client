@@ -17,7 +17,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 class Connection implements ConnectionInterface
 {
-
     private HttpClientInterface $client;
     private ApiRouter $router;
     private EventDispatcherInterface $dispatcher;

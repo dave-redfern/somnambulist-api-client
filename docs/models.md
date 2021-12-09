@@ -116,17 +116,17 @@ Both types can define relationships.
 #### Models
 
 A `Model` maps to a primary, discrete API end point i.e. it can be "active" and fetch data.
-Typically the Model will be the primary node or aggregate root of an entity. Models only
+Typically, the Model will be the primary node or aggregate root of an entity. Models only
 support a single primary key field that should be the same as the route parameter name.
 
 #### Value Objects
 
 A `ValueObject` is a sub-object of a `Model` that cannot be loaded independently of the
-Model. i.e.: there is no endpoint to access the data directly or it does not make sense if
+Model. i.e.: there is no endpoint to access the data directly, or it does not make sense if
 the model is not loaded. `ValueObject`s are not "active" and cannot load any data. When
 fetching data it is pulled from the parent Model instead.
 
-Typically value objects are used when the API does not return independent identities for
+Typically, value objects are used when the API does not return independent identities for
 the object e.g.: a User has a single Address. Another example is when there is a "pivot"
 table linking two root entities with meta-data. This intermediary object has identities
 to both sides of the relationship and is not a "valid" independent record.
@@ -154,7 +154,6 @@ use Somnambulist\Components\ApiClient\Model;
 
 class User extends Model
 {
-
     protected array $routes = [
         'search' => 'users.list',
         'view' => 'users.view',
@@ -181,7 +180,7 @@ The following properties may be customised per model:
  * queryEncoder - the class to use to encode search requests to the API
  * responseDecoder - the class to use to decode API responses to PHP arrays
 
-### API Searches
+### API Searches / Querying
 
 To load a user: `User::find(id)` or `User::query()->whereField('name', 'like', 'foo%')->fetch()`.
 Searching will depend on the API being called. The query builder allows for nested and/or 
@@ -196,8 +195,38 @@ provided:
  * CompoundNestedArray - use a compound operator:value instead of separate array keys
 
 The query encoder class can be set on a per model basis and any `QueryEncoderInterface` may be
-used, so completely custom serialization is possible. Encoders that do not support nested or OR
-conditionals, will raise an error when encountered during the query encoding process.
+used, so completely custom serialization is possible. Encoders that do not support nested or,
+"OR" conditionals, will raise an error when encountered during the query encoding process.
+
+For example:
+
+```php
+use Somnambulist\Components\ApiClient\Model;
+
+$expr = Model::query()->expr();
+Model::query()->where($expr->like('keywords', 'some keywords'))->fetch();
+```
+
+If the API allows for complex nested querying:
+
+```php
+use Somnambulist\Components\ApiClient\Model;
+
+$expr = Model::query()->expr();
+Model::query()
+    ->where($expr->like('keywords', 'some keywords'))
+    ->orWhere(
+        $expr->neq('email', 'some@email'),
+        $expr->neq('email', 'some@email2'),
+    )
+    ->andWhere(
+        $expr->eq('active', true),
+        $expr->eq('marketable', true)
+    )
+    ->limit(20)
+    ->fetch()
+;
+```
 
 In keeping with read-models / active record, linked records can be loaded using `->with()`,
 though this is dependent on the API. It is preferable to always eager load the data you need at
@@ -216,9 +245,9 @@ The `ModelBuilder` has some additional helper methods:
  * fetchFirstOrFail()
  * fetchFirstOrNull()
 
-By default calling `->fetch()` will return a Collection class. This can be overridden to a 
+By default, calling `->fetch()` will return a Collection class. This can be overridden to a 
 custom collection by setting the class for collections to use on the Model. Note that this must
-be a somnambulist/collection interface type collection.
+be a `somnambulist/collection` interface type collection.
 
 Most querying will use the `search` route defined in the routes array; however the primary
 key method or `find()` will trigger the use of the `view` route instead of a search. This 
@@ -239,7 +268,6 @@ use Somnambulist\Components\ApiClient\ValueObject;
 
 class Address extends ValueObject
 {
-
     protected array $casts = [
 
     ];
@@ -263,7 +291,6 @@ concat both together:
 
 class User extends Model
 {
-
     protected function getFullNameAttribute(): string
     {
         return sprintf('%s %s', $this->first_name, $this->last_name);
@@ -275,5 +302,5 @@ User::find()->fullName();
 ```
 
 __Note:__ due to the use of relationships and magic getters / call, you should always use the
-attribute mutators for methods to avoid any potential issues e.g.: trying to call a method but
+attribute mutators for methods to avoid any potential issues e.g.: trying to call a method, but
 it is interpreted as a relationship access.

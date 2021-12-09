@@ -18,7 +18,6 @@ use function method_exists;
  */
 abstract class AbstractDecorator implements ConnectionInterface
 {
-
     protected ConnectionInterface $connection;
 
     public function __call($name, $arguments)

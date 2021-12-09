@@ -15,7 +15,6 @@ use Symfony\Component\Routing\Route;
  */
 class ApiRoute extends Route
 {
-
     public function __construct(string $route, array $rules = [], array $methods = [])
     {
         parent::__construct($route, [], $rules, [], null, [], $methods);

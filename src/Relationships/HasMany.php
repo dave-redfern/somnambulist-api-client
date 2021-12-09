@@ -2,10 +2,10 @@
 
 namespace Somnambulist\Components\ApiClient\Relationships;
 
-use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Exceptions\ModelRelationshipException;
 use Somnambulist\Components\ApiClient\Model;
+use Somnambulist\Components\Collection\Contracts\Collection;
 use function get_class;
 
 /**
@@ -16,7 +16,6 @@ use function get_class;
  */
 class HasMany extends AbstractRelationship
 {
-
     private ?string $indexBy;
 
     public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, ?string $indexBy = null, bool $lazyLoading = true)

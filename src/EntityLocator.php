@@ -13,7 +13,6 @@ use Somnambulist\Components\Collection\Contracts\Collection;
  */
 class EntityLocator
 {
-
     private Manager $manager;
     private string $class;
     private array $with = [];
@@ -72,7 +71,7 @@ class EntityLocator
 
     protected function query(): ModelBuilder
     {
-        $qb = $this->class::with($this->with);
+        $qb = $this->class::with(...$this->with);
 
         $this->with = [];
 

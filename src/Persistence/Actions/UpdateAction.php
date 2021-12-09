@@ -13,7 +13,6 @@ use Assert\InvalidArgumentException;
  */
 class UpdateAction extends AbstractAction
 {
-
     public static function update(string $class): self
     {
         return new static($class);

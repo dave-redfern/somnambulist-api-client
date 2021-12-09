@@ -18,7 +18,6 @@ use Symfony\Component\HttpClient\Exception\ClientException;
  */
 trait MakeCreateRequest
 {
-
     public function create(ApiActionInterface $action): object
     {
         $action->isValid();

@@ -19,7 +19,6 @@ use function strtoupper;
  */
 class LoggingDecorator extends AbstractDecorator
 {
-
     private LoggerInterface $logger;
     private string $logLevel = LogLevel::INFO;
 

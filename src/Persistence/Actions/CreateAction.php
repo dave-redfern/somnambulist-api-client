@@ -13,7 +13,6 @@ use Assert\InvalidArgumentException;
  */
 class CreateAction extends AbstractAction
 {
-
     public static function new(string $class): self
     {
         $self = static::class;

@@ -15,7 +15,6 @@ use function is_object;
  */
 class Expression implements ExpressionInterface
 {
-
     private string $field;
     private string $operator;
     private mixed $value;

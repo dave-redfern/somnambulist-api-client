@@ -12,7 +12,6 @@ use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
  */
 interface QueryEncoderInterface
 {
-
     /**
      * Convert the query builder to an array of parameters that can be sent as a HTTP request
      *

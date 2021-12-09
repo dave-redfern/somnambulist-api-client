@@ -30,7 +30,6 @@ use const JSON_THROW_ON_ERROR;
  */
 class ResponseStore
 {
-
     private static ?ResponseStore $instance = null;
     private ?string $store;
 

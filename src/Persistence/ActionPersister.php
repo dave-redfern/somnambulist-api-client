@@ -33,7 +33,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 class ActionPersister implements ActionPersisterInterface, LoggerAwareInterface
 {
-
     use LoggerAwareTrait;
 
     use MakeRequest;
@@ -57,9 +56,7 @@ class ActionPersister implements ActionPersisterInterface, LoggerAwareInterface
 
     protected function log(string $level, string $message, array $context = []): void
     {
-        if ($this->logger) {
-            $this->logger->log($level, $message, $context);
-        }
+        $this->logger?->log($level, $message, $context);
     }
 
     protected function hydrateObject(ResponseInterface $response, string $className): ?object

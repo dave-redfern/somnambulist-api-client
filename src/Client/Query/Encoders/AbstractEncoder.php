@@ -22,7 +22,6 @@ use function strtolower;
  */
 abstract class AbstractEncoder implements QueryEncoderInterface
 {
-
     public const FILTERS  = 'filters';
     public const INCLUDE  = 'include';
     public const LIMIT    = 'limit';
@@ -49,7 +48,7 @@ abstract class AbstractEncoder implements QueryEncoderInterface
     {
         ksort($args);
 
-        foreach ($args as $key => &$value) {
+        foreach ($args as &$value) {
             if (is_array($value)) {
                 $this->sort($value);
             }

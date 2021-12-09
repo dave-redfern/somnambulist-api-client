@@ -14,7 +14,6 @@ use Somnambulist\Components\ApiClient\Persistence\Contracts\ApiActionInterface;
  */
 abstract class AbstractAction implements ApiActionInterface
 {
-
     use HasObjectData;
     use HasRouteData;
 

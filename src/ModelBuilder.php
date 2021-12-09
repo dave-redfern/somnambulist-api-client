@@ -6,8 +6,6 @@ use BadMethodCallException;
 use IlluminateAgnostic\Str\Support\Str;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
-use Somnambulist\Components\ApiClient\Exceptions\MissingRequiredRouteParametersException;
-use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface as Connection;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
 use Somnambulist\Components\ApiClient\Client\Contracts\QueryEncoderInterface;
@@ -18,8 +16,7 @@ use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
 use Somnambulist\Components\ApiClient\Exceptions\NoResultsException;
 use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
-use function array_diff;
-use function array_intersect;
+use Somnambulist\Components\Collection\Contracts\Collection;
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
@@ -32,6 +29,7 @@ use function str_contains;
 use function strlen;
 use function strtolower;
 use function substr;
+use function trigger_deprecation;
 
 /**
  * Class ModelBuilder
@@ -63,22 +61,22 @@ use function substr;
  */
 class ModelBuilder
 {
-
-    private Model        $model;
+    private Model $model;
     private QueryBuilder $query;
-    private Connection   $connection;
-    private array        $eagerLoad = [];
-    private ?string      $route;
+    private Connection $connection;
+    private array $eagerLoad = [];
+    private ?string $route;
 
-    private QueryEncoderInterface    $encoder;
+    private QueryEncoderInterface $encoder;
     private ResponseDecoderInterface $decoder;
 
     public function __construct(Model $model)
     {
         $this->model      = $model;
-        $this->route      = $model->getRoute('search');
         $this->query      = new QueryBuilder();
         $this->connection = Manager::instance()->connect($model);
+
+        $this->useRoute('search');
 
         $this->encoder = $model->getQueryEncoder();
         $this->decoder = $model->getResponseDecoder();
@@ -99,11 +97,11 @@ class ModelBuilder
     /**
      * Find the model by primary key, optionally returning just the specified columns
      *
-     * @param string $id
+     * @param mixed $id
      *
      * @return Model|null
      */
-    public function find($id): ?Model
+    public function find(mixed $id): ?Model
     {
         return $this->wherePrimaryKey($id)->fetch()->first();
     }
@@ -153,12 +151,12 @@ class ModelBuilder
     /**
      * Find the model by the primary key, but raise an exception if not found
      *
-     * @param string $id
+     * @param mixed $id
      *
      * @return Model
      * @throws EntityNotFoundException
      */
-    public function findOrFail($id): Model
+    public function findOrFail(mixed $id): Model
     {
         if (null === $model = $this->find($id)) {
             throw EntityNotFoundException::noMatchingRecordFor(get_class($this->model), $this->model->getPrimaryKeyName(), $id);
@@ -188,7 +186,7 @@ class ModelBuilder
     {
         $response = $this->connection->get(
             $this->route,
-            $this->encoder->encode($this->query->with($this->eagerLoad))
+            $this->encoder->encode($this->query->with(...$this->eagerLoad))
         );
 
         return $this->decoder->decode($response);
@@ -199,7 +197,7 @@ class ModelBuilder
         $models = $this->model->getCollection();
         $data   = $this->fetchRaw();
 
-        if (!$data || !is_array($data)) {
+        if (!$data) {
             return $models;
         }
 
@@ -231,7 +229,7 @@ class ModelBuilder
         $models = $this->model->getCollection();
         $data   = $this->fetchRaw();
 
-        if (!$data || !is_array($data) || !isset($data['data'])) {
+        if (!$data || !isset($data['data'])) {
             return new Pagerfanta(new FixedAdapter(0, $models));
         }
 
@@ -264,7 +262,8 @@ class ModelBuilder
      */
     public function with(...$relations): self
     {
-        if (is_array($relations[0])) {
+        if (isset($relations[0]) && is_array($relations[0])) {
+            trigger_deprecation('somnambulist/api-client', '3.2.2', 'Passing an array as first arg is deprecated, use separate string arguments');
             $relations = $relations[0];
         }
 
@@ -316,11 +315,11 @@ class ModelBuilder
      * Note: this will at most return one object. If you wish to search by the primary
      * id instead, use {@see ModelBuilder::whereField()}.
      *
-     * @param string $id
+     * @param mixed $id
      *
      * @return $this
      */
-    public function wherePrimaryKey($id): self
+    public function wherePrimaryKey(mixed $id): self
     {
         return $this->useRoute('view')->whereField($this->model->getPrimaryKeyName(), 'eq', $id);
     }
@@ -335,7 +334,7 @@ class ModelBuilder
      *
      * @return ModelBuilder
      */
-    public function whereField(string $field, string $operator, $value, string $andOr = 'and'): self
+    public function whereField(string $field, string $operator, mixed $value, string $andOr = 'and'): self
     {
         $map = [
             '='        => ExpressionBuilder::EQ,

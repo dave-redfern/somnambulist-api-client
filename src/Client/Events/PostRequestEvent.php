@@ -12,7 +12,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 class PostRequestEvent
 {
-
     private ResponseInterface $response;
     private string $route;
     private array $parameters;

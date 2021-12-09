@@ -13,7 +13,6 @@ namespace Somnambulist\Components\ApiClient\Client\Query\Expression;
  */
 class ExpressionBuilder
 {
-
     public const EQ  = 'eq';
     public const NEQ = 'neq';
     public const LT  = 'lt';

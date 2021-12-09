@@ -18,14 +18,13 @@ use const JSON_THROW_ON_ERROR;
  */
 class SimpleJsonDecoder implements ResponseDecoderInterface
 {
-
     public function decode(ResponseInterface $response, array $ok = [200]): array
     {
         if (!in_array($response->getStatusCode(), $ok)) {
             return [];
         }
 
-        return json_decode((string)$response->getContent(), true, $depth = 512, JSON_THROW_ON_ERROR);
+        return json_decode($response->getContent(), true, flags: JSON_THROW_ON_ERROR);
     }
 
     public function object(array $rawData): array

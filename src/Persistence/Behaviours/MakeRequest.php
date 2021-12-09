@@ -19,7 +19,6 @@ use function strtolower;
  */
 trait MakeRequest
 {
-
     public function handle(ApiActionInterface $action, int $code = 200): object
     {
         $action->isValid();

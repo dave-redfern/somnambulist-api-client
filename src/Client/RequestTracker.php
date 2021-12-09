@@ -14,7 +14,7 @@ use function sprintf;
  * Class RequestTracker
  *
  * Tracks the number of times a particular request has been made. Class must be
- * static as we want it to persistent outside of the kernel getting restarted when
+ * static as we want it to persistent outside the kernel getting restarted when
  * under testing.
  *
  * @package    Somnambulist\Components\ApiClient\Client\Decorators

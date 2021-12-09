@@ -27,7 +27,6 @@ use function strtolower;
  */
 class OpenStackApiEncoder extends AbstractEncoder
 {
-
     use EncodeSimpleFilterConditions;
 
     protected array $mappings = [

@@ -12,7 +12,6 @@ use Exception;
  */
 class QueryEncoderException extends Exception
 {
-
     public static function encoderDoesNotSupportComplexConditions(string $class, string $type): self
     {
         return new self(sprintf('Encoder "%s" does not support "%s" expressions', $class, $type));

@@ -61,7 +61,7 @@ There is an included header injector event subscriber / listener that can be add
 standard Symfony `services.yaml` or the event dispatcher. This can inject from the main
 RequestStack, a request header (configurable) for tracking requests across service calls.
 
-For example: in a micro services setup, you may use the `X-Request-Id` header to track a
+For example: in a micro-services setup, you may use the `X-Request-Id` header to track a
 single user journey through the stack. An injector can be configured to pull the header
 from the apps request object and apply it to all ApiClient calls.
 

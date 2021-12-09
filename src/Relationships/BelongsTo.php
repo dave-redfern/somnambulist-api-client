@@ -2,10 +2,10 @@
 
 namespace Somnambulist\Components\ApiClient\Relationships;
 
-use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Exceptions\ModelRelationshipException;
 use Somnambulist\Components\ApiClient\Model;
+use Somnambulist\Components\Collection\Contracts\Collection;
 use function get_class;
 use function is_null;
 
@@ -17,7 +17,6 @@ use function is_null;
  */
 class BelongsTo extends AbstractRelationship
 {
-
     private string $identityKey;
     private bool $nullOnNotFound;
 

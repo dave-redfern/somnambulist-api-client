@@ -12,7 +12,6 @@ use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterExce
  */
 interface ActionPersisterInterface
 {
-
     /**
      * Create a new record returning the hydrated result
      *

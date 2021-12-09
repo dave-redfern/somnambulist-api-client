@@ -24,7 +24,6 @@ use function is_null;
  */
 class JsonApiEncoder extends AbstractEncoder
 {
-
     use EncodeSimpleFilterConditions;
 
     protected array $mappings = [
@@ -76,8 +75,8 @@ class JsonApiEncoder extends AbstractEncoder
         return ['page' => parent::createPaginationFromLimitAndOffset($limit, $offset)];
     }
 
-    protected function createLimit(int $limit = null, string $offset = null): array
+    protected function createLimit(int $limit = null, string $marker = null): array
     {
-        return ['page' => parent::createLimit($limit, $offset)];
+        return ['page' => parent::createLimit($limit, $marker)];
     }
 }

@@ -7,8 +7,6 @@ use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpressio
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 use function array_filter;
 use function array_merge;
-use function is_null;
-use function ksort;
 
 /**
  * Trait EncodeSimpleFilterConditions
@@ -18,7 +16,6 @@ use function ksort;
  */
 trait EncodeSimpleFilterConditions
 {
-
     public function encode(QueryBuilder $builder): array
     {
         if ($builder->getWhere() && $builder->getWhere()->isOr()) {

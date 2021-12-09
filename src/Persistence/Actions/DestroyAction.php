@@ -13,7 +13,6 @@ use Assert\InvalidArgumentException;
  */
 class DestroyAction extends AbstractAction
 {
-
     public static function destroy(string $class): self
     {
         return new static($class);

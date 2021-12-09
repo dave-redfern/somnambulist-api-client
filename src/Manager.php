@@ -16,7 +16,6 @@ use function sprintf;
  */
 final class Manager
 {
-
     private static ?Manager $instance = null;
     private ConnectionManager $connections;
     private AttributeCaster $caster;
@@ -55,7 +54,7 @@ final class Manager
             throw new RuntimeException(
                 sprintf(
                     '%s has not been instantiated; you must first create a new instance before accessing the registry statically',
-                    static::class
+                    self::class
                 )
             );
         }

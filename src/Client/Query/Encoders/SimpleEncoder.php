@@ -22,7 +22,6 @@ use function is_null;
  */
 class SimpleEncoder extends AbstractEncoder
 {
-
     use EncodeSimpleFilterConditions;
 
     protected array $mappings = [

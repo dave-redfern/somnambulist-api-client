@@ -15,7 +15,6 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 interface ConnectionInterface
 {
-
     public function client(): HttpClientInterface;
 
     public function dispatcher(): EventDispatcherInterface;

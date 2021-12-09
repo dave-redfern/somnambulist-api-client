@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+2021-10-21 - 3.2.2
+------------------
+
+ * Add deprecation notices for passing array of strings as only arg
+ * Add deprecation for passing "null" to clear relationships on `QueryBuilder`
+ * Add deprecation for passing array to `set()` on `HasObjectData` trait
+ * Add missing return types / type hints
+ * Minor code clean up and documentation tweaks
+
 2021-10-21 - 3.2.1
 ------------------
 

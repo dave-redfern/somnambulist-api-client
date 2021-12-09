@@ -13,7 +13,6 @@ use Assert\InvalidArgumentException;
  */
 class GenericAction extends AbstractAction
 {
-
     public static function for(string $class): self
     {
         return new static($class);

@@ -18,7 +18,6 @@ use function count;
  */
 class CompositeExpression implements Countable, ArrayAccess, ExpressionInterface
 {
-
     public const TYPE_AND = 'and';
     public const TYPE_OR = 'or';
 
@@ -32,17 +31,17 @@ class CompositeExpression implements Countable, ArrayAccess, ExpressionInterface
         $this->addAll($parts);
     }
 
-    public static function and(array $parts = [])
+    public static function and(array $parts = []): self
     {
         return new self(self::TYPE_AND, $parts);
     }
 
-    public static function or(array $parts = [])
+    public static function or(array $parts = []): self
     {
         return new self(self::TYPE_OR, $parts);
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return array_key_exists($offset, $this->parts);
     }
@@ -52,12 +51,12 @@ class CompositeExpression implements Countable, ArrayAccess, ExpressionInterface
         return $this->parts[$offset];
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->parts[$offset] = $value;
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->parts[$offset]);
     }
@@ -96,7 +95,7 @@ class CompositeExpression implements Countable, ArrayAccess, ExpressionInterface
         return $this;
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->parts);
     }

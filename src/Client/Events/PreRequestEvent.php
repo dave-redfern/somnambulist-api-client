@@ -10,7 +10,6 @@ namespace Somnambulist\Components\ApiClient\Client\Events;
  */
 class PreRequestEvent
 {
-
     private string $route;
     private array $parameters;
     private array $body;

@@ -40,11 +40,13 @@ own implementations.
 
 The docs are available in the docs folder with a suggested reading order as follows:
 
- * [upgrade notes](docs/upgrading_from_1.X_to_2.0.md)
+ * [upgrade notes 1.X](docs/upgrading_from_1.X_to_2.0.md)
+ * [upgrade notes 2.X](docs/upgrading_from_2.X_to_3.0.md)
  * [adding routes](docs/routing.md)
  * [defining API connections](docs/connections.md)
  * [expected JSON structure](docs/json_format.md)
  * [using Models and ValueObjects](docs/models.md)
+ * [searching and querying](docs/models.md)
  * [type casting attributes](docs/type_casting.md)
  * [model relationships](docs/model_relationships.md)
  * [storing data](docs/persistence.md)

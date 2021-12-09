@@ -15,7 +15,6 @@ use function trim;
  */
 trait HasRouteData
 {
-
     protected ?string $route = null;
     protected ?string $method = null;
     protected array $params = [];

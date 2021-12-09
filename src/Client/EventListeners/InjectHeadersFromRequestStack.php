@@ -5,7 +5,6 @@ namespace Somnambulist\Components\ApiClient\Client\EventListeners;
 use Somnambulist\Components\ApiClient\Client\Events\PreRequestEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use function method_exists;
 
 /**
  * Class InjectHeadersFromRequestStack
@@ -17,7 +16,6 @@ use function method_exists;
  */
 class InjectHeadersFromRequestStack implements EventSubscriberInterface
 {
-
     private RequestStack $stack;
     private array $headers;
 

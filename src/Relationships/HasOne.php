@@ -2,11 +2,10 @@
 
 namespace Somnambulist\Components\ApiClient\Relationships;
 
-use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Exceptions\ModelRelationshipException;
 use Somnambulist\Components\ApiClient\Model;
-use function array_key_exists;
+use Somnambulist\Components\Collection\Contracts\Collection;
 use function get_class;
 use function is_null;
 
@@ -21,7 +20,6 @@ use function is_null;
  */
 class HasOne extends AbstractRelationship
 {
-
     private bool $nullOnNotFound;
 
     public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, bool $nullOnNotFound = true, bool $lazyLoading = true)
