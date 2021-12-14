@@ -46,7 +46,7 @@ class CompositeExpression implements Countable, ArrayAccess, ExpressionInterface
         return array_key_exists($offset, $this->parts);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->parts[$offset];
     }

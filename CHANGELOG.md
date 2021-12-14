@@ -6,6 +6,7 @@ Change Log
 
  * Support Symfony 6.0
  * Require Pagerfanta 3.5
+ * Add return type hints to address deprecation notices
 
 2021-10-21 - 3.2.2
 ------------------
