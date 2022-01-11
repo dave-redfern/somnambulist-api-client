@@ -58,7 +58,7 @@ class UpdateActionTest extends TestCase
 
     public function testIfNoRouteParamsRaisesException()
     {
-        $action = UpdateAction::update(User::class)->set(['name' => 'foo bar', 'email' => 'bar@example.com',]);
+        $action = UpdateAction::update(User::class)->with(['name' => 'foo bar', 'email' => 'bar@example.com',]);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The following 2 assertions failed:

@@ -19,6 +19,7 @@
         "phpunit/phpunit": "~9.5",
         "somnambulist/domain": "^4.3",
         "symfony/framework-bundle": "^5.4",
+        "symfony/phpunit-bridge": "^5.4",
         "symfony/var-dumper": "^5.4"
     },
     "autoload": {

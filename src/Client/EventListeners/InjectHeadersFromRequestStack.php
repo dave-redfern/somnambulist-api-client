@@ -25,7 +25,7 @@ class InjectHeadersFromRequestStack implements EventSubscriberInterface
         $this->headers = $headers;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [PreRequestEvent::class => 'onPreRequest'];
     }

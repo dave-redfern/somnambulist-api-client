@@ -1,6 +1,11 @@
 Change Log
 ==========
 
+2022-01-11 - 3.3.1
+------------------
+
+ * Address deprecated method calls in internal code
+
 2021-12-14 - 3.3.0
 ------------------
 

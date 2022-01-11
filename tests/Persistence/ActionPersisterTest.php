@@ -177,7 +177,7 @@ class ActionPersisterTest extends TestCase
         $repo = $this->persister;
 
         $req = UpdateAction::update(User::class)
-            ->set([
+            ->with([
                 'name' => 'foo bar baz', 'email' => 'foobar@example.com'
             ])
             ->route('users.update', ['id' => 'c8259b3b-8603-3098-8361-425325078c9a'])

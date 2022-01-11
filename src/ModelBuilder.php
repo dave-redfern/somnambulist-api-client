@@ -279,7 +279,7 @@ class ModelBuilder
                 /** @var AbstractRelationship $load */
                 $rel = $this->model->new()->getRelationship($name);
                 $rel
-                    ->with($this->findNestedRelationshipsFor($name))
+                    ->with(...$this->findNestedRelationshipsFor($name))
                     ->addRelationshipResultsToModels($models, $name)
                 ;
             }

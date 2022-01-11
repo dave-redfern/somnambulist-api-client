@@ -42,26 +42,6 @@ class QueryBuilderTest extends TestCase
         $this->assertEquals(['this', 'that'], $qb->getWith());
     }
 
-    public function testWithArray()
-    {
-        $qb = new QueryBuilder();
-        $qb->with(['this', 'that']);
-
-        $this->assertEquals(['this', 'that'], $qb->getWith());
-    }
-
-    public function testWithNullResets()
-    {
-        $qb = new QueryBuilder();
-        $qb->with('this', 'that');
-
-        $this->assertEquals(['this', 'that'], $qb->getWith());
-
-        $qb->with(null);
-
-        $this->assertEmpty($qb->getWith());
-    }
-
     public function testWithoutRelationships()
     {
         $qb = new QueryBuilder();

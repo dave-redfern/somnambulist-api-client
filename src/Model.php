@@ -108,7 +108,7 @@ abstract class Model extends AbstractModel
     public function newQuery(): ModelBuilder
     {
         $builder = new ModelBuilder($this);
-        $builder->with($this->with);
+        $builder->with(...$this->with);
 
         return $builder;
     }
