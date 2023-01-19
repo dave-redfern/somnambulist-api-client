@@ -10,27 +10,21 @@ use Somnambulist\Components\ApiClient\Client\Connection;
 use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Tests\Support\Decorators\AssertableConnectionDecorator;
 use Somnambulist\Components\AttributeModel\TypeCasters;
-use Somnambulist\Components\Domain\Entities\Types\Geography\Country;
-use Somnambulist\Components\Domain\Entities\Types\Identity\EmailAddress;
-use Somnambulist\Components\Domain\Entities\Types\Identity\Uuid;
-use Somnambulist\Components\Domain\Entities\Types\PhoneNumber;
+use Somnambulist\Components\Models\Types\Geography\Country;
+use Somnambulist\Components\Models\Types\Identity\EmailAddress;
+use Somnambulist\Components\Models\Types\Identity\Uuid;
+use Somnambulist\Components\Models\Types\PhoneNumber;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Routing\RouteCollection;
+
 use function file_get_contents;
 use function is_callable;
 use function sprintf;
 
-/**
- * Class Factory
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Support
- * @subpackage Somnambulist\Components\ApiClient\Tests\Support\Factory
- */
 class Factory
 {
-
     public function makeManager(callable $decoratorFactory = null): Manager
     {
         $host = 'http://api.example.dev/users/v1';

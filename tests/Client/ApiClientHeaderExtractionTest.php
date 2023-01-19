@@ -11,17 +11,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class ApiClientHeaderExtractionTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests
- * @subpackage Somnambulist\Components\ApiClient\Tests\Client\ApiClientHeaderExtractionTest
- *
- * @group      client
- * @group      client-entity-locator
+ * @group client
+ * @group client-entity-locator
  */
 class ApiClientHeaderExtractionTest extends TestCase
 {
-
     use UseFactory;
 
     private ?ConnectionInterface $client = null;

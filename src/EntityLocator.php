@@ -5,17 +5,11 @@ namespace Somnambulist\Components\ApiClient;
 use Pagerfanta\Pagerfanta;
 use Somnambulist\Components\Collection\Contracts\Collection;
 
-/**
- * Class EntityLocator
- *
- * @package    Somnambulist\Components\ApiClient
- * @subpackage Somnambulist\Components\ApiClient\EntityLocator
- */
 class EntityLocator
 {
     private Manager $manager;
     private string $class;
-    private array $with = [];
+    private array $include = [];
 
     public function __construct(Manager $manager, string $class)
     {
@@ -23,9 +17,9 @@ class EntityLocator
         $this->class   = $class;
     }
 
-    public function with(string ...$include): self
+    public function include(string ...$include): self
     {
-        $this->with = $include;
+        $this->include = $include;
 
         return $this;
     }
@@ -71,9 +65,9 @@ class EntityLocator
 
     protected function query(): ModelBuilder
     {
-        $qb = $this->class::with(...$this->with);
+        $qb = $this->class::include(...$this->include);
 
-        $this->with = [];
+        $this->include = [];
 
         return $qb;
     }

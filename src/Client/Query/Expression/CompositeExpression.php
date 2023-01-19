@@ -5,16 +5,12 @@ namespace Somnambulist\Components\ApiClient\Client\Query\Expression;
 use ArrayAccess;
 use Countable;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
+
 use function array_key_exists;
 use function count;
 
 /**
- * Class CompositeExpression
- *
  * Borrowed from Doctrine\DBAL\Query\Expression\CompositeExpression;
- *
- * @package    Somnambulist\Components\ApiClient\Client
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression
  */
 class CompositeExpression implements Countable, ArrayAccess, ExpressionInterface
 {

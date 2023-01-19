@@ -5,15 +5,8 @@ namespace Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities;
 use Somnambulist\Components\ApiClient\Model;
 use Somnambulist\Components\ApiClient\Relationships\HasMany;
 
-/**
- * Class Account
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities
- * @subpackage Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\Account
- */
 class Account extends Model
 {
-
     protected array $routes = [
         'search' => 'accounts.list',
         'view'   => 'accounts.view',

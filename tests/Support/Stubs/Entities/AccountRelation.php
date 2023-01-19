@@ -5,15 +5,8 @@ namespace Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities;
 use Somnambulist\Components\ApiClient\Relationships\BelongsTo;
 use Somnambulist\Components\ApiClient\ValueObject;
 
-/**
- * Class AccountRelation
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities
- * @subpackage Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\AccountRelation
- */
 class AccountRelation extends ValueObject
 {
-
     protected array $casts = [
         'related_account_id' => 'uuid',
     ];

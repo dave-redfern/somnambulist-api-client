@@ -4,12 +4,6 @@ namespace Somnambulist\Components\ApiClient\Persistence\Contracts;
 
 use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException;
 
-/**
- * Interface ActionPersisterInterface
- *
- * @package    Somnambulist\Components\ApiClient\Persistence\Contracts
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Contracts\ActionPersisterInterface
- */
 interface ActionPersisterInterface
 {
     /**

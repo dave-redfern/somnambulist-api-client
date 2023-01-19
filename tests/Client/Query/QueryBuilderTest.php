@@ -2,25 +2,19 @@
 
 namespace Somnambulist\Components\ApiClient\Tests\Client\Query;
 
+use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\ExpressionBuilder;
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
-use PHPUnit\Framework\TestCase;
 
 /**
- * Class QueryBuilderTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Client\Query
- * @subpackage Somnambulist\Components\ApiClient\Tests\Client\Query\QueryBuilderTest
- *
  * @group client
  * @group client-query
  * @group client-query-builder
  */
 class QueryBuilderTest extends TestCase
 {
-
     public function testDefaults()
     {
         $qb = new QueryBuilder();
@@ -30,28 +24,28 @@ class QueryBuilderTest extends TestCase
         $this->assertNull($qb->getPerPage());
         $this->assertNull($qb->getLimit());
         $this->assertNull($qb->getWhere());
-        $this->assertIsArray($qb->getWith());
+        $this->assertIsArray($qb->getIncludes());
         $this->assertIsArray($qb->getOrderBy());
     }
 
     public function testWith()
     {
         $qb = new QueryBuilder();
-        $qb->with('this', 'that');
+        $qb->include('this', 'that');
 
-        $this->assertEquals(['this', 'that'], $qb->getWith());
+        $this->assertEquals(['this', 'that'], $qb->getIncludes());
     }
 
     public function testWithoutRelationships()
     {
         $qb = new QueryBuilder();
-        $qb->with('this', 'that');
+        $qb->include('this', 'that');
 
-        $this->assertEquals(['this', 'that'], $qb->getWith());
+        $this->assertEquals(['this', 'that'], $qb->getIncludes());
 
-        $qb->withoutRelationships();
+        $qb->withoutIncludes();
 
-        $this->assertEmpty($qb->getWith());
+        $this->assertEmpty($qb->getIncludes());
     }
 
     public function testRouteRequires()

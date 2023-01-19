@@ -4,12 +4,6 @@ namespace Somnambulist\Components\ApiClient\Client\Contracts;
 
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 
-/**
- * Interface QueryEncoderInterface
- *
- * @package    Somnambulist\Components\ApiClient\Client\Contracts
- * @subpackage Somnambulist\Components\ApiClient\Client\Contracts\QueryEncoderInterface
- */
 interface QueryEncoderInterface
 {
     /**

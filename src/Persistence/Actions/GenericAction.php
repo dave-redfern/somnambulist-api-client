@@ -5,12 +5,6 @@ namespace Somnambulist\Components\ApiClient\Persistence\Actions;
 use Assert\Assert;
 use Assert\InvalidArgumentException;
 
-/**
- * Class GenericAction
- *
- * @package    Somnambulist\Components\ApiClient\Persistence\Actions
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Actions\GenericAction
- */
 class GenericAction extends AbstractAction
 {
     public static function for(string $class): self

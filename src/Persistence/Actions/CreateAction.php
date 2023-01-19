@@ -5,12 +5,6 @@ namespace Somnambulist\Components\ApiClient\Persistence\Actions;
 use Assert\Assert;
 use Assert\InvalidArgumentException;
 
-/**
- * Class CreateAction
- *
- * @package    Somnambulist\Components\ApiClient\Persistence\Actions
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Actions\CreateAction
- */
 class CreateAction extends AbstractAction
 {
     public static function new(string $class): self

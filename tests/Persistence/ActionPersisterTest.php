@@ -4,43 +4,38 @@ namespace Somnambulist\Components\ApiClient\Tests\Persistence;
 
 use IlluminateAgnostic\Str\Support\Str;
 use PHPUnit\Framework\TestCase;
-use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\Client\ApiRoute;
 use Somnambulist\Components\ApiClient\Client\ApiRouter;
 use Somnambulist\Components\ApiClient\Client\Connection;
 use Somnambulist\Components\ApiClient\Manager;
+use Somnambulist\Components\ApiClient\Persistence\ActionPersister;
 use Somnambulist\Components\ApiClient\Persistence\Actions\CreateAction;
 use Somnambulist\Components\ApiClient\Persistence\Actions\DestroyAction;
 use Somnambulist\Components\ApiClient\Persistence\Actions\UpdateAction;
-use Somnambulist\Components\ApiClient\Persistence\ActionPersister;
 use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Somnambulist\Components\AttributeModel\TypeCasters;
-use Somnambulist\Components\Domain\Entities\Types\Geography\Country;
-use Somnambulist\Components\Domain\Entities\Types\Identity\EmailAddress;
-use Somnambulist\Components\Domain\Entities\Types\Identity\Uuid;
-use Somnambulist\Components\Domain\Entities\Types\PhoneNumber;
+use Somnambulist\Components\Collection\Contracts\Collection;
+use Somnambulist\Components\Models\Types\Geography\Country;
+use Somnambulist\Components\Models\Types\Identity\EmailAddress;
+use Somnambulist\Components\Models\Types\Identity\Uuid;
+use Somnambulist\Components\Models\Types\PhoneNumber;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+
 use function file_get_contents;
 
 /**
- * Class ActionPersisterTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests
- * @subpackage Somnambulist\Components\ApiClient\Tests\Persistence\ActionPersisterTest
- *
- * @group      client
- * @group      client-action-persister
+ * @group client
+ * @group client-action-persister
  */
 class ActionPersisterTest extends TestCase
 {
-
     use UseFactory;
 
     private ?ActionPersister $persister = null;
@@ -120,7 +115,7 @@ class ActionPersisterTest extends TestCase
         $repo = $this->persister;
 
         $req = CreateAction::new(User::class)
-            ->with([
+            ->include([
                 'name' => 'foo bar', 'email' => 'foo@example.com'
             ])
             ->route('users.create')
@@ -141,7 +136,7 @@ class ActionPersisterTest extends TestCase
 
         $repo = $this->persister;
         $req  = CreateAction::new(User::class)
-            ->with([
+            ->include([
                 'name' => 'foo bar', 'email' => 'foo@example.com', 'error' => true,
             ])
             ->route('users.create')
@@ -156,7 +151,7 @@ class ActionPersisterTest extends TestCase
 
         try {
             $req = CreateAction::new(User::class)
-                ->with([
+                ->include([
                     'name' => 'foo bar', 'email' => 'foo@example.com', 'error' => true,
                 ])
                 ->route('users.create')
@@ -177,7 +172,7 @@ class ActionPersisterTest extends TestCase
         $repo = $this->persister;
 
         $req = UpdateAction::update(User::class)
-            ->with([
+            ->include([
                 'name' => 'foo bar baz', 'email' => 'foobar@example.com'
             ])
             ->route('users.update', ['id' => 'c8259b3b-8603-3098-8361-425325078c9a'])
@@ -206,7 +201,7 @@ class ActionPersisterTest extends TestCase
 
         try {
             $req = CreateAction::new(User::class)
-                ->with([
+                ->include([
                     'name' => 'foo bar', 'email' => 'foo@example.com', 'error' => true,
                 ])
                 ->route('users.create')

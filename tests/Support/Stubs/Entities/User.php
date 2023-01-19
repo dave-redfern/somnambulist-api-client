@@ -9,7 +9,6 @@ use Somnambulist\Components\ApiClient\Relationships\HasOne;
 
 class User extends Model
 {
-
     protected array $routes = [
         'search' => 'users.list',
         'view'   => 'users.view',

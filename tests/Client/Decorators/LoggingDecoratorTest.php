@@ -9,20 +9,14 @@ use Somnambulist\Components\ApiClient\Client\Decorators\LoggingDecorator;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Symfony\Component\HttpKernel\Log\Logger;
+
 use function dirname;
 use function file_exists;
 use function file_get_contents;
 use function mkdir;
 
-/**
- * Class LoggingDecoratorTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Client\Decorators
- * @subpackage Somnambulist\Components\ApiClient\Tests\Client\Decorators\LoggingDecoratorTest
- */
 class LoggingDecoratorTest extends TestCase
 {
-
     use UseFactory;
 
     private ?string $log = null;

@@ -9,17 +9,11 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Class ApiRouterTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Client
- * @subpackage Somnambulist\Components\ApiClient\Tests\Client\ApiRouterTest
- *
  * @group client
  * @group client-api-router
  */
 class ApiRouterTest extends TestCase
 {
-
     public function testCreate()
     {
         $router = new ApiRouter('https://api.example.dev/users/v1', new RouteCollection());

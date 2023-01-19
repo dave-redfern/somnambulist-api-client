@@ -5,19 +5,17 @@ namespace Somnambulist\Components\ApiClient\Client\Query\Encoders;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
+
 use function array_filter;
 use function http_build_query;
 use function is_null;
 
 /**
- * Class NestedArrayEncoder
+ * Encodes an API query request
  *
  * Encodes complex nested where conditions creating key => arg:value conditions. This
  * encoder generates very long HTTP query strings if used with {@see http_build_query()}.
  * It is recommended to use JSON if using this encoder.
- *
- * @package    Somnambulist\Components\ApiClient\Client\Query\Encoders
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\Encoders\NestedArrayEncoder
  */
 class CompoundNestedArrayEncoder extends AbstractEncoder
 {
@@ -39,7 +37,7 @@ class CompoundNestedArrayEncoder extends AbstractEncoder
         $res = array_filter(
             array_merge(
                 $builder->getRouteParams(),
-                $this->createInclude($builder->getWith()),
+                $this->createInclude($builder->getIncludes()),
                 $this->createOrderBy($builder->getOrderBy()),
                 $this->createLimit($builder->getLimit()),
                 $this->createPagination($builder->getPage(), $builder->getPerPage()),

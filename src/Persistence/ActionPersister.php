@@ -15,21 +15,18 @@ use Somnambulist\Components\ApiClient\Persistence\Contracts\ActionPersisterInter
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * Class ActionPersister
+ * Encapsulation of API requests
  *
  * Provides a set of common methods for creating (storing) new objects,
  * updating an existing object or deleting (destroying) an existing object.
  * This class can be extended or re-implemented to provide the necessary
  * functionality your client requires.
  *
- * store and update methods will return a hydrated object of the specified type.
+ * `store` and `update` methods will return a hydrated object of the specified type.
  * If an error occurs, or the API returns an unexpected response code, an
  * exception will be raised. If the error is from the API itself and not a curl
  * or client error, then the JSON error message will be added to the exception
  * history via the ApiErrorException wrapper class.
- *
- * @package    Somnambulist\Components\ApiClient
- * @subpackage Somnambulist\Components\ApiClient\Persistence\ActionPersister
  */
 class ActionPersister implements ActionPersisterInterface, LoggerAwareInterface
 {

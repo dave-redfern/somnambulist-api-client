@@ -3,13 +3,7 @@
 namespace Somnambulist\Components\ApiClient\Client\Query\Expression;
 
 /**
- * Class ExpressionBuilder
- *
- * Borrowed from Doctrine\DBAL\Query\Expression\ExpressionBuilder but adapted for a HTTP
- * context.
- *
- * @package    Somnambulist\Components\ApiClient\Client
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\Expression\Expression\ExpressionBuilder
+ * Borrowed from Doctrine\DBAL\Query\Expression\ExpressionBuilder but adapted for a HTTP context.
  */
 class ExpressionBuilder
 {

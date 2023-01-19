@@ -8,14 +8,9 @@ use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+
 use function method_exists;
 
-/**
- * Class AbstractDecorator
- *
- * @package    Somnambulist\Components\ApiClient\Client
- * @subpackage Somnambulist\Components\ApiClient\Client\Decorators\AbstractDecorator
- */
 abstract class AbstractDecorator implements ConnectionInterface
 {
     protected ConnectionInterface $connection;

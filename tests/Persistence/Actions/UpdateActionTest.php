@@ -8,16 +8,10 @@ use Somnambulist\Components\ApiClient\Persistence\Actions\UpdateAction;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 
 /**
- * Class UpdateActionTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Persistence\Actions
- * @subpackage Somnambulist\Components\ApiClient\Tests\Persistence\Actions\UpdateActionTest
- *
  * @group persister-actions
  */
 class UpdateActionTest extends TestCase
 {
-
     public function testBuild()
     {
         $action = new UpdateAction(User::class);
@@ -35,7 +29,7 @@ class UpdateActionTest extends TestCase
     public function testBuildFullAction()
     {
         $action = UpdateAction::update(User::class)
-            ->with([
+            ->include([
                 'name' => 'foo bar', 'email' => 'bar@example.com',
             ])
             ->route('users.update', ['id' => '123'])
@@ -58,7 +52,7 @@ class UpdateActionTest extends TestCase
 
     public function testIfNoRouteParamsRaisesException()
     {
-        $action = UpdateAction::update(User::class)->with(['name' => 'foo bar', 'email' => 'bar@example.com',]);
+        $action = UpdateAction::update(User::class)->include(['name' => 'foo bar', 'email' => 'bar@example.com',]);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The following 2 assertions failed:

@@ -9,11 +9,6 @@ use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterExce
 use Symfony\Component\HttpClient\Exception\ClientException;
 
 /**
- * Trait MakeCreateRequest
- *
- * @package    Somnambulist\Components\ApiClient\Persistence\Behaviours
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeCreateRequest
- *
  * @property-read ConnectionInterface $connection
  */
 trait MakeCreateRequest

@@ -3,14 +3,9 @@
 namespace Somnambulist\Components\ApiClient\Exceptions;
 
 use Exception;
+
 use function sprintf;
 
-/**
- * Class EntityNotFoundException
- *
- * @package    Somnambulist\Components\ApiClient\Exceptions
- * @subpackage Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException
- */
 class EntityNotFoundException extends Exception
 {
     public static function noMatchingRecordFor(string $class, string $key, mixed ...$id): self

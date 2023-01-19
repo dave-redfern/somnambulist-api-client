@@ -6,17 +6,12 @@ use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Exceptions\ModelRelationshipException;
 use Somnambulist\Components\ApiClient\Model;
 use Somnambulist\Components\Collection\Contracts\Collection;
+
 use function get_class;
 use function is_null;
 
 /**
- * Class HasOne
- *
- * Loads a single record from the parents API call with the relationships passed
- * through.
- *
- * @package    Somnambulist\Components\ApiClient\Relationships
- * @subpackage Somnambulist\Components\ApiClient\Relationships\HasOne
+ * Loads a single record from the parents API call with the relationships passed through.
  */
 class HasOne extends AbstractRelationship
 {
@@ -66,7 +61,7 @@ class HasOne extends AbstractRelationship
     private function callApi(Model $model, string $relationship): ?array
     {
         $data = $this->parent->getResponseDecoder()->object(
-            $this->query->with($relationship)->wherePrimaryKey($model->getPrimaryKey())->fetchRaw()
+            $this->query->include($relationship)->wherePrimaryKey($model->getPrimaryKey())->fetchRaw()
         );
 
         return $data[$this->attributeKey] ?? null;

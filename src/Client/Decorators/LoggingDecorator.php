@@ -6,16 +6,12 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+
 use function sprintf;
 use function strtoupper;
 
 /**
- * Class LoggingDecorator
- *
  * For each call into the ApiClient, logs at a specified level (default: info)
- *
- * @package    Somnambulist\Components\ApiClient\Client\Decorators
- * @subpackage Somnambulist\Components\ApiClient\Client\Decorators\LoggingDecorator
  */
 class LoggingDecorator extends AbstractDecorator
 {

@@ -8,11 +8,6 @@ use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderExcept
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 
 /**
- * Class SimpleEncoderTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Client\Query\Encoders
- * @subpackage Somnambulist\Components\ApiClient\Tests\Client\Query\Encoders\SimpleEncoderTest
- *
  * @group client
  * @group client-query
  * @group client-query-encoders
@@ -20,12 +15,11 @@ use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
  */
 class SimpleEncoderTest extends TestCase
 {
-
     public function testEncode()
     {
         $qb = new QueryBuilder();
         $qb
-            ->with('foo', 'bar', 'this.that')
+            ->include('foo', 'bar', 'this.that')
             ->where(
                 $qb->expr()->eq('this', 'that'),
                 $qb->expr()->eq('foo', 'bar'),
@@ -67,7 +61,7 @@ class SimpleEncoderTest extends TestCase
     {
         $qb = new QueryBuilder();
         $qb
-            ->with('foo', 'bar', 'this.that')
+            ->include('foo', 'bar', 'this.that')
             ->page(1)
             ->perPage(30)
             ->orderBy('this')
@@ -90,7 +84,7 @@ class SimpleEncoderTest extends TestCase
     {
         $qb = new QueryBuilder();
         $qb
-            ->with('foo', 'bar', 'this.that')
+            ->include('foo', 'bar', 'this.that')
             ->orWhere($qb->expr()->eq('baz', true))
         ;
 
@@ -104,7 +98,7 @@ class SimpleEncoderTest extends TestCase
     {
         $qb = new QueryBuilder();
         $qb
-            ->with('foo', 'bar', 'this.that')
+            ->include('foo', 'bar', 'this.that')
             ->where(
                 $qb->expr()->and(
                     $qb->expr()->neq('this', 'that'),
@@ -127,7 +121,7 @@ class SimpleEncoderTest extends TestCase
     {
         $qb = new QueryBuilder();
         $qb
-            ->with('foo', 'bar', 'this.that')
+            ->include('foo', 'bar', 'this.that')
             ->where(
                 $qb->expr()->and(
                     $qb->expr()->neq('this', 'that'),
@@ -146,7 +140,7 @@ class SimpleEncoderTest extends TestCase
     public function testEncodeIncludesLowerSnakeCasesIncludes()
     {
         $qb = new QueryBuilder();
-        $qb->with('fooBar', 'baz_bar',);
+        $qb->include('fooBar', 'baz_bar',);
 
         $query = (new SimpleEncoder())->encode($qb);
 

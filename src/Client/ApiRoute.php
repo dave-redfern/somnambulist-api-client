@@ -5,13 +5,7 @@ namespace Somnambulist\Components\ApiClient\Client;
 use Symfony\Component\Routing\Route;
 
 /**
- * Class ApiRoute
- *
- * Simplifies the Symfony Route constructor so it is more appropriate for defining API
- * resource routes.
- *
- * @package    Somnambulist\Components\ApiClient\Client
- * @subpackage Somnambulist\Components\ApiClient\Client\ApiRoute
+ * Simplifies the Symfony Route constructor so it is more appropriate for defining API resource routes.
  */
 class ApiRoute extends Route
 {

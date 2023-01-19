@@ -7,18 +7,16 @@ use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderExcept
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\ExpressionBuilder;
+
 use function array_merge;
 use function is_null;
 
 /**
- * Class SimpleEncoder
+ * Encodes an API query request
  *
  * A basic encoder that converts to key: value pairs and does not support complex
  * or nested conditions. This is similar to the previous URL generation output in
  * version 1.X.
- *
- * @package    Somnambulist\Components\ApiClient\Client\Query\Encoders
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\Encoders\SimpleEncoder
  */
 class SimpleEncoder extends AbstractEncoder
 {

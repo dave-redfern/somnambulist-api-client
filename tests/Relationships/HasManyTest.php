@@ -11,18 +11,12 @@ use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Somnambulist\Components\Collection\Contracts\Collection;
 
 /**
- * Class HasManyTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Relationships
- * @subpackage Somnambulist\Components\ApiClient\Tests\Relationships\HasManyTest
- *
  * @group model
  * @group model-relationships
  * @group model-relationships-has-many
  */
 class HasManyTest extends TestCase
 {
-
     use UseFactory;
     use AssertRequestMade;
 
@@ -33,7 +27,7 @@ class HasManyTest extends TestCase
 
     public function testEagerLoad()
     {
-        $user = User::with('addresses', 'contacts')->find('c8259b3b-8603-3098-8361-425325078c9a');
+        $user = User::include('addresses', 'contacts')->find('c8259b3b-8603-3098-8361-425325078c9a');
 
         $this->assertInstanceOf(Collection::class, $user->addresses);
         $this->assertInstanceOf(Collection::class, $user->contacts);
@@ -54,7 +48,7 @@ class HasManyTest extends TestCase
 
     public function testLoadingNestedManys()
     {
-        $user = User::with('groups.permissions')->find('c8259b3b-8603-3098-8361-425325078c9a');
+        $user = User::include('groups.permissions')->find('c8259b3b-8603-3098-8361-425325078c9a');
 
         $this->assertRouteWasCalledWith('users.view', ['include' => 'groups']);
 
@@ -79,11 +73,11 @@ class HasManyTest extends TestCase
 
     public function testCamelCaseRelationshipName()
     {
-        $user = Account::with('relatedAccounts')->find('1228ec03-1a58-4e51-8cea-cb787104aa3d');
+        $user = Account::include('relatedAccounts')->find('1228ec03-1a58-4e51-8cea-cb787104aa3d');
 
         $this->assertInstanceOf(Collection::class, $user->relatedAccounts);
 
-        $user = Account::with('related_accounts')->find('1228ec03-1a58-4e51-8cea-cb787104aa3d');
+        $user = Account::include('related_accounts')->find('1228ec03-1a58-4e51-8cea-cb787104aa3d');
 
         $this->assertInstanceOf(Collection::class, $user->related_accounts);
     }

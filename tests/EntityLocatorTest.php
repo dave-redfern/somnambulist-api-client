@@ -12,16 +12,10 @@ use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\UserCollection;
 
 /**
- * Class EntityLocatorTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests
- * @subpackage Somnambulist\Components\ApiClient\Tests\EntityLocatorTest
- *
  * @group entity-locator
  */
 class EntityLocatorTest extends TestCase
 {
-
     use UseFactory;
 
     protected function setUp(): void

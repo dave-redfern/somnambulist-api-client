@@ -6,7 +6,6 @@ use Somnambulist\Components\ApiClient\ValueObject;
 
 class Contact extends ValueObject
 {
-
     protected array $casts = [
         'email' => 'email',
         'phone' => 'phone',

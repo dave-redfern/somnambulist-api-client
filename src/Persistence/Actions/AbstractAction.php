@@ -6,12 +6,6 @@ use Somnambulist\Components\ApiClient\Persistence\Behaviours\HasObjectData;
 use Somnambulist\Components\ApiClient\Persistence\Behaviours\HasRouteData;
 use Somnambulist\Components\ApiClient\Persistence\Contracts\ApiActionInterface;
 
-/**
- * Class AbstractAction
- *
- * @package    Somnambulist\Components\ApiClient\Persistence\Actions
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Actions\AbstractAction
- */
 abstract class AbstractAction implements ApiActionInterface
 {
     use HasObjectData;

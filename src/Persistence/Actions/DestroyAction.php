@@ -5,12 +5,6 @@ namespace Somnambulist\Components\ApiClient\Persistence\Actions;
 use Assert\Assert;
 use Assert\InvalidArgumentException;
 
-/**
- * Class DestroyAction
- *
- * @package    Somnambulist\Components\ApiClient\Persistence\Actions
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Actions\DestroyAction
- */
 class DestroyAction extends AbstractAction
 {
     public static function destroy(string $class): self

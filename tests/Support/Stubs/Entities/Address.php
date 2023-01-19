@@ -6,7 +6,6 @@ use Somnambulist\Components\ApiClient\ValueObject;
 
 class Address extends ValueObject
 {
-
     protected array $casts = [
 
     ];

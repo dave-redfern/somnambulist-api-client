@@ -7,12 +7,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Class InjectHeadersFromRequestStack
- *
  * Allows injecting headers from the Symfony master request on the RequestStack.
- *
- * @package    Somnambulist\Components\ApiClient\Client\EventListeners
- * @subpackage Somnambulist\Components\ApiClient\Client\EventListeners\InjectHeadersFromRequestStack
  */
 class InjectHeadersFromRequestStack implements EventSubscriberInterface
 {

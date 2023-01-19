@@ -8,11 +8,6 @@ use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderExcept
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 
 /**
- * Class OpenStackApiEncoderTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Client\Query\Encoders
- * @subpackage Somnambulist\Components\ApiClient\Tests\Client\Query\Encoders\OpenStackApiEncoderTest
- *
  * @group client
  * @group client-query
  * @group client-query-encoders
@@ -25,7 +20,7 @@ class OpenStackApiEncoderTest extends TestCase
     {
         $qb = new QueryBuilder();
         $qb
-            ->with('foo', 'bar', 'this.that')
+            ->include('foo', 'bar', 'this.that')
             ->where(
                 $qb->expr()->neq('this', 'that'),
                 $qb->expr()->eq('foo', 'bar'),
@@ -72,7 +67,7 @@ class OpenStackApiEncoderTest extends TestCase
     {
         $qb = new QueryBuilder();
         $qb
-            ->with('foo', 'bar', 'this.that')
+            ->include('foo', 'bar', 'this.that')
             ->orWhere($qb->expr()->eq('baz', true))
             ->page(1)
             ->perPage(30)
@@ -90,7 +85,7 @@ class OpenStackApiEncoderTest extends TestCase
     {
         $qb = new QueryBuilder();
         $qb
-            ->with('foo', 'bar', 'this.that')
+            ->include('foo', 'bar', 'this.that')
             ->where(
                 $qb->expr()->and(
                     $qb->expr()->neq('this', 'that'),
@@ -116,7 +111,7 @@ class OpenStackApiEncoderTest extends TestCase
     public function testPreservesCaseOfIncludes()
     {
         $qb = new QueryBuilder();
-        $qb->with('fooBar', 'baz_bar',);
+        $qb->include('fooBar', 'baz_bar',);
 
         $query = (new OpenStackApiEncoder())->encode($qb);
 

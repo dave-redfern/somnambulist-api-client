@@ -8,16 +8,10 @@ use Somnambulist\Components\ApiClient\Persistence\Actions\CreateAction;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 
 /**
- * Class CreateActionTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Persistence\Actions
- * @subpackage Somnambulist\Components\ApiClient\Tests\Persistence\Actions\CreateActionTest
- *
  * @group persister-actions
  */
 class CreateActionTest extends TestCase
 {
-
     public function testBuild()
     {
         $action = new CreateAction(User::class);
@@ -35,7 +29,7 @@ class CreateActionTest extends TestCase
     public function testBuildFullAction()
     {
         $action = CreateAction::new(User::class)
-            ->with([
+            ->include([
                 'name' => 'foo bar', 'email' => 'bar@example.com',
             ])
             ->route('users.create', ['id' => '123'])
@@ -58,7 +52,7 @@ class CreateActionTest extends TestCase
 
     public function testIfNoRouteParamsRaisesException()
     {
-        $action = CreateAction::new(User::class)->with(['name' => 'foo bar', 'email' => 'bar@example.com',]);
+        $action = CreateAction::new(User::class)->include(['name' => 'foo bar', 'email' => 'bar@example.com',]);
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The following 1 assertions failed:

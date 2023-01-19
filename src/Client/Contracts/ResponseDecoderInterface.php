@@ -4,12 +4,6 @@ namespace Somnambulist\Components\ApiClient\Client\Contracts;
 
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * Interface ResponseDecoderInterface
- *
- * @package    Somnambulist\Components\ApiClient\Client\Contracts
- * @subpackage Somnambulist\Components\ApiClient\Client\Contracts\ResponseDecoderInterface
- */
 interface ResponseDecoderInterface
 {
     /**

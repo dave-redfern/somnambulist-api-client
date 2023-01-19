@@ -4,21 +4,15 @@ namespace Somnambulist\Components\ApiClient\Tests;
 
 use Pagerfanta\Pagerfanta;
 use PHPUnit\Framework\TestCase;
-use Somnambulist\Components\ApiClient\Exceptions\MissingRequiredRouteParametersException;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\Inbox;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\UserCollection;
-use Somnambulist\Components\Domain\Entities\Types\DateTime\DateTime;
-use Somnambulist\Components\Domain\Entities\Types\Identity\Uuid;
+use Somnambulist\Components\Models\Types\DateTime\DateTime;
+use Somnambulist\Components\Models\Types\Identity\Uuid;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 
 /**
- * Class ModelTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests
- * @subpackage Somnambulist\Components\ApiClient\Tests\ModelTest
- *
  * @group model
  */
 class ModelTest extends TestCase

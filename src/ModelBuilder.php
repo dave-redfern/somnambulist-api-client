@@ -17,25 +17,21 @@ use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
 use Somnambulist\Components\ApiClient\Exceptions\NoResultsException;
 use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
 use Somnambulist\Components\Collection\Contracts\Collection;
+
 use function array_key_exists;
 use function array_merge;
 use function array_unique;
 use function count;
 use function get_class;
-use function is_array;
 use function method_exists;
 use function sprintf;
 use function str_contains;
 use function strlen;
 use function strtolower;
 use function substr;
-use function trigger_deprecation;
 
 /**
- * Class ModelBuilder
- *
- * @package    Somnambulist\Components\ApiClient
- * @subpackage Somnambulist\Components\ApiClient\ModelBuilder
+ * Builds queries to fetch models from the configured API endpoint.
  *
  * @method ExpressionBuilder expr()
  *
@@ -50,7 +46,7 @@ use function trigger_deprecation;
  * @method ModelBuilder offset(string $offset = null)
  * @method ModelBuilder routeRequires(array $params)
  *
- * @method array getWith()
+ * @method array getIncludes()
  * @method array getOrderBy()
  * @method array getRouteParams()
  * @method null|CompositeExpression getWhere()
@@ -186,7 +182,7 @@ class ModelBuilder
     {
         $response = $this->connection->get(
             $this->route,
-            $this->encoder->encode($this->query->with(...$this->eagerLoad))
+            $this->encoder->encode($this->query->include(...$this->eagerLoad))
         );
 
         return $this->decoder->decode($response);
@@ -260,13 +256,8 @@ class ModelBuilder
      *
      * @return $this
      */
-    public function with(...$relations): self
+    public function include(string ...$relations): self
     {
-        if (isset($relations[0]) && is_array($relations[0])) {
-            trigger_deprecation('somnambulist/api-client', '3.2.2', 'Passing an array as first arg is deprecated, use separate string arguments');
-            $relations = $relations[0];
-        }
-
         $this->eagerLoad = array_unique(array_merge($this->eagerLoad, $relations));
 
         return $this;
@@ -279,7 +270,7 @@ class ModelBuilder
                 /** @var AbstractRelationship $load */
                 $rel = $this->model->new()->getRelationship($name);
                 $rel
-                    ->with(...$this->findNestedRelationshipsFor($name))
+                    ->include(...$this->findNestedRelationshipsFor($name))
                     ->addRelationshipResultsToModels($models, $name)
                 ;
             }

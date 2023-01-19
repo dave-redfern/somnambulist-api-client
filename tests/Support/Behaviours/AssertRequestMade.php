@@ -3,21 +3,14 @@
 namespace Somnambulist\Components\ApiClient\Tests\Support\Behaviours;
 
 use PHPUnit\Framework\ExpectationFailedException;
-use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+
 use function asort;
 
-/**
- * Trait AssertRequestMade
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Support\Behaviours
- * @subpackage Somnambulist\Components\ApiClient\Tests\Support\Behaviours\AssertRequestMade
- */
 trait AssertRequestMade
 {
-
     /**
      * @param string $expectedRoute
      * @param array  $expectedParams array of field => value pairs to check for

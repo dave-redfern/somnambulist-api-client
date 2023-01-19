@@ -5,6 +5,7 @@ namespace Somnambulist\Components\ApiClient\Client\Query\Encoders;
 use IlluminateAgnostic\Str\Support\Str;
 use Somnambulist\Components\ApiClient\Client\Contracts\QueryEncoderInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
+
 use function array_map;
 use function count;
 use function floor;
@@ -14,12 +15,6 @@ use function ksort;
 use function max;
 use function strtolower;
 
-/**
- * Class AbstractEncoder
- *
- * @package    Somnambulist\Components\ApiClient\Client\Query\Encoders
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\Encoders\AbstractEncoder
- */
 abstract class AbstractEncoder implements QueryEncoderInterface
 {
     public const FILTERS  = 'filters';

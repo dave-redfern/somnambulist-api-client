@@ -14,18 +14,12 @@ use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use SplFileInfo;
+
 use function dirname;
 use function rmdir;
 
-/**
- * Class RecordResponseDecoratorTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Client\Decorators
- * @subpackage Somnambulist\Components\ApiClient\Tests\Client\Decorators\RecordResponseDecoratorTest
- */
 class RecordResponseDecoratorTest extends TestCase
 {
-
     use UseFactory;
 
     private ?string $store = null;
@@ -55,13 +49,26 @@ class RecordResponseDecoratorTest extends TestCase
         }
     }
 
+    protected function assertCacheFilesExistForRequestsInRequestTracker(): void
+    {
+        foreach (RequestTracker::instance()->requests() as $hash => $count) {
+            for ($i=1; $i<=$count; $i++) {
+                $this->assertCacheFileExistsForHash($hash, $i);
+            }
+        }
+    }
+
+    protected function assertCacheFileExistsForHash(string $hash, int $count = 1): void
+    {
+        $this->assertFileExists(ResponseStore::instance()->getCacheFileForHash(sprintf('%s_%s', $hash, $count)));
+    }
+
     public function testCanRecordRequests()
     {
         User::find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
         User::query()->findBy(['id' => $id], ['name' => 'DESC', 'created_at' => 'asc']);
 
-        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
-        $this->assertFileExists($this->store . '/21/1d/211da158d83dee04816a76e62ccb8c697311009e_1.json');
+        $this->assertCacheFilesExistForRequestsInRequestTracker();
     }
 
     public function testMultipleSameRequestsGetSeparateFiles()
@@ -70,9 +77,7 @@ class RecordResponseDecoratorTest extends TestCase
         User::find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
         User::find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
-        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
-        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_2.json');
-        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_3.json');
+        $this->assertCacheFilesExistForRequestsInRequestTracker();
     }
 
     public function testCanPlayback()
@@ -80,7 +85,7 @@ class RecordResponseDecoratorTest extends TestCase
         User::find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
         // record the request to avoid needing another stub file
-        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
+        $this->assertCacheFilesExistForRequestsInRequestTracker();
 
         // reset the request tracker so the hash is still the first request: _1
         RequestTracker::instance()->reset();
@@ -94,7 +99,7 @@ class RecordResponseDecoratorTest extends TestCase
     {
         User::find($id = 'c8259b3b-8603-3098-8361-425325078c9a');
 
-        $this->assertFileExists($this->store . '/15/3a/153a46dff068e201e2f93de7725929800f18b749_1.json');
+        $this->assertCacheFilesExistForRequestsInRequestTracker();
 
         RequestTracker::instance()->reset();
 

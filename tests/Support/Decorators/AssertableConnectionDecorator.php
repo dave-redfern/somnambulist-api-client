@@ -7,15 +7,8 @@ use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Client\Decorators\AbstractDecorator;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * Class AssertableConnectionDecorator
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Support\Decorators
- * @subpackage Somnambulist\Components\ApiClient\Tests\Support\Decorators\AssertableConnectionDecorator
- */
 class AssertableConnectionDecorator extends AbstractDecorator
 {
-
     private ?Closure $onBeforeRequest = null;
     private ?Closure $onAfterRequest = null;
 

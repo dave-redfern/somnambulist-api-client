@@ -2,13 +2,7 @@
 
 namespace Somnambulist\Components\ApiClient\Client\Events;
 
-/**
- * Class PreRequestEvent
- *
- * @package    Somnambulist\Components\ApiClient\Client\Events
- * @subpackage Somnambulist\Components\ApiClient\Client\Events\PreRequestEvent
- */
-class PreRequestEvent
+final class PreRequestEvent
 {
     private string $route;
     private array $parameters;

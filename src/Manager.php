@@ -5,15 +5,10 @@ namespace Somnambulist\Components\ApiClient;
 use RuntimeException;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\AttributeModel\AttributeCaster;
+
 use function get_class;
 use function sprintf;
 
-/**
- * Class Manager
- *
- * @package    Somnambulist\Components\ApiClient
- * @subpackage Somnambulist\Components\ApiClient\Manager
- */
 final class Manager
 {
     private static ?Manager $instance = null;

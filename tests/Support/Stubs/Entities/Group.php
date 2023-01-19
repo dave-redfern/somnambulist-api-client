@@ -7,7 +7,6 @@ use Somnambulist\Components\ApiClient\Relationships\HasMany;
 
 class Group extends Model
 {
-
     protected array $routes = [
         'search' => 'groups.list',
         'view'   => 'groups.view',

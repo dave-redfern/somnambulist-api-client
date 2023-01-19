@@ -3,26 +3,20 @@
 namespace Somnambulist\Components\ApiClient\Tests\Relationships;
 
 use PHPUnit\Framework\TestCase;
-use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\ApiClient\Relationships\BelongsTo;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\AssertRequestMade;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\Account;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
+use Somnambulist\Components\Collection\Contracts\Collection;
 
 /**
- * Class BelongsToTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Relationships
- * @subpackage Somnambulist\Components\ApiClient\Tests\Relationships\BelongsToTest
- *
  * @group model
  * @group model-relationships
  * @group model-relationships-belongs-to
  */
 class BelongsToTest extends TestCase
 {
-
     use UseFactory;
     use AssertRequestMade;
 
@@ -33,7 +27,7 @@ class BelongsToTest extends TestCase
 
     public function testEagerLoad()
     {
-        $user = User::with('account')->find('1e335331-ee15-4871-a419-c6778e190a54');
+        $user = User::include('account')->find('1e335331-ee15-4871-a419-c6778e190a54');
 
         $this->assertRouteWasNotCalledWith('accounts.view', ['id' => '1228ec03-1a58-4e51-8cea-cb787104aa3d', 'include' => 'account']);
 

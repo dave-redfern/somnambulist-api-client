@@ -4,12 +4,6 @@ namespace Somnambulist\Components\ApiClient\Exceptions;
 
 use Exception;
 
-/**
- * Class ModelRelationshipException
- *
- * @package    Somnambulist\Components\ApiClient\Exceptions
- * @subpackage Somnambulist\Components\ApiClient\Exceptions\ModelRelationshipException
- */
 class ModelRelationshipException extends Exception
 {
     public static function valueObjectNotAllowedForRelationship(string $model, string $relationship, string $related): self

@@ -16,7 +16,7 @@ The library uses Symfony HTTP Client under the hood.
 
 ## Requirements
 
- * PHP 8.0+
+ * PHP 8.1+
  * cURL
  * symfony/event-dispatcher
  * symfony/http-client
@@ -31,7 +31,7 @@ Install using composer, or checkout / pull the files from github.com.
 ## Usage
 
 This library provides some building blocks to help you get started with consuming RESTful
-APIs. Typically this is for use with a micro-services project where you need to write
+APIs. Typically, this is for use with a micro-services project where you need to write
 clients that will be shared amongst other projects.
 
 Please note: this project does not make assumptions about the type of service being used.
@@ -42,6 +42,7 @@ The docs are available in the docs folder with a suggested reading order as foll
 
  * [upgrade notes 1.X](docs/upgrading_from_1.X_to_2.0.md)
  * [upgrade notes 2.X](docs/upgrading_from_2.X_to_3.0.md)
+ * [upgrade notes 3.X](docs/upgrading_from_3.X_to_4.0.md)
  * [adding routes](docs/routing.md)
  * [defining API connections](docs/connections.md)
  * [expected JSON structure](docs/json_format.md)

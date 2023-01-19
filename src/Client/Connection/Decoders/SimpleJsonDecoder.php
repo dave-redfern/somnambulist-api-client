@@ -4,18 +4,14 @@ namespace Somnambulist\Components\ApiClient\Client\Connection\Decoders;
 
 use Somnambulist\Components\ApiClient\Client\Contracts\ResponseDecoderInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+
 use function in_array;
 use function is_numeric;
 use function is_string;
 use function json_decode;
+
 use const JSON_THROW_ON_ERROR;
 
-/**
- * Class SimpleJsonDecoder
- *
- * @package    Somnambulist\Components\ApiClient\Client\Connection\Decoders
- * @subpackage Somnambulist\Components\ApiClient\Client\Connection\Decoders\SimpleJsonDecoder
- */
 class SimpleJsonDecoder implements ResponseDecoderInterface
 {
     public function decode(ResponseInterface $response, array $ok = [200]): array

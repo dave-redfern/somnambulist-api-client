@@ -11,24 +11,18 @@ use function sha1;
 use function sprintf;
 
 /**
- * Class RequestTracker
+ * Tracks the number of times a particular request has been made.
  *
- * Tracks the number of times a particular request has been made. Class must be
- * static as we want it to persistent outside the kernel getting restarted when
+ * Class must be static as we want it to persistent outside the kernel getting restarted when
  * under testing.
- *
- * @package    Somnambulist\Components\ApiClient\Client\Decorators
- * @subpackage Somnambulist\Components\ApiClient\Client\RequestTracker
  */
 class RequestTracker
 {
-
     private static ?RequestTracker $instance = null;
     private array $requests = [];
 
     private function __construct()
     {
-        
     }
 
     public static function instance(): self
@@ -61,7 +55,7 @@ class RequestTracker
             $request[$key] = $value;
         }
 
-        $data = array_merge(['route' => $route, $request]);
+        $data = array_filter(array_merge(['route' => $route, $request]));
         ksort($data);
 
         return sha1(json_encode($data));

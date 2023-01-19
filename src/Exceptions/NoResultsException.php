@@ -4,14 +4,9 @@ namespace Somnambulist\Components\ApiClient\Exceptions;
 
 use Exception;
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
+
 use function sprintf;
 
-/**
- * Class NoResultsException
- *
- * @package    Somnambulist\Components\ApiClient\Exceptions
- * @subpackage Somnambulist\Components\ApiClient\Exceptions\NoResultsException
- */
 class NoResultsException extends Exception
 {
     private QueryBuilder $query;

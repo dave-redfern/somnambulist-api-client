@@ -5,6 +5,7 @@ namespace Somnambulist\Components\ApiClient\Client;
 use RuntimeException;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+
 use function dirname;
 use function file_exists;
 use function file_get_contents;
@@ -16,17 +17,14 @@ use function mkdir;
 use function sprintf;
 use function strtoupper;
 use function substr;
+
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 
 /**
- * Class ResponseStore
+ * Manages response recordings in a store.
  *
- * Manages recordings in a store. Acts as a singleton to avoid being cleared with a
- * kernel restart / terminate when used with Symfony WebTestCase.
- *
- * @package    Somnambulist\Components\ApiClient\Client\Decorators
- * @subpackage Somnambulist\Components\ApiClient\Client\ResponseStore
+ * Acts as a singleton to avoid being cleared with a kernel restart / terminate when used with Symfony WebTestCase.
  */
 class ResponseStore
 {

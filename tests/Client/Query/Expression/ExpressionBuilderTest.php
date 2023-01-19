@@ -2,20 +2,16 @@
 
 namespace Somnambulist\Components\ApiClient\Tests\Client\Query\Expression;
 
+use PHPUnit\Framework\TestCase;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\ExpressionBuilder;
-use PHPUnit\Framework\TestCase;
 
 /**
- * Class ExpressionBuilderTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Client\Query\Expression
- * @subpackage Somnambulist\Components\ApiClient\Tests\Client\Query\Expression\ExpressionBuilderTest
+ * @group expression-builder
  */
 class ExpressionBuilderTest extends TestCase
 {
-
     public function testAnd()
     {
         $expr = (new ExpressionBuilder())->and(

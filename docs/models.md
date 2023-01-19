@@ -228,7 +228,7 @@ Model::query()
 ;
 ```
 
-In keeping with read-models / active record, linked records can be loaded using `->with()`,
+In keeping with read-models / active record, linked records can be loaded using `->include()`,
 though this is dependent on the API. It is preferable to always eager load the data you need at
 the point of request to avoid unnecessary API calls or worse, cascading API calls as they will
 be much slower than the equivalent database operations.

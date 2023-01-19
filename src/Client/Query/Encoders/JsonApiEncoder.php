@@ -7,20 +7,18 @@ use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderExcept
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\ExpressionBuilder;
+
 use function array_merge;
 use function is_null;
 
 /**
- * Class JsonApiEncoder
+ * Encodes an API query request
  *
  * Implements the ideas / recommendations from: https://jsonapi.org/recommendations/#filtering
  *
  * Does not support OR conditions or nested conditions (only nested AND). Filters are
  * inlined into a single 'filter' argument. Operators are not supported on conditions.
  * Pagination is inlined into a single 'page' argument.
- *
- * @package    Somnambulist\Components\ApiClient\Client\Query\Encoders
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\Encoders\JsonApiEncoder
  */
 class JsonApiEncoder extends AbstractEncoder
 {

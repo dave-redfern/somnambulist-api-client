@@ -4,12 +4,6 @@ namespace Somnambulist\Components\ApiClient\Client\Query\Exceptions;
 
 use Exception;
 
-/**
- * Class QueryEncoderException
- *
- * @package    Somnambulist\Components\ApiClient\Client\Query\Exceptions
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderException
- */
 class QueryEncoderException extends Exception
 {
     public static function encoderDoesNotSupportComplexConditions(string $class, string $type): self

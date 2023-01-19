@@ -5,15 +5,10 @@ namespace Somnambulist\Components\ApiClient\Client\Query\Behaviours;
 use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderException;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
+
 use function array_filter;
 use function array_merge;
 
-/**
- * Trait EncodeSimpleFilterConditions
- *
- * @package    Somnambulist\Components\ApiClient\Client\Query\Behaviours
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\Behaviours\EncodeSimpleFilterConditions
- */
 trait EncodeSimpleFilterConditions
 {
     public function encode(QueryBuilder $builder): array
@@ -25,7 +20,7 @@ trait EncodeSimpleFilterConditions
         $res = array_filter(
             array_merge(
                 $builder->getRouteParams(),
-                $this->createInclude($builder->getWith()),
+                $this->createInclude($builder->getIncludes()),
                 $this->createOrderBy($builder->getOrderBy()),
                 $this->createLimit($builder->getLimit(), $builder->getOffset()),
                 $this->createPagination($builder->getPage(), $builder->getPerPage()),

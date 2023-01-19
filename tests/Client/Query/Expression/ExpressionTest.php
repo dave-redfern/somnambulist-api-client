@@ -2,22 +2,16 @@
 
 namespace Somnambulist\Components\ApiClient\Tests\Client\Query\Expression;
 
-use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 use PHPUnit\Framework\TestCase;
+use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 
 /**
- * Class ExpressionTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Client\Query\Expression
- * @subpackage Somnambulist\Components\ApiClient\Tests\Client\Query\Expression\ExpressionTest
- *
  * @group client
  * @group client-query
  * @group client-query-expression
  */
 class ExpressionTest extends TestCase
 {
-
     public function testCreate()
     {
         $expr = new Expression('this', '=', 'that');

@@ -9,12 +9,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * Class Connection
- *
- * @package    Somnambulist\Components\ApiClient
- * @subpackage Somnambulist\Components\ApiClient\Client\Connection
- */
 class Connection implements ConnectionInterface
 {
     private HttpClientInterface $client;

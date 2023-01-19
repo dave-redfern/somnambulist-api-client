@@ -6,15 +6,10 @@ use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Exceptions\ModelRelationshipException;
 use Somnambulist\Components\ApiClient\Model;
 use Somnambulist\Components\Collection\Contracts\Collection;
+
 use function get_class;
 use function is_null;
 
-/**
- * Class BelongsTo
- *
- * @package    Somnambulist\Components\ApiClient\Relationships
- * @subpackage Somnambulist\Components\ApiClient\Relationships\BelongsTo
- */
 class BelongsTo extends AbstractRelationship
 {
     private string $identityKey;
@@ -56,7 +51,7 @@ class BelongsTo extends AbstractRelationship
         $models->each(function (AbstractModel $loaded) use ($relationship) {
             if ((null === $data = $loaded->getRawAttribute($this->attributeKey)) && !$loaded->isRelationshipLoaded($relationship) && $this->lazyLoading) {
                 $data = $this->related->getResponseDecoder()->object(
-                    $this->query->with($relationship)->wherePrimaryKey($loaded->getRawAttribute($this->identityKey))->fetchRaw()
+                    $this->query->include($relationship)->wherePrimaryKey($loaded->getRawAttribute($this->identityKey))->fetchRaw()
                 );
 
                 if (empty($data)) {

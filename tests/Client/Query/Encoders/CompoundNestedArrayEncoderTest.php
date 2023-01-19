@@ -7,11 +7,6 @@ use Somnambulist\Components\ApiClient\Client\Query\Encoders\CompoundNestedArrayE
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 
 /**
- * Class CompoundNestedArrayEncoderTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Client\Query\Encoders
- * @subpackage Somnambulist\Components\ApiClient\Tests\Client\Query\Encoders\CompoundNestedArrayEncoderTest
- *
  * @group client
  * @group client-query
  * @group client-query-encoders
@@ -19,12 +14,11 @@ use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
  */
 class CompoundNestedArrayEncoderTest extends TestCase
 {
-
     public function testEncode()
     {
         $qb = new QueryBuilder();
         $qb
-            ->with('foo', 'bar', 'this.that')
+            ->include('foo', 'bar', 'this.that')
             ->where(
                 $qb->expr()->and(
                     $qb->expr()->neq('this', 'that'),

@@ -4,12 +4,6 @@ namespace Somnambulist\Components\ApiClient\Persistence\Contracts;
 
 use Assert\InvalidArgumentException;
 
-/**
- * Interface ApiActionInterface
- *
- * @package    Somnambulist\Components\ApiClient\Contracts
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Contracts\ApiActionInterface
- */
 interface ApiActionInterface
 {
     /**

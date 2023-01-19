@@ -2,6 +2,7 @@
 
 namespace Somnambulist\Components\ApiClient;
 
+use IlluminateAgnostic\Str\Support\Str;
 use LogicException;
 use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
 use Somnambulist\Components\ApiClient\Relationships\BelongsTo;
@@ -10,16 +11,11 @@ use Somnambulist\Components\ApiClient\Relationships\HasOne;
 use Somnambulist\Components\AttributeModel\AbstractModel as AttributeModel;
 use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\Collection\MutableCollection;
+
 use function array_key_exists;
 use function is_null;
 use function method_exists;
 
-/**
- * Class AbstractModel
- *
- * @package    Somnambulist\Components\ApiClient
- * @subpackage Somnambulist\Components\ApiClient\AbstractModel
- */
 abstract class AbstractModel extends AttributeModel
 {
     /**
@@ -184,7 +180,7 @@ abstract class AbstractModel extends AttributeModel
      * @param string $attributeKey   The attribute name where data is located on the data source
      * @param string $identityKey    The attribute name for the related identity
      * @param bool   $nullOnNotFound If false, returns an empty model as the related object
-     * @param bool   $lazyLoading    If false, will not auto-load the relationship data from the API
+     * @param bool   $lazyLoading    If false, will not autoload the relationship data from the API
      *
      * @return BelongsTo
      * @throws Exceptions\ModelRelationshipException
@@ -195,12 +191,12 @@ abstract class AbstractModel extends AttributeModel
     }
 
     /**
-     * Define a one to many relationship
+     * Define a one-to-many relationship
      *
      * Here, the parent has many children, so a User can have many addresses.
      * The related data is expected to be available via an include using the relationship
      * name and will be converted to a collection of the specified class. Like with 1:1,
-     * this should be a direct relationship; loaded via a parent `with()` call.
+     * this should be a direct relationship; loaded via a parent `include()` call.
      *
      * indexBy allows a column on the child to be used as the key in the returned
      * collection. Note: if this is specified, then there can be only a single
@@ -211,7 +207,7 @@ abstract class AbstractModel extends AttributeModel
      * @param string      $class
      * @param string      $attributeKey The attribute name where data is located on the data source
      * @param string|null $indexBy
-     * @param bool        $lazyLoading  If false, will not auto-load the relationship data from the API
+     * @param bool        $lazyLoading  If false, will not autoload the relationship data from the API
      *
      * @return HasMany
      * @throws Exceptions\ModelRelationshipException
@@ -222,16 +218,16 @@ abstract class AbstractModel extends AttributeModel
     }
 
     /**
-     * Defines a one to one relationship
+     * Defines a one-to-one relationship
      *
      * Here the parent has only one child and the child only has that parent. This data
-     * should be loaded directly from the parent via a `with()` call. For in-direct
+     * should be loaded directly from the parent via a `include()` call. For in-direct
      * relationships, use {@see Model::belongsTo()}.
      *
      * @param string $class
      * @param string $attributeKey   The attribute name where data is located on the data source
      * @param bool   $nullOnNotFound If false, returns an empty model as the related object
-     * @param bool   $lazyLoading    If false, will not auto-load the relationship data from the API
+     * @param bool   $lazyLoading    If false, will not autoload the relationship data from the API
      *
      * @return HasOne
      * @throws Exceptions\ModelRelationshipException

@@ -6,6 +6,7 @@ use Somnambulist\Components\ApiClient\Client\Query\Behaviours\EncodeSimpleFilter
 use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderException;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
+
 use function array_merge;
 use function implode;
 use function is_null;
@@ -13,7 +14,7 @@ use function sprintf;
 use function strtolower;
 
 /**
- * Class OpenStackApiEncoder
+ * Encodes an API query request
  *
  * Implements the spec from: https://specs.openstack.org/openstack/api-wg/guidelines/pagination_filter_sort.html#filtering
  *
@@ -21,9 +22,6 @@ use function strtolower;
  * inlined into the main query arguments and operators are prefixed before the value.
  * Pagination is by limit and marker; page/per_page is not supported by the spec.
  * Marker is a string but could be a numeric offset.
- *
- * @package    Somnambulist\Components\ApiClient\Client\Query\Encoders
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\Encoders\OpenStackApiEncoder
  */
 class OpenStackApiEncoder extends AbstractEncoder
 {

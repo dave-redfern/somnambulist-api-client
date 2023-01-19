@@ -6,15 +6,11 @@ use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Client\RequestTracker;
 use Somnambulist\Components\ApiClient\Client\ResponseStore;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+
 use function in_array;
 
 /**
- * Class RecordResponseDecorator
- *
  * Decorates a ConnectionInterface adding the ability to record responses from the API.
- *
- * @package    Somnambulist\Components\ApiClient\Client
- * @subpackage Somnambulist\Components\ApiClient\Client\Decorators\RecordResponseDecorator
  */
 class RecordResponseDecorator extends AbstractDecorator
 {

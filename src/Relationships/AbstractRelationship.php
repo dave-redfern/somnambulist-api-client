@@ -8,21 +8,17 @@ use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\ModelBuilder;
 use Somnambulist\Components\Collection\Contracts\Collection;
+
 use function sprintf;
 
 /**
- * Class AbstractRelationship
- *
- * @package    Somnambulist\Components\ApiClient\Relationships
- * @subpackage Somnambulist\Components\ApiClient\Relationships\AbstractRelationship
- *
- * @method AbstractRelationship with(...$relationship)
+ * @method AbstractRelationship include(string ...$relationship)
  * @method AbstractRelationship limit(int $limit = null)
  * @method AbstractRelationship offset(string $offset = null)
  * @method AbstractRelationship page(int $page = null)
  * @method AbstractRelationship perPage(int $perPage = null)
  *
- * @method array getWith()
+ * @method array getIncludes()
  * @method array getOrderBy()
  * @method null|CompositeExpression getWhere()
  * @method null|int getLimit()
@@ -38,7 +34,7 @@ abstract class AbstractRelationship
     protected bool $lazyLoading;
     protected ?ModelBuilder $query = null;
 
-    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, bool $lazyLoading = true)
+    public function __construct(AbstractModel $parent, AbstractModel $related, string $attributeKey, bool $lazyLoading = false)
     {
         $this->parent       = $parent;
         $this->related      = $related;
@@ -71,7 +67,7 @@ abstract class AbstractRelationship
 
     public function __call($name, $arguments)
     {
-        $allowed = ['with', 'limit', 'offset', 'page', 'perPage'];
+        $allowed = ['include', 'limit', 'offset', 'page', 'perPage'];
 
         if (in_array($name, $allowed) || Str::startsWith($name, 'get')) {
             $ret = $this->query->{$name}(...$arguments);

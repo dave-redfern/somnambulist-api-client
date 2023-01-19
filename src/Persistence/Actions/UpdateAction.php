@@ -5,12 +5,6 @@ namespace Somnambulist\Components\ApiClient\Persistence\Actions;
 use Assert\Assert;
 use Assert\InvalidArgumentException;
 
-/**
- * Class UpdateAction
- *
- * @package    Somnambulist\Components\ApiClient\Persistence\Actions
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Actions\UpdateAction
- */
 class UpdateAction extends AbstractAction
 {
     public static function update(string $class): self

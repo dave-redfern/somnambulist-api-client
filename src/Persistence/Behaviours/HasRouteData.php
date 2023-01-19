@@ -7,12 +7,6 @@ use function is_null;
 use function strtolower;
 use function trim;
 
-/**
- * Trait HasRouteData
- *
- * @package    Somnambulist\Components\ApiClient\Persistence\Behaviours
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Behaviours\HasRouteData
- */
 trait HasRouteData
 {
     protected ?string $route = null;

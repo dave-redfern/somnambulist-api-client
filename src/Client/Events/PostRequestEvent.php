@@ -4,13 +4,7 @@ namespace Somnambulist\Components\ApiClient\Client\Events;
 
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * Class PostRequestEvent
- *
- * @package    Somnambulist\Components\ApiClient\Client\Events
- * @subpackage Somnambulist\Components\ApiClient\Client\Events\PostRequestEvent
- */
-class PostRequestEvent
+final class PostRequestEvent
 {
     private ResponseInterface $response;
     private string $route;

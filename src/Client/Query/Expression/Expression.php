@@ -3,16 +3,11 @@
 namespace Somnambulist\Components\ApiClient\Client\Query\Expression;
 
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
+
 use function implode;
 use function is_array;
 use function is_object;
 
-/**
- * Class Expression
- *
- * @package    Somnambulist\Components\ApiClient\Client
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\Expression\Expression
- */
 class Expression implements ExpressionInterface
 {
     private string $field;

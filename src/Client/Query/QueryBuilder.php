@@ -5,27 +5,23 @@ namespace Somnambulist\Components\ApiClient\Client\Query;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\ExpressionBuilder;
+
 use function array_key_exists;
 use function array_unshift;
 use function count;
-use function is_array;
 use function is_null;
-use function trigger_deprecation;
 
 /**
- * Class QueryBuilder
+ * Based on Doctrine\DBAL\Query\QueryBuilder
  *
- * Based on Doctrine\DBAL\Query\QueryBuilder; provides a way to create a set of
- * expressions that can be converted to filters for passing to an API end point.
- * How the query builder is converted is left up to the chosen encoder.
- *
- * @package    Somnambulist\Components\ApiClient\Client\Query
- * @subpackage Somnambulist\Components\ApiClient\Client\Query\QueryBuilder
+ * Provides a way to create a set of expressions that can be converted to filters for passing to an API end point.
+ * How the query builder is converted is left up to the chosen encoder. This library includes several encoders
+ * for JsonAPI, OpenAPI, simple encoding, and a more complex nested array encoder.
  */
 class QueryBuilder
 {
     private array $routeParams = [];
-    private array $with = [];
+    private array $include = [];
     private array $orderBy = [];
     private ?int $page = null;
     private ?int $perPage = null;
@@ -51,17 +47,9 @@ class QueryBuilder
      *
      * @return $this
      */
-    public function with(...$relationship): self
+    public function include(string ...$relationship): self
     {
-        if (isset($relationship[0]) && is_array($relationship[0])) {
-            trigger_deprecation('somnambulist/api-client', '3.2.2', 'Passing an array as first arg is deprecated, use separate string arguments');
-            $relationship = $relationship[0];
-        } elseif (array_key_exists(0, $relationship) && is_null($relationship[0])) {
-            trigger_deprecation('somnambulist/api-client', '3.2.2', 'Passing null is deprecated, use "withoutRelationships()"');
-            $relationship = [];
-        }
-
-        $this->with = $relationship;
+        $this->include = $relationship;
 
         return $this;
     }
@@ -71,9 +59,9 @@ class QueryBuilder
      *
      * @return $this
      */
-    public function withoutRelationships(): self
+    public function withoutIncludes(): self
     {
-        $this->with = [];
+        $this->include = [];
 
         return $this;
     }
@@ -200,9 +188,9 @@ class QueryBuilder
 
 
 
-    public function getWith(): array
+    public function getIncludes(): array
     {
-        return $this->with;
+        return $this->include;
     }
 
     public function getRouteParams(): array

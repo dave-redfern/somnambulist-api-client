@@ -8,14 +8,10 @@ use Somnambulist\Components\Collection\FrozenCollection;
 use Somnambulist\Components\Collection\MutableCollection;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+
 use function json_decode;
 
 /**
- * Class ActionPersisterException
- *
- * @package    Somnambulist\Components\ApiClient\Persistence\Exceptions
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException
- *
  * @method ClientExceptionInterface getPrevious()
  */
 class ActionPersisterException extends Exception

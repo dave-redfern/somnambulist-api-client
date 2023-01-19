@@ -8,13 +8,18 @@ use Somnambulist\Components\ApiClient\Client\Contracts\QueryEncoderInterface;
 use Somnambulist\Components\ApiClient\Client\Contracts\ResponseDecoderInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Encoders\SimpleEncoder;
 use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
+
 use function array_key_exists;
 
 /**
- * Class Model
+ * Represents an API resource that can be queried independently
  *
- * @package    Somnambulist\Components\ApiClient
- * @subpackage Somnambulist\Components\ApiClient\Model
+ * "Model" in this case encapsulates a singular endpoint that can additionally have included data (sub-objects)
+ * that will respond to a request of the type `/some/resource/{some_id}`. By default, the response handling uses
+ * a basic JSON decoder. This can be replaced with a decoder that implements e.g. JsonAPI or OpenAPI etc.
+ *
+ * Models can be queried for via the query methods. This is entirely API dependent and not all features may
+ * work. Be sure to review the APIs documentation you are integrating with.
  */
 abstract class Model extends AbstractModel
 {
@@ -58,7 +63,7 @@ abstract class Model extends AbstractModel
     /**
      * The relationships to eager load on every request
      */
-    protected array $with = [];
+    protected array $include = [];
 
     /**
      * @param mixed $id
@@ -90,9 +95,9 @@ abstract class Model extends AbstractModel
      *
      * @return ModelBuilder
      */
-    public static function with(...$relations): ModelBuilder
+    public static function include(...$relations): ModelBuilder
     {
-        return static::query()->with(...$relations);
+        return static::query()->include(...$relations);
     }
 
     /**
@@ -108,7 +113,7 @@ abstract class Model extends AbstractModel
     public function newQuery(): ModelBuilder
     {
         $builder = new ModelBuilder($this);
-        $builder->with(...$this->with);
+        $builder->include(...$this->include);
 
         return $builder;
     }

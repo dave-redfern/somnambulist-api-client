@@ -8,16 +8,10 @@ use Somnambulist\Components\ApiClient\Persistence\Actions\DestroyAction;
 use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 
 /**
- * Class DestroyActionTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Persistence\Actions
- * @subpackage Somnambulist\Components\ApiClient\Tests\Persistence\Actions\DestroyActionTest
- *
  * @group persister-actions
  */
 class DestroyActionTest extends TestCase
 {
-
     public function testBuild()
     {
         $action = new DestroyAction(User::class);
@@ -35,7 +29,7 @@ class DestroyActionTest extends TestCase
     public function testBuildFullAction()
     {
         $action = DestroyAction::destroy(User::class)
-            ->with([
+            ->include([
                 'name' => 'foo bar', 'email' => 'bar@example.com',
             ])
             ->route('users.destroy', ['id' => '123'])

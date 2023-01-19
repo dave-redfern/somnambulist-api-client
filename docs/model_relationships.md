@@ -73,7 +73,7 @@ to ease the implementation, but also to encourage eager loading whenever possibl
 
 `HasOne` and `HasMany` _only_ load data from the parent defining the relationship. This means that
 they cannot be defined on a `ValueObject` as the parent must be "active". This is because both
-of these load the relationship data by issuing a `->with()` on the parent Model and processing the
+of these load the relationship data by issuing an `->include()` on the parent Model and processing the
 result.
 
 The reason for this behaviour is that for these relationships, it is expected that the related 
@@ -117,7 +117,6 @@ use Somnambulist\Components\ApiClient\Relationships\HasOne;
 
 class User extends Model
 {
-
     protected function address(): HasOne
     {
         return $this->hasOne(Address::class, 'address', false);
@@ -136,5 +135,5 @@ class User extends Model
 ```
 
 Depending on the API implementation it should be possible to eager load all this data directly
-from the User itself: `User::with('address', 'contacts', 'account')->find()`. The relationships
+from the User itself: `User::include('address', 'contacts', 'account')->find()`. The relationships
 will then be populated from the pre-fetched data.

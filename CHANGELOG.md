@@ -1,6 +1,16 @@
 Change Log
 ==========
 
+2023-01-19
+----------
+
+ * Required PHP 8.1
+ * Update minimum versions
+ * Rename `with()` to `include()` for consistency across libraries
+ * Remove unnecessary docblocks
+ * Fix response decorator allowing empty array when no request vars
+ * Fix response decorator test
+
 2022-03-01 - 3.3.2
 ------------------
 

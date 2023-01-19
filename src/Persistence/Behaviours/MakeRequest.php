@@ -7,14 +7,10 @@ use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Persistence\Contracts\ApiActionInterface;
 use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException;
 use Symfony\Component\HttpClient\Exception\ClientException;
+
 use function strtolower;
 
 /**
- * Trait MakeRequest
- *
- * @package    Somnambulist\Components\ApiClient\Persistence\Behaviours
- * @subpackage Somnambulist\Components\ApiClient\Persistence\Behaviours\MakeRequest
- *
  * @property-read ConnectionInterface $connection
  */
 trait MakeRequest

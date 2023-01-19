@@ -3,7 +3,6 @@
 namespace Somnambulist\Components\ApiClient\Tests\Relationships;
 
 use PHPUnit\Framework\TestCase;
-use Somnambulist\Components\ApiClient\Manager;
 use Somnambulist\Components\ApiClient\Relationships\HasOne;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\AssertRequestMade;
 use Somnambulist\Components\ApiClient\Tests\Support\Behaviours\UseFactory;
@@ -12,18 +11,12 @@ use Somnambulist\Components\ApiClient\Tests\Support\Stubs\Entities\User;
 use Somnambulist\Components\Collection\Contracts\Collection;
 
 /**
- * Class HasOneTest
- *
- * @package    Somnambulist\Components\ApiClient\Tests\Relationships
- * @subpackage Somnambulist\Components\ApiClient\Tests\Relationships\HasOneTest
- *
  * @group model
  * @group model-relationships
  * @group model-relationships-has-one
  */
 class HasOneTest extends TestCase
 {
-
     use UseFactory;
     use AssertRequestMade;
 
@@ -34,7 +27,7 @@ class HasOneTest extends TestCase
 
     public function testEagerLoad()
     {
-        $user = User::with('address')->find('c8259b3b-8603-3098-8361-425325078c9a');
+        $user = User::include('address')->find('c8259b3b-8603-3098-8361-425325078c9a');
 
         $this->assertInstanceOf(Address::class, $user->address);
         $this->assertEquals('Hong Kong', $user->address->country);
@@ -52,7 +45,7 @@ class HasOneTest extends TestCase
 
     public function testLazyLoadingRelationshipDoesNotReloadIfRelationshipLoadedAlready()
     {
-        $user = User::with('address3')->find('468185d5-4238-44bb-ae34-44909e35e4fe');
+        $user = User::include('address3')->find('468185d5-4238-44bb-ae34-44909e35e4fe');
 
         $this->assertTrue($user->isRelationshipLoaded('address3'));
         $this->assertRouteWasNotCalledWith('users.view', ['include' => 'address']);
