@@ -42,11 +42,11 @@ class SimpleEncoder extends AbstractEncoder
 
         foreach ($expression->getParts() as $part) {
             if ($part instanceof Expression) {
-                if (ExpressionBuilder::EQ !== $part->getOperator()) {
-                    throw QueryEncoderException::encoderDoesNotSupportOperator(self::class, $part->getField(), $part->getOperator());
+                if (ExpressionBuilder::EQ !== $part->operator) {
+                    throw QueryEncoderException::encoderDoesNotSupportOperator(self::class, $part->field, $part->operator);
                 }
 
-                $filters[$part->getField()] = $part->getValue();
+                $filters[$part->field] = $part->value;
             } elseif($part instanceof CompositeExpression) {
                 if ($part->isOr()) {
                     throw QueryEncoderException::encoderDoesNotSupportNestedConditions(self::class, 'OR');

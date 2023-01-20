@@ -16,9 +16,9 @@ class ExpressionTest extends TestCase
     {
         $expr = new Expression('this', '=', 'that');
 
-        $this->assertEquals('this', $expr->getField());
-        $this->assertEquals('=', $expr->getOperator());
-        $this->assertEquals('that', $expr->getValue());
+        $this->assertEquals('this', $expr->field);
+        $this->assertEquals('=', $expr->operator);
+        $this->assertEquals('that', $expr->value);
     }
 
     public function testCastToString()

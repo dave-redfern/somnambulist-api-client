@@ -7,6 +7,8 @@ use Somnambulist\Components\ApiClient\Client\Query\Encoders\OpenStackApiEncoder;
 use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderException;
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
 
+use function http_build_query;
+
 /**
  * @group client
  * @group client-query
@@ -15,7 +17,6 @@ use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
  */
 class OpenStackApiEncoderTest extends TestCase
 {
-
     public function testEncode()
     {
         $qb = new QueryBuilder();
@@ -49,6 +50,40 @@ class OpenStackApiEncoderTest extends TestCase
         $this->assertEquals('gte:3456', $args['bar']);
         $this->assertEquals('bar', $args['foo']);
         $this->assertEquals('neq:that', $args['this']);
+    }
+
+    public function testEncodeConvertsOperators()
+    {
+        $qb = new QueryBuilder();
+        $qb
+            ->where(
+                $qb->expr()->notIn('this', ['that', 'foo', 'bar']),
+                $qb->expr()->notLike('foo', 'bar'),
+            )
+        ;
+
+        $encoder = new OpenStackApiEncoder();
+        $args = $encoder->encode($qb);
+
+        $this->assertEquals('nin:that,foo,bar', $args['this']);
+        $this->assertEquals('nlike:bar', $args['foo']);
+    }
+
+    public function testAllowsMultipleValuesPerField()
+    {
+        $qb = new QueryBuilder();
+        $qb
+            ->where(
+                $qb->expr()->notIn('this', ['that', 'foo', 'bar']),
+                $qb->expr()->notLike('this', 'bar'),
+            )
+        ;
+
+        $encoder = new OpenStackApiEncoder();
+        $args = $encoder->encode($qb);
+
+        $this->assertIsArray($args['this']);
+        $this->assertCount(2, $args['this']);
     }
 
     public function testEncodeWithRouteParams()

@@ -66,9 +66,9 @@ class NestedArrayEncoder extends AbstractEncoder
         foreach ($expression->getParts() as $part) {
             if ($part instanceof Expression) {
                 $filters[$this->mappings['filter_parts']][] = [
-                    $this->mappings['filter_field']    => $part->getField(),
-                    $this->mappings['filter_operator'] => $part->getOperator(),
-                    $this->mappings['filter_value']    => $part->getValue(),
+                    $this->mappings['filter_field']    => $part->field,
+                    $this->mappings['filter_operator'] => $part->operator,
+                    $this->mappings['filter_value']    => $part->value,
                 ];
             } elseif ($part instanceof CompositeExpression) {
                 $filters[$this->mappings['filter_parts']][] = $this->createFilters($part)[$this->mappings[self::FILTERS]];

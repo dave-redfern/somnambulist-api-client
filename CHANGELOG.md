@@ -1,8 +1,15 @@
 Change Log
 ==========
 
-2023-01-19
+2023-01-20
 ----------
+
+ * Fix OpenStack should allow multiple conditions per field
+ * Fix JsonAPI should allow IN (array of values, comma separated)
+ * Make `Expression` properties readonly and public, deprecate methods
+
+2023-01-19 - 4.0.0
+------------------
 
  * Required PHP 8.1
  * Update minimum versions

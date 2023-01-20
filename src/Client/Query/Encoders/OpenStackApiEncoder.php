@@ -7,6 +7,7 @@ use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderExcept
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 
+use function array_key_exists;
 use function array_merge;
 use function implode;
 use function is_null;
@@ -22,6 +23,8 @@ use function strtolower;
  * inlined into the main query arguments and operators are prefixed before the value.
  * Pagination is by limit and marker; page/per_page is not supported by the spec.
  * Marker is a string but could be a numeric offset.
+ *
+ * OpenStack supports the following filter operators: in, nin, neq, gt, gte, lt, and lte.
  */
 class OpenStackApiEncoder extends AbstractEncoder
 {
@@ -37,6 +40,11 @@ class OpenStackApiEncoder extends AbstractEncoder
         self::PER_PAGE => 'per_page',
     ];
 
+    protected array $operatorMap = [
+        '!in'   => 'nin',
+        '!like' => 'nlike',
+    ];
+
     protected bool $snakeCaseIncludes = false;
 
     protected function createFilters(?CompositeExpression $expression): array
@@ -49,8 +57,15 @@ class OpenStackApiEncoder extends AbstractEncoder
 
         foreach ($expression->getParts() as $part) {
             if ($part instanceof Expression) {
-                $filters[$part->getField()] = (string)$part;
-            } elseif($part instanceof CompositeExpression) {
+                if (array_key_exists($part->field, $filters)) {
+                    $filters[$part->field] = array_merge(
+                        (array)$filters[$part->field],
+                        [$part->toString($this->operatorMap[$part->operator] ?? null)]
+                    );
+                } else {
+                    $filters[$part->field] = $part->toString($this->operatorMap[$part->operator] ?? null);
+                }
+            } elseif ($part instanceof CompositeExpression) {
                 if ($part->isOr()) {
                     throw QueryEncoderException::encoderDoesNotSupportNestedConditions(self::class, 'OR');
                 }

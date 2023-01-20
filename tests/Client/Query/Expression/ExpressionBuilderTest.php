@@ -27,7 +27,7 @@ class ExpressionBuilderTest extends TestCase
     {
         $expr = (new ExpressionBuilder())->gt('this', 'that');
 
-        $this->assertEquals('gt', $expr->getOperator());
+        $this->assertEquals('gt', $expr->operator);
     }
 
     public function testOr()
@@ -45,49 +45,49 @@ class ExpressionBuilderTest extends TestCase
     {
         $expr = (new ExpressionBuilder())->like('this', 'that');
 
-        $this->assertEquals('like', $expr->getOperator());
+        $this->assertEquals('like', $expr->operator);
     }
 
     public function testLte()
     {
         $expr = (new ExpressionBuilder())->lte('this', 'that');
 
-        $this->assertEquals('lte', $expr->getOperator());
+        $this->assertEquals('lte', $expr->operator);
     }
 
     public function testComparison()
     {
         $expr = (new ExpressionBuilder())->comparison('this', 'compound', 'that');
 
-        $this->assertEquals('compound', $expr->getOperator());
+        $this->assertEquals('compound', $expr->operator);
     }
 
     public function testNotLike()
     {
         $expr = (new ExpressionBuilder())->notLike('this', 'that');
 
-        $this->assertEquals('!like', $expr->getOperator());
+        $this->assertEquals('!like', $expr->operator);
     }
 
     public function testNeq()
     {
         $expr = (new ExpressionBuilder())->neq('this', 'that');
 
-        $this->assertEquals('neq', $expr->getOperator());
+        $this->assertEquals('neq', $expr->operator);
     }
 
     public function testIn()
     {
         $expr = (new ExpressionBuilder())->in('this', 'that');
 
-        $this->assertEquals('in', $expr->getOperator());
+        $this->assertEquals('in', $expr->operator);
     }
 
     public function testIsNotNull()
     {
         $expr = (new ExpressionBuilder())->isNotNull('this');
 
-        $this->assertEquals('!null', $expr->getOperator());
+        $this->assertEquals('!null', $expr->operator);
     }
 
     public function testBetween()
@@ -96,42 +96,42 @@ class ExpressionBuilderTest extends TestCase
 
         $this->assertInstanceOf(CompositeExpression::class, $expr);
         $this->assertCount(2, $expr);
-        $this->assertEquals('gte', $expr[0]->getOperator());
-        $this->assertEquals('lte', $expr[1]->getOperator());
+        $this->assertEquals('gte', $expr[0]->operator);
+        $this->assertEquals('lte', $expr[1]->operator);
     }
 
     public function testGte()
     {
         $expr = (new ExpressionBuilder())->gte('this', 'that');
 
-        $this->assertEquals('gte', $expr->getOperator());
+        $this->assertEquals('gte', $expr->operator);
     }
 
     public function testEq()
     {
         $expr = (new ExpressionBuilder())->eq('this', 'that');
 
-        $this->assertEquals('eq', $expr->getOperator());
+        $this->assertEquals('eq', $expr->operator);
     }
 
     public function testLt()
     {
         $expr = (new ExpressionBuilder())->lt('this', 'that');
 
-        $this->assertEquals('lt', $expr->getOperator());
+        $this->assertEquals('lt', $expr->operator);
     }
 
     public function testNotIn()
     {
         $expr = (new ExpressionBuilder())->notIn('this', 'that');
 
-        $this->assertEquals('!in', $expr->getOperator());
+        $this->assertEquals('!in', $expr->operator);
     }
 
     public function testIsNull()
     {
         $expr = (new ExpressionBuilder())->isNull('this');
 
-        $this->assertEquals('null', $expr->getOperator());
+        $this->assertEquals('null', $expr->operator);
     }
 }

@@ -46,11 +46,11 @@ class JsonApiEncoder extends AbstractEncoder
 
         foreach ($expression->getParts() as $part) {
             if ($part instanceof Expression) {
-                if (ExpressionBuilder::EQ !== $part->getOperator()) {
-                    throw QueryEncoderException::encoderDoesNotSupportOperator(self::class, $part->getField(), $part->getOperator());
+                if (!in_array($part->operator, [ExpressionBuilder::EQ, ExpressionBuilder::IN])) {
+                    throw QueryEncoderException::encoderDoesNotSupportOperator(self::class, $part->field, $part->operator);
                 }
 
-                $filters[$part->getField()] = $part->getValueAsString();
+                $filters[$part->field] = $part->getValueAsString();
             } elseif($part instanceof CompositeExpression) {
                 if ($part->isOr()) {
                     throw QueryEncoderException::encoderDoesNotSupportNestedConditions(self::class, 'OR');

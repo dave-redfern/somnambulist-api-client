@@ -43,6 +43,19 @@ class JsonApiEncoderTest extends TestCase
         $this->assertEquals(['bar' => 3456, 'foo' => 'bar', 'this' => 'that'], $args['filter']);
     }
 
+    public function testEncodeAllowsIn()
+    {
+        $qb = new QueryBuilder();
+        $qb->where($qb->expr()->in('this', ['that', 'bar']));
+
+        $encoder = new JsonApiEncoder();
+        $args = $encoder->encode($qb);
+
+        $this->assertArrayHasKey('filter', $args);
+        $this->assertArrayHasKey('this', $args['filter']);
+        $this->assertEquals('that,bar', $args['filter']['this']);
+    }
+
     public function testEncodeWithRouteParams()
     {
         $qb = new QueryBuilder();

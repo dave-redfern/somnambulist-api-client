@@ -6,26 +6,48 @@ use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
 
 use function implode;
 use function is_array;
-use function is_object;
+use function sprintf;
 
 class Expression implements ExpressionInterface
 {
-    private string $field;
-    private string $operator;
-    private mixed $value;
-
-    public function __construct(string $field, string $operator, mixed $value)
-    {
-        if (is_object($value)) {
-            $value = (string)$value;
-        }
-
-        $this->field    = $field;
-        $this->operator = $operator;
-        $this->value    = $value;
+    public function __construct(
+        public readonly string $field,
+        public readonly string $operator,
+        public readonly mixed $value
+    ) {
     }
 
     public function __toString(): string
+    {
+        return $this->toString();
+    }
+
+    /**
+     * @deprecated Use property directly
+     */
+    public function getField(): string
+    {
+        return $this->field;
+    }
+
+
+    /**
+     * @deprecated Use property directly
+     */
+    public function getOperator(): string
+    {
+        return $this->operator;
+    }
+
+    /**
+     * @deprecated Use property directly
+     */
+    public function getValue(): mixed
+    {
+        return $this->value;
+    }
+
+    public function toString(string $operator = null): string
     {
         $val = $this->getValueAsString();
 
@@ -33,22 +55,7 @@ class Expression implements ExpressionInterface
             return $val;
         }
 
-        return sprintf('%s:%s', $this->operator, $val);
-    }
-
-    public function getField(): string
-    {
-        return $this->field;
-    }
-
-    public function getOperator(): string
-    {
-        return $this->operator;
-    }
-
-    public function getValue(): mixed
-    {
-        return $this->value;
+        return sprintf('%s:%s', $operator ?? $this->operator, $val);
     }
 
     public function getValueAsString(): string

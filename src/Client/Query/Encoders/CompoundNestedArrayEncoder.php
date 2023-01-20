@@ -62,7 +62,7 @@ class CompoundNestedArrayEncoder extends AbstractEncoder
 
         foreach ($expression->getParts() as $part) {
             if ($part instanceof Expression) {
-                $filters[$this->mappings['filter_parts']][$part->getField()] = (string)$part;
+                $filters[$this->mappings['filter_parts']][$part->field] = (string)$part;
             } elseif ($part instanceof CompositeExpression) {
                 $filters[$this->mappings['filter_parts']][] = $this->createFilters($part)[$this->mappings[self::FILTERS]];
             }
