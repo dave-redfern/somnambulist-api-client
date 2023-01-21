@@ -1,8 +1,13 @@
 Change Log
 ==========
 
-2023-01-20
-----------
+2023-01-21 - 4.0.2
+------------------
+
+ * Fix OpenStack encoder not handling nested `AND` expressions for the same field
+
+2023-01-20 - 4.0.1
+------------------
 
  * Fix OpenStack should allow multiple conditions per field
  * Fix JsonAPI should allow IN (array of values, comma separated)

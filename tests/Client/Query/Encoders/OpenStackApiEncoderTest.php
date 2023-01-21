@@ -86,6 +86,50 @@ class OpenStackApiEncoderTest extends TestCase
         $this->assertCount(2, $args['this']);
     }
 
+    public function testAllowsMultipleValuesPerFieldAcrossCompositeFilters()
+    {
+        $qb = new QueryBuilder();
+        $qb
+            ->where(
+                $qb->expr()->and(
+                    $qb->expr()->notIn('this', ['that', 'foo', 'bar']),
+                    $qb->expr()->notLike('this', 'bar'),
+                ),
+                $qb->expr()->and(
+                    $qb->expr()->eq('this', 'bar'),
+                    $qb->expr()->notLike('this', 'foo'),
+                )
+            )
+        ;
+
+        $encoder = new OpenStackApiEncoder();
+        $args = $encoder->encode($qb);
+
+        $this->assertIsArray($args['this']);
+        $this->assertCount(4, $args['this']);
+    }
+
+    public function testAllowsMultipleValuesPerFieldAcrossMultipleComposites()
+    {
+        $qb = new QueryBuilder();
+        $qb
+            ->where(
+                $qb->expr()->notIn('this', ['that', 'foo', 'bar']),
+                $qb->expr()->notLike('this', 'bar'),
+            )
+            ->andWhere(
+                $qb->expr()->eq('this', 'bar'),
+                $qb->expr()->notLike('this', 'foo'),
+            )
+        ;
+
+        $encoder = new OpenStackApiEncoder();
+        $args = $encoder->encode($qb);
+
+        $this->assertIsArray($args['this']);
+        $this->assertCount(4, $args['this']);
+    }
+
     public function testEncodeWithRouteParams()
     {
         $qb = new QueryBuilder();

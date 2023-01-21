@@ -9,6 +9,7 @@ use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 
 use function array_key_exists;
 use function array_merge;
+use function array_merge_recursive;
 use function implode;
 use function is_null;
 use function sprintf;
@@ -70,7 +71,7 @@ class OpenStackApiEncoder extends AbstractEncoder
                     throw QueryEncoderException::encoderDoesNotSupportNestedConditions(self::class, 'OR');
                 }
 
-                $filters = array_merge($filters, $this->createFilters($part));
+                $filters = array_merge_recursive($filters, $this->createFilters($part));
             }
         }
 
