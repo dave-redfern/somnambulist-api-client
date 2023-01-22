@@ -146,4 +146,41 @@ class SimpleEncoderTest extends TestCase
 
         $this->assertEquals('foo_bar,baz_bar', $query['include']);
     }
+
+    public function testCanUseArrayValues()
+    {
+        $qb = new QueryBuilder();
+        $qb->where($qb->expr()->in('this', ['that', 'the', 'other']));
+
+        $query = (new SimpleEncoder())->encode($qb);
+
+        $this->assertEquals('that,the,other', $query['this']);
+    }
+
+    public function testMultipleWheresOnTheSameFieldLastWins()
+    {
+        $qb = new QueryBuilder();
+        $qb
+            ->where($qb->expr()->in('this', ['that', 'the', 'other']))
+            ->andWhere($qb->expr()->in('this', ['foo', 'bar', 'baz']))
+        ;
+
+        $query = (new SimpleEncoder())->encode($qb);
+
+        $this->assertEquals('foo,bar,baz', $query['this']);
+    }
+
+    public function testCanSetNameForFilters()
+    {
+        $qb = new QueryBuilder();
+        $qb
+            ->where($qb->expr()->in('this', ['that', 'the', 'other']))
+            ->andWhere($qb->expr()->in('this', ['foo', 'bar', 'baz']))
+        ;
+
+        $query = (new SimpleEncoder())->useNameForFiltersField('filters')->encode($qb);
+
+        $this->assertArrayHasKey('filters', $query);
+        $this->assertEquals('foo,bar,baz', $query['filters']['this']);
+    }
 }

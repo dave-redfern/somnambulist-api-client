@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+2023-01-21 - 4.0.3
+------------------
+
+ * Allow `SimpleEncoder` to support `IN` queries with array args encoded as comma separated string
+ * Allow `SimpleEncoder` to change the query arg used for filters
+
 2023-01-21 - 4.0.2
 ------------------
 
