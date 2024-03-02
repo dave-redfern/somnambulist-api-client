@@ -17,7 +17,6 @@ use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
 use Somnambulist\Components\ApiClient\Exceptions\NoResultsException;
 use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
 use Somnambulist\Components\Collection\Contracts\Collection;
-
 use function array_key_exists;
 use function array_merge;
 use function array_unique;

@@ -8,7 +8,6 @@ use Somnambulist\Components\ApiClient\Client\Contracts\QueryEncoderInterface;
 use Somnambulist\Components\ApiClient\Client\Contracts\ResponseDecoderInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Encoders\SimpleEncoder;
 use Somnambulist\Components\ApiClient\Exceptions\EntityNotFoundException;
-
 use function array_key_exists;
 
 /**

@@ -6,7 +6,6 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-
 use function sprintf;
 use function strtoupper;
 

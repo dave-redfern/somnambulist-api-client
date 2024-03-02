@@ -2,7 +2,6 @@
 
 namespace Somnambulist\Components\ApiClient;
 
-use IlluminateAgnostic\Str\Support\Str;
 use LogicException;
 use Somnambulist\Components\ApiClient\Relationships\AbstractRelationship;
 use Somnambulist\Components\ApiClient\Relationships\BelongsTo;
@@ -11,7 +10,6 @@ use Somnambulist\Components\ApiClient\Relationships\HasOne;
 use Somnambulist\Components\AttributeModel\AbstractModel as AttributeModel;
 use Somnambulist\Components\Collection\Contracts\Collection;
 use Somnambulist\Components\Collection\MutableCollection;
-
 use function array_key_exists;
 use function is_null;
 use function method_exists;

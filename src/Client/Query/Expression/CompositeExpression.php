@@ -5,7 +5,6 @@ namespace Somnambulist\Components\ApiClient\Client\Query\Expression;
 use ArrayAccess;
 use Countable;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
-
 use function array_key_exists;
 use function count;
 

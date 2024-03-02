@@ -3,7 +3,6 @@
 namespace Somnambulist\Components\ApiClient\Exceptions;
 
 use Exception;
-
 use function sprintf;
 
 class ConnectionManagerException extends Exception

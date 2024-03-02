@@ -5,7 +5,6 @@ namespace Somnambulist\Components\ApiClient;
 use Somnambulist\Components\ApiClient\Client\Connection;
 use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Exceptions\ConnectionManagerException;
-
 use function array_key_exists;
 
 final class ConnectionManager

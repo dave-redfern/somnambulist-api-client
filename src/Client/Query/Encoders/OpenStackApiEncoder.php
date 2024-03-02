@@ -6,7 +6,6 @@ use Somnambulist\Components\ApiClient\Client\Query\Behaviours\EncodeSimpleFilter
 use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderException;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
-
 use function array_key_exists;
 use function array_merge;
 use function array_merge_recursive;

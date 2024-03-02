@@ -3,7 +3,6 @@
 namespace Somnambulist\Components\ApiClient\Client\Query\Expression;
 
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
-
 use function implode;
 use function is_array;
 use function sprintf;

@@ -5,7 +5,6 @@ namespace Somnambulist\Components\ApiClient\Client\Query;
 use Somnambulist\Components\ApiClient\Client\Contracts\ExpressionInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\ExpressionBuilder;
-
 use function array_key_exists;
 use function array_unshift;
 use function count;

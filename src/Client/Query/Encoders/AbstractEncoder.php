@@ -5,7 +5,6 @@ namespace Somnambulist\Components\ApiClient\Client\Query\Encoders;
 use IlluminateAgnostic\Str\Support\Str;
 use Somnambulist\Components\ApiClient\Client\Contracts\QueryEncoderInterface;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
-
 use function array_map;
 use function count;
 use function floor;

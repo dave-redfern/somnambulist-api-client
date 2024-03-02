@@ -7,7 +7,6 @@ use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Persistence\Contracts\ApiActionInterface;
 use Somnambulist\Components\ApiClient\Persistence\Exceptions\ActionPersisterException;
 use Symfony\Component\HttpClient\Exception\ClientException;
-
 use function array_values;
 use function implode;
 

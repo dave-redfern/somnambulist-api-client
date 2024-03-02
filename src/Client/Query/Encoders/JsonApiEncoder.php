@@ -7,7 +7,6 @@ use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderExcept
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\ExpressionBuilder;
-
 use function array_merge;
 use function is_null;
 

@@ -6,7 +6,6 @@ use Somnambulist\Components\ApiClient\Client\Contracts\ConnectionInterface;
 use Somnambulist\Components\ApiClient\Client\RequestTracker;
 use Somnambulist\Components\ApiClient\Client\ResponseStore;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-
 use function in_array;
 
 /**

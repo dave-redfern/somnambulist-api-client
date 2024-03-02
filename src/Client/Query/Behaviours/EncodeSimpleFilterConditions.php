@@ -5,7 +5,6 @@ namespace Somnambulist\Components\ApiClient\Client\Query\Behaviours;
 use Somnambulist\Components\ApiClient\Client\Query\Exceptions\QueryEncoderException;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
-
 use function array_filter;
 use function array_merge;
 

@@ -6,7 +6,6 @@ use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Exceptions\ModelRelationshipException;
 use Somnambulist\Components\ApiClient\Model;
 use Somnambulist\Components\Collection\Contracts\Collection;
-
 use function get_class;
 
 /**

@@ -5,7 +5,6 @@ namespace Somnambulist\Components\ApiClient\Client\Query\Encoders;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\Expression;
 use Somnambulist\Components\ApiClient\Client\Query\QueryBuilder;
-
 use function array_filter;
 use function http_build_query;
 use function is_null;

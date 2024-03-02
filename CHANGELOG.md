@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+2024-02-24 - 4.1.0
+------------------
+
+ * Update dependencies to Symfony 6.4
+ * Add support for Symfony 7
+
 2023-01-21 - 4.0.3
 ------------------
 

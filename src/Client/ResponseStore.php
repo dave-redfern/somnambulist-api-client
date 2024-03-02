@@ -5,7 +5,6 @@ namespace Somnambulist\Components\ApiClient\Client;
 use RuntimeException;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-
 use function dirname;
 use function file_exists;
 use function file_get_contents;
@@ -17,7 +16,6 @@ use function mkdir;
 use function sprintf;
 use function strtoupper;
 use function substr;
-
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 

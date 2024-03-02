@@ -2,9 +2,6 @@
 
 namespace Somnambulist\Components\ApiClient\Persistence\Behaviours;
 
-use function is_null;
-use function trigger_deprecation;
-
 trait HasObjectData
 {
     protected ?string $class = null;

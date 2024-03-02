@@ -8,7 +8,6 @@ use Somnambulist\Components\ApiClient\AbstractModel;
 use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpression;
 use Somnambulist\Components\ApiClient\ModelBuilder;
 use Somnambulist\Components\Collection\Contracts\Collection;
-
 use function sprintf;
 
 /**
