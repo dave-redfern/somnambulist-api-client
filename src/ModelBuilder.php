@@ -28,6 +28,7 @@ use function str_contains;
 use function strlen;
 use function strtolower;
 use function substr;
+use function Symfony\Component\String\u;
 
 /**
  * Builds queries to fetch models from the configured API endpoint.
@@ -39,10 +40,10 @@ use function substr;
  * @method ModelBuilder orWhere(ExpressionInterface ...$predicates)
  * @method ModelBuilder orderBy(string $field, string $dir = 'asc')
  * @method ModelBuilder addOrderBy(string $field, string $dir = 'asc')
- * @method ModelBuilder page(int $page = null)
- * @method ModelBuilder perPage(int $perPage = null)
- * @method ModelBuilder limit(int $limit = null)
- * @method ModelBuilder offset(string $offset = null)
+ * @method ModelBuilder page(?int $page = null)
+ * @method ModelBuilder perPage(?int $perPage = null)
+ * @method ModelBuilder limit(?int $limit = null)
+ * @method ModelBuilder offset(?string $offset = null)
  * @method ModelBuilder routeRequires(array $params)
  *
  * @method array getIncludes()
@@ -111,7 +112,7 @@ class ModelBuilder
      *
      * @return Collection
      */
-    public function findBy(array $criteria = [], array $orderBy = [], int $limit = null, string $offset = null): Collection
+    public function findBy(array $criteria = [], array $orderBy = [], ?int $limit = null, ?string $offset = null): Collection
     {
         foreach ($criteria as $field => $value) {
             $this->whereField($field, 'eq', $value);
@@ -291,7 +292,8 @@ class ModelBuilder
         // the given top-level relationship. We will just check for any relations
         // that start with the given top relations and add them to our arrays.
         foreach ($this->eagerLoad as $name) {
-            if (Str::contains($name, '.') && Str::startsWith($name, $relation . '.')) {
+            $str = u($name);
+            if ($str->containsAny('.') && $str->startsWith($relation . '.')) {
                 $nested[] = substr($name, strlen($relation . '.'));
             }
         }
@@ -362,7 +364,7 @@ class ModelBuilder
         if (method_exists($this->query, $name)) {
             $ret = $this->query->{$name}(...$arguments);
 
-            if (Str::startsWith($name, 'get') || 'expr' === $name) {
+            if (u($name)->startsWith('get') || 'expr' === $name) {
                 return $ret;
             }
 

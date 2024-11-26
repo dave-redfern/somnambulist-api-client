@@ -7,6 +7,7 @@
           <versions>
             <info id="Local" version="9.3.8" />
             <info id="Local/Users/dave/Projects/somnambulist/api-client/vendor/autoload.php" version="10.5.10" />
+            <info id="Local/vendor/autoload.php" version="10.5.10" />
           </versions>
         </cache>
       </tool>

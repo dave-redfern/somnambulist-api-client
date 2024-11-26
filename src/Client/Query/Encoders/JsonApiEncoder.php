@@ -62,17 +62,17 @@ class JsonApiEncoder extends AbstractEncoder
         return [$this->mappings[self::FILTERS] => $filters];
     }
 
-    protected function createPagination(int $page = null, int $perPage = null): array
+    protected function createPagination(?int $page = null, ?int $perPage = null): array
     {
         return ['page' => parent::createPagination($page, $perPage)];
     }
 
-    protected function createPaginationFromLimitAndOffset(int $limit = null, int $offset = null): array
+    protected function createPaginationFromLimitAndOffset(?int $limit = null, ?int $offset = null): array
     {
         return ['page' => parent::createPaginationFromLimitAndOffset($limit, $offset)];
     }
 
-    protected function createLimit(int $limit = null, string $marker = null): array
+    protected function createLimit(?int $limit = null, ?string $marker = null): array
     {
         return ['page' => parent::createLimit($limit, $marker)];
     }

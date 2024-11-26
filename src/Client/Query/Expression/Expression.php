@@ -46,7 +46,7 @@ class Expression implements ExpressionInterface
         return $this->value;
     }
 
-    public function toString(string $operator = null): string
+    public function toString(?string $operator = null): string
     {
         $val = $this->getValueAsString();
 

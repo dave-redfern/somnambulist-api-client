@@ -35,8 +35,8 @@ trait EncodeSimpleFilterConditions
     abstract protected function sort(array &$args = []): void;
     abstract protected function createFilters(?CompositeExpression $expression): array;
     abstract protected function createInclude(array $includes = []): array;
-    abstract protected function createLimit(int $limit = null, string $marker = null): array;
+    abstract protected function createLimit(?int $limit = null, ?string $marker = null): array;
     abstract protected function createOrderBy(array $orderBy = []): array;
     abstract protected function createPagination(int $page = 1, int $perPage = 30): array;
-    abstract protected function createPaginationFromLimitAndOffset(int $limit = null, int $offset = null): array;
+    abstract protected function createPaginationFromLimitAndOffset(?int $limit = null, ?int $offset = null): array;
 }

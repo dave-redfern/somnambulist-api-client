@@ -19,7 +19,7 @@ class RecordResponseDecorator extends AbstractDecorator
 
     private string $mode;
 
-    public function __construct(ConnectionInterface $client, string $mode = null)
+    public function __construct(ConnectionInterface $client, ?string $mode = null)
     {
         $this->connection = $client;
         $this->mode       = in_array($mode, [self::RECORD, self::PLAYBACK, self::PASSTHRU], true) ? $mode : self::PASSTHRU;

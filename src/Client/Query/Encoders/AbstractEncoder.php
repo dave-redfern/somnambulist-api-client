@@ -13,6 +13,7 @@ use function is_null;
 use function ksort;
 use function max;
 use function strtolower;
+use function Symfony\Component\String\u;
 
 abstract class AbstractEncoder implements QueryEncoderInterface
 {
@@ -56,13 +57,13 @@ abstract class AbstractEncoder implements QueryEncoderInterface
         }
 
         if ($this->snakeCaseIncludes) {
-            $includes = array_map(fn($include) => Str::snake($include), $includes);
+            $includes = array_map(fn($include) => u($include)->replace('.', 'aaadotaaa')->snake()->replace('aaadotaaa', '.')->toString(), $includes);
         }
 
         return [$this->mappings[self::INCLUDE] => implode(',', $includes)];
     }
 
-    protected function createLimit(int $limit = null, string $marker = null): array
+    protected function createLimit(?int $limit = null, ?string $marker = null): array
     {
         if (is_null($limit) && is_null($marker)) {
             return [];
@@ -88,7 +89,7 @@ abstract class AbstractEncoder implements QueryEncoderInterface
         return [$this->mappings[self::ORDER_BY] => implode(',', $sort)];
     }
 
-    protected function createPagination(int $page = null, int $perPage = null): array
+    protected function createPagination(?int $page = null, ?int $perPage = null): array
     {
         if (is_null($page) && is_null($perPage)) {
             return [];
@@ -100,7 +101,7 @@ abstract class AbstractEncoder implements QueryEncoderInterface
         return [$this->mappings[self::PAGE] => $page, $this->mappings[self::PER_PAGE] => $perPage];
     }
 
-    protected function createPaginationFromLimitAndOffset(int $limit = null, int $offset = null): array
+    protected function createPaginationFromLimitAndOffset(?int $limit = null, ?int $offset = null): array
     {
         if (is_null($limit) && is_null($offset)) {
             return [];

@@ -92,12 +92,12 @@ class OpenStackApiEncoder extends AbstractEncoder
         return [$this->mappings[self::ORDER_BY] => implode(',', $sort)];
     }
 
-    protected function createPagination(int $page = null, int $perPage = null): array
+    protected function createPagination(?int $page = null, ?int $perPage = null): array
     {
         return [];
     }
 
-    protected function createPaginationFromLimitAndOffset(int $limit = null, int $offset = null): array
+    protected function createPaginationFromLimitAndOffset(?int $limit = null, ?int $offset = null): array
     {
         return [];
     }

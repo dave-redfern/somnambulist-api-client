@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+2024-11-27 - 4.1.1
+------------------
+
+ * Fix PHP 8.4 deprecations
+ * Switch to symfony/string instead of pragmarx/ia-str
+
 2024-02-24 - 4.1.0
 ------------------
 

@@ -9,13 +9,14 @@ use Somnambulist\Components\ApiClient\Client\Query\Expression\CompositeExpressio
 use Somnambulist\Components\ApiClient\ModelBuilder;
 use Somnambulist\Components\Collection\Contracts\Collection;
 use function sprintf;
+use function Symfony\Component\String\u;
 
 /**
  * @method AbstractRelationship include(string ...$relationship)
- * @method AbstractRelationship limit(int $limit = null)
- * @method AbstractRelationship offset(string $offset = null)
- * @method AbstractRelationship page(int $page = null)
- * @method AbstractRelationship perPage(int $perPage = null)
+ * @method AbstractRelationship limit(?int $limit = null)
+ * @method AbstractRelationship offset(?string $offset = null)
+ * @method AbstractRelationship page(?int $page = null)
+ * @method AbstractRelationship perPage(?int $perPage = null)
  *
  * @method array getIncludes()
  * @method array getOrderBy()
@@ -68,7 +69,7 @@ abstract class AbstractRelationship
     {
         $allowed = ['include', 'limit', 'offset', 'page', 'perPage'];
 
-        if (in_array($name, $allowed) || Str::startsWith($name, 'get')) {
+        if (in_array($name, $allowed) || u($name)->startsWith('get')) {
             $ret = $this->query->{$name}(...$arguments);
 
             if (!$ret instanceof $this->query) {

@@ -157,28 +157,28 @@ class QueryBuilder
         return $this;
     }
 
-    public function page(int $page = null): self
+    public function page(?int $page = null): self
     {
         $this->page = !is_null($page) ? max($page, 1) : null;
 
         return $this;
     }
 
-    public function perPage(int $perPage = null): self
+    public function perPage(?int $perPage = null): self
     {
         $this->perPage = !is_null($perPage) ? ($perPage < 1 ? 30 : $perPage) : null;
 
         return $this;
     }
 
-    public function limit(int $limit = null): self
+    public function limit(?int $limit = null): self
     {
         $this->limit = is_null($limit) ? null : ($limit < 1 ? 100 : $limit);
 
         return $this;
     }
 
-    public function offset(string $offset = null): self
+    public function offset(?string $offset = null): self
     {
         $this->offset = $offset;
 

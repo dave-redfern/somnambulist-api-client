@@ -39,7 +39,7 @@ class EntityLocator
         return $this->query()->findOrFail($id);
     }
 
-    public function findBy(array $criteria = [], array $orderBy = [], int $limit = null, int $offset = null): Collection
+    public function findBy(array $criteria = [], array $orderBy = [], ?int $limit = null, ?int $offset = null): Collection
     {
         return $this->query()->findBy($criteria, $orderBy, $limit, (string)$offset);
     }

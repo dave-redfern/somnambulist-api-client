@@ -40,7 +40,7 @@ class ActionPersister implements ActionPersisterInterface, LoggerAwareInterface
     protected ConnectionInterface $connection;
     protected ResponseDecoderInterface $decoder;
 
-    public function __construct(ConnectionInterface $connection, ResponseDecoderInterface $decoder = null)
+    public function __construct(ConnectionInterface $connection, ?ResponseDecoderInterface $decoder = null)
     {
         $this->connection = $connection;
         $this->decoder    = $decoder ?? new SimpleJsonDecoder();

@@ -22,7 +22,7 @@ trait HasRouteData
         return in_array(strtolower(trim($method)), ['get', 'post', 'put', 'patch', 'delete', 'head']) ? $method : null;
     }
 
-    public function route(string $route, array $params = [], string $method = null): self
+    public function route(string $route, array $params = [], ?string $method = null): self
     {
         $this->route  = $route;
         $this->params = $params;

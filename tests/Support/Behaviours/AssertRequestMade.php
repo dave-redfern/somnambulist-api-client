@@ -57,7 +57,7 @@ trait AssertRequestMade
      * @param string|null $expectedBody    the response string to compare with
      * @param array       $expectedHeaders array of key => value pairs to check for
      */
-    protected function assertResponseContains(string $expectedBody = null, array $expectedHeaders = []): void
+    protected function assertResponseContains(?string $expectedBody = null, array $expectedHeaders = []): void
     {
         Manager::instance()->connect(new User)->onAfterRequest(function (ResponseInterface $response) use ($expectedBody, $expectedHeaders) {
             foreach ($expectedHeaders as $key => $value) {
@@ -74,7 +74,7 @@ trait AssertRequestMade
      * @param string|null $expectedBody    the response string that should not appear
      * @param array       $expectedHeaders array of key => value pairs to check dont exist
      */
-    protected function assertResponseDoesNotContain(string $expectedBody = null, array $expectedHeaders = []): void
+    protected function assertResponseDoesNotContain(?string $expectedBody = null, array $expectedHeaders = []): void
     {
         Manager::instance()->connect(new User)->onAfterRequest(function (ResponseInterface $response) use ($expectedBody, $expectedHeaders) {
             foreach ($expectedHeaders as $key => $value) {

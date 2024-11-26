@@ -29,12 +29,12 @@ class ResponseStore
     private static ?ResponseStore $instance = null;
     private ?string $store;
 
-    private function __construct(string $store = null)
+    private function __construct(?string $store = null)
     {
         $this->store = $store;
     }
 
-    public static function instance(string $store = null): self
+    public static function instance(?string $store = null): self
     {
         if (!self::$instance instanceof ResponseStore) {
             self::$instance = new ResponseStore($store);

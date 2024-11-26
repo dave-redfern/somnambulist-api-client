@@ -29,6 +29,7 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 use function file_get_contents;
+use function Symfony\Component\String\u;
 
 /**
  * @group client
@@ -69,19 +70,20 @@ class ActionPersisterTest extends TestCase
         ]);
 
         $callback = function ($method, $url, $options) use ($new, $updated, $deleted, $error) {
-            $useError = Str::contains($options['body'] ?? '', '&error=1');
+            $useError = u($options['body'] ?? '')->containsAny('&error=1');
+            $url = u($url);
 
-            switch ($url) {
-                case 'PUT' === $method && Str::contains($url, '/users/c8259b3b-8603-3098-8361-425325078c9a'):
+            switch (true) {
+                case 'PUT' === $method && $url->containsAny('/users/c8259b3b-8603-3098-8361-425325078c9a'):
                     return $updated;
 
-                case 'DELETE' === $method && Str::contains($url, '/users/c8259b3b-8603-3098-8361-425325078c9a'):
+                case 'DELETE' === $method && $url->containsAny('/users/c8259b3b-8603-3098-8361-425325078c9a'):
                     return $deleted;
 
-                case 'POST' === $method && Str::contains($url, '/users') && $useError:
+                case 'POST' === $method && $url->containsAny('/users') && $useError:
                     return $error;
 
-                case 'POST' === $method && Str::contains($url, '/users'):
+                case 'POST' === $method && $url->containsAny('/users'):
                     return $new;
             }
         };
